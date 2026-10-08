@@ -1,0 +1,90 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --background: #ffffff;
+    --foreground: #1c1917;
+    /* rich stone dark */
+    --primary-maroon: #8b1828;
+    --primary-red: #c5222d;
+    --gold: #d4a373;
+    --gold-accent: #c68a4c;
+    --border-light: #f1ede7;
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
+    overflow-x: hidden;
+  }
+}
+
+/* Handwritten signature script font utility */
+.font-script {
+  font-family: var(--font-script), 'Great Vibes', cursive;
+}
+
+/* Luxury serif headline font utility */
+.font-serif-luxury {
+  font-family: var(--font-serif), 'Cinzel', 'Playfair Display', serif;
+}
+
+/* Royal Roman Engraved Luxury Font */
+.font-cinzel {
+  font-family: var(--font-cinzel), 'Cinzel', Georgia, serif;
+}
+
+/* Elegant gold gradient */
+.text-gold-gradient {
+  background: linear-gradient(135deg, #b8860b 0%, #c68a4c 50%, #996515 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-maroon-gradient {
+  background: linear-gradient(135deg, #8b1828 0%, #c5222d 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Subtle luxury card shadows */
+.card-shadow {
+  box-shadow: 0 10px 30px -10px rgba(139, 24, 40, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.02);
+}
+
+.card-shadow-hover:hover {
+  box-shadow: 0 20px 35px -10px rgba(139, 24, 40, 0.14), 0 8px 12px -3px rgba(0, 0, 0, 0.04);
+}
+
+/* Continuous ribbon marquee ticker */
+@keyframes marquee {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  display: flex;
+  width: max-content;
+  animation: marquee 25s linear infinite;
+}
+
+/* Hide horizontal and vertical scrollbars cleanly while preserving touch/trackpad scrolling */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
