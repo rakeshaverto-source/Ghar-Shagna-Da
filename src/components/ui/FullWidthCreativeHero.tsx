@@ -97,7 +97,7 @@ export default function FullWidthCreativeHero({ onOpenModal }: FullWidthHeroProp
     <section 
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
-      className="relative w-full h-[560px] sm:h-[650px] lg:h-[760px] overflow-hidden bg-stone-950 select-none touch-pan-y"
+      className="relative w-full h-screen min-h-[700px] overflow-hidden bg-stone-950 select-none touch-pan-y"
     >
       {/* Background Slides */}
       {CREATIVE_SLIDES.map((slide, idx) => (
@@ -107,84 +107,75 @@ export default function FullWidthCreativeHero({ onOpenModal }: FullWidthHeroProp
             idx === current ? 'opacity-100 z-10' : 'opacity-0 z-0 pointer-events-none'
           }`}
         >
-          {/* Desktop & Tablet Landscape Image (Hidden on Phone) */}
-          <div className="hidden md:block absolute inset-0 overflow-hidden">
-            <Image
-              src={slide.desktopImage}
-              alt={slide.headingPrefix}
-              fill
-              priority={idx === 0}
-              sizes="100vw"
-              className="object-cover object-center"
-            />
+          {/* All Devices (Mobile + PC): High-End Cinematic Bridal Video - Full Height No Crop */}
+          <div className="absolute inset-0 overflow-hidden">
+            <video
+              autoPlay
+              loop
+              muted
+              playsInline
+              preload="metadata"
+              className="w-full h-full object-cover object-[center_top] filter brightness-[0.96] contrast-[1.08] saturate-[1.05]"
+            >
+              <source src="/luxury_lehengas.mp4" type="video/mp4" />
+              {/* Fallback to image if video not supported or slow connection */}
+              <Image
+                src={slide.desktopImage}
+                alt={slide.headingPrefix}
+                fill
+                priority={idx === 0}
+                sizes="100vw"
+                className="object-cover object-[center_top]"
+              />
+            </video>
           </div>
 
-          {/* Dedicated Mobile & Portrait Image: Edge-to-edge full width without any side spaces */}
-          <div className="block md:hidden absolute inset-0 overflow-hidden">
-            <Image
-              src={slide.mobileImage}
-              alt={slide.headingPrefix}
-              fill
-              priority={idx === 0}
-              sizes="100vw"
-              className="object-cover object-[center_15%]"
-            />
-          </div>
-
-          {/* Cinematic Vignette Overlay (Leaves dress clear, dark only under text) */}
+          {/* Cinematic Vignette Overlay - Lighter on the dress, deeper on left for text readability */}
           <div
-            className={`absolute inset-0 ${
-              slide.theme === 'warm'
-                ? 'bg-gradient-to-t md:bg-gradient-to-r from-stone-950 via-stone-950/80 via-30% to-transparent'
-                : 'bg-gradient-to-t md:bg-gradient-to-r from-black via-black/85 via-30% to-transparent'
-            }`}
+            className="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-r from-stone-950/90 via-stone-950/60 via-35% to-transparent pointer-events-none"
           />
 
-          {/* Slide Content Layer: Positioned cleanly at bottom without covering the lehengas */}
-          <div className="relative z-20 max-w-7xl mx-auto h-full px-5 sm:px-10 lg:px-16 flex items-end md:items-center pb-8 sm:pb-12 md:pb-0">
-            <div className="max-w-xl text-white space-y-2 sm:space-y-4">
-              {/* Top Subtitle - Hidden on mobile as requested */}
-              <p className="hidden md:block font-serif-luxury tracking-[0.25em] sm:tracking-[0.35em] text-[11px] sm:text-sm text-amber-200 uppercase font-semibold">
-                {slide.subtitle}
-              </p>
-
+          {/* Slide Content Layer: Positioned cleanly with breathing room */}
+          <div className="relative z-20 max-w-7xl mx-auto h-full px-4 sm:px-10 lg:px-16 flex items-end md:items-center pb-10 sm:pb-16 md:pb-0 pt-20">
+            <div className="w-full max-w-xl lg:max-w-2xl text-white space-y-3.5 sm:space-y-6">
+              
               {/* Huge Serif Headline with BOLD Handwritten Script Highlight */}
-              <div className="space-y-0">
-                <h1 className="font-serif-luxury text-3xl sm:text-6xl lg:text-7xl font-bold tracking-[0.1em] sm:tracking-[0.12em] uppercase text-white leading-tight drop-shadow-md">
+              <div className="space-y-1">
+                <h1 className="font-serif-luxury text-3xl sm:text-6xl lg:text-7xl xl:text-8xl font-bold tracking-[0.06em] uppercase text-white leading-none drop-shadow-[0_4px_16px_rgba(0,0,0,0.8)]">
                   {slide.headingPrefix}
                 </h1>
-                <span className="font-script text-5xl sm:text-8xl lg:text-9xl text-amber-300 block -mt-2 sm:-mt-5 font-bold tracking-normal drop-shadow-2xl">
+                <span className="font-script text-5xl sm:text-8xl lg:text-9xl xl:text-[10rem] text-[#f7c843] block -mt-2 sm:-mt-5 lg:-mt-7 font-bold tracking-normal drop-shadow-[0_8px_30px_rgba(0,0,0,0.9)] filter brightness-110">
                   {slide.headingHighlight}
                 </span>
               </div>
 
-              {/* Hinglish Touch Taglines */}
-              <div className="space-y-1 sm:space-y-1.5 pt-1">
-                <p className="font-serif-luxury tracking-[0.15em] sm:tracking-[0.2em] text-xs sm:text-sm text-stone-200 font-bold uppercase">
+              {/* Hinglish Touch Taglines with Gold Decorative Accent */}
+              <div className="space-y-1.5 sm:space-y-2 pt-1 border-l-2 border-amber-400/60 pl-3.5 sm:pl-5">
+                <p className="font-serif-luxury tracking-[0.2em] sm:tracking-[0.25em] text-xs sm:text-sm lg:text-base text-amber-200 font-semibold uppercase">
                   {slide.tagline}
                 </p>
-                <p className="text-xs sm:text-sm text-stone-300 font-medium line-clamp-2">
+                <p className="text-xs sm:text-base lg:text-lg text-stone-200 font-light max-w-lg leading-relaxed drop-shadow-md">
                   {slide.subtagline}
                 </p>
               </div>
 
-              {/* Action Buttons: Sleek, compact and elegant on mobile without overpowering the outfit */}
-              <div className="flex items-center gap-2.5 sm:gap-4 pt-2 sm:pt-4">
+              {/* Action Buttons: Perfectly sized for mobile screen width */}
+              <div className="flex items-center gap-2 sm:gap-5 pt-2 sm:pt-6 w-full max-w-full">
                 <Link
                   href={slide.ctaLink}
-                  className="inline-flex items-center justify-center gap-1.5 bg-[#8b1828]/95 hover:bg-[#8b1828] text-white font-semibold py-2.5 sm:py-3 px-4 sm:px-7 rounded-full text-[11px] sm:text-xs uppercase tracking-wider transition-all shadow-md active:scale-95 shrink-0"
+                  className="group inline-flex items-center justify-center gap-1.5 bg-gradient-to-r from-[#8b1828] via-[#a01d30] to-[#73121f] hover:from-[#a01d30] hover:to-[#8b1828] text-white font-semibold py-2.5 sm:py-4 px-3 sm:px-8 rounded-full text-[11px] sm:text-sm uppercase tracking-wider transition-all duration-300 shadow-[0_8px_25px_rgba(139,24,40,0.5)] active:scale-95 shrink-0 whitespace-nowrap border border-white/20"
                 >
-                  <span>{slide.ctaText}</span>
-                  <ArrowRight className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+                  <span className="hidden xs:inline">{slide.ctaText}</span>
+                  <span className="inline xs:hidden">Explore Outfits</span>
+                  <ArrowRight className="w-3 h-3 sm:w-4 sm:h-4 transition-transform group-hover:translate-x-1" />
                 </Link>
 
                 <button
                   onClick={onOpenModal}
-                  className="inline-flex items-center justify-center gap-1.5 bg-black/40 hover:bg-black/60 text-stone-200 hover:text-white backdrop-blur-md border border-white/20 font-medium py-2.5 sm:py-3 px-3.5 sm:px-6 rounded-full text-[11px] sm:text-xs uppercase tracking-wider transition-all active:scale-95"
+                  className="inline-flex items-center justify-center gap-1.5 bg-black/60 hover:bg-black/85 text-white backdrop-blur-md border border-amber-300/50 hover:border-amber-300 font-medium py-2.5 sm:py-4 px-3 sm:px-7 rounded-full text-[11px] sm:text-sm uppercase tracking-wider transition-all duration-300 active:scale-95 shrink-0 whitespace-nowrap"
                 >
-                  <Calendar className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-amber-300" />
-                  <span className="hidden xs:inline sm:inline">Book</span>
-                  <span>Trial</span>
+                  <Calendar className="w-3 h-3 sm:w-4 sm:h-4 text-amber-300 shrink-0" />
+                  <span className="whitespace-nowrap">Book Fitting Trial</span>
                 </button>
               </div>
             </div>
@@ -192,38 +183,14 @@ export default function FullWidthCreativeHero({ onOpenModal }: FullWidthHeroProp
         </div>
       ))}
 
-      {/* Desktop-Only Navigation Arrows (Hidden on Mobile/Phone) */}
-      <button
-        onClick={prevSlide}
-        className="hidden md:flex absolute left-4 sm:left-8 top-1/2 -translate-y-1/2 z-30 w-11 h-11 rounded-full bg-black/30 hover:bg-black/60 text-white border border-white/20 backdrop-blur-md items-center justify-center transition-all hover:scale-110"
-        aria-label="Previous Banner"
-      >
-        <ChevronLeft className="w-5 h-5" />
-      </button>
-
-      <button
-        onClick={nextSlide}
-        className="hidden md:flex absolute right-4 sm:right-8 top-1/2 -translate-y-1/2 z-30 w-11 h-11 rounded-full bg-black/30 hover:bg-black/60 text-white border border-white/20 backdrop-blur-md items-center justify-center transition-all hover:scale-110"
-        aria-label="Next Banner"
-      >
-        <ChevronRight className="w-5 h-5" />
-      </button>
-
-      {/* Modern Capsule Pill Pagination Indicator in Top Right Corner */}
-      <div className="absolute top-6 sm:top-8 right-5 sm:right-10 z-30 flex items-center">
-        <div className="bg-black/50 backdrop-blur-md border border-white/20 rounded-full px-3 py-1.5 flex items-center gap-2 shadow-lg">
-          {CREATIVE_SLIDES.map((_, i) => (
-            <button
-              key={i}
-              onClick={() => setCurrent(i)}
-              className={`transition-all duration-300 rounded-full h-1.5 ${
-                i === current ? 'w-8 bg-white' : 'w-3 bg-white/40 hover:bg-white/70'
-              }`}
-              aria-label={`Slide ${i + 1}`}
-            />
-          ))}
+      {/* Subtle Luxury Scroll Down Indicator on PC */}
+      <div className="hidden md:flex absolute bottom-8 right-12 z-30 flex-col items-center gap-2 text-white/70 pointer-events-none">
+        <span className="text-[10px] uppercase tracking-[0.3em] font-medium text-amber-200/80">Scroll</span>
+        <div className="w-5 h-9 rounded-full border border-white/30 flex items-start justify-center p-1.5">
+          <div className="w-1 h-2 rounded-full bg-amber-300 animate-bounce" />
         </div>
       </div>
-    </section>
+
+      </section>
   );
 }

@@ -46,8 +46,8 @@ export const INITIAL_PRODUCTS: Product[] = [
       'Complimentary Master Alteration & Sanitized Box'
     ],
     images: [
-      'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?q=80&w=1000&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=1000&auto=format&fit=crop'
+      '/hero-bride.jpg',
+      '/creative-bridal.jpg'
     ],
     sizes: ['XS', 'S', 'M', 'L', 'XL', 'Custom Fitting'],
     rentalDays: '3 - 4 Days',
@@ -76,8 +76,8 @@ export const INITIAL_PRODUCTS: Product[] = [
       'Alterations according to your measurements'
     ],
     images: [
-      'https://images.unsplash.com/photo-1594744803329-e58b31de8bf5?q=80&w=1000&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?q=80&w=1000&auto=format&fit=crop'
+      '/hero-lehenga.jpg',
+      '/creative-bridal.jpg'
     ],
     sizes: ['S', 'M', 'L', 'XL'],
     rentalDays: '3 - 4 Days',
@@ -136,8 +136,8 @@ export const INITIAL_PRODUCTS: Product[] = [
       'Heavy Border Net Dupatta'
     ],
     images: [
-      'https://images.unsplash.com/photo-1566737236500-c8ac43014a67?q=80&w=1000&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?q=80&w=1000&auto=format&fit=crop'
+      '/hero-gown.jpg',
+      '/hero-bride.jpg'
     ],
     sizes: ['S', 'M', 'L', 'XL'],
     rentalDays: '3 Days',
