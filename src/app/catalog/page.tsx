@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Search } from 'lucide-react';
 import { INITIAL_PRODUCTS, CATEGORIES } from '@/data/products';
@@ -9,21 +9,60 @@ import ProductCard from '@/components/catalog/ProductCard';
 export default function CatalogPage() {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
+  const [productsList, setProductsList] = useState<any[]>(INITIAL_PRODUCTS);
 
-  const filteredProducts = INITIAL_PRODUCTS.filter((product) => {
+  useEffect(() => {
+    fetch('/api/products')
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.products && data.products.length > 0) {
+          const mapped = data.products.map((p: any) => ({
+            id: p.id || p._id || p.slug,
+            _id: p._id,
+            slug: p.slug,
+            title: p.title,
+            subtitle: p.subtitle || '',
+            category: p.categorySlug || p.category || 'bridal-lehengas',
+            categoryLabel: p.category || 'Bridal Lehengas',
+            rentalPrice: p.price || p.rentalPrice || '',
+            securityDeposit: p.deposit || p.securityDeposit || '',
+            originalPrice: p.originalValue || p.originalPrice || '',
+            color: p.color || '',
+            fabric: p.fabric || '',
+            embroidery: p.work || p.embroidery || '',
+            occasion: p.occasion || '',
+            description: p.description || '',
+            includes: p.includes || [],
+            images: p.images && p.images.length > 0 ? p.images : ['/products/lehenga-maroon.png'],
+            sizes: p.sizes || ['Custom Fit Available'],
+            rentalDays: p.duration || p.rentalDays || '3 Days',
+            isTrending: Boolean(p.featured ?? p.isTrending),
+            reviews: p.reviews || [],
+            metaDescription: p.description || '',
+          }));
+          setProductsList(mapped);
+        }
+      })
+      .catch((err) => {
+        console.error('Failed to load catalog outfits', err);
+      });
+  }, []);
+
+  const filteredProducts = productsList.filter((product) => {
     const matchesCategory =
       selectedCategory === 'all' || product.category === selectedCategory;
     const matchesSearch =
-      product.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      product.fabric.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      product.color.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      product.embroidery.toLowerCase().includes(searchQuery.toLowerCase());
+      (product.title || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (product.fabric || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (product.color || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (product.embroidery || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (product.occasion || '').toLowerCase().includes(searchQuery.toLowerCase());
 
     return matchesCategory && matchesSearch;
   });
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 sm:pt-36 pb-12 space-y-10">
       {/* Header */}
       <div className="text-center space-y-3">
         <span className="font-script text-3xl text-[#8b1828]">Rental Catalog</span>
@@ -47,7 +86,7 @@ export default function CatalogPage() {
                 : 'bg-white text-stone-700 hover:text-stone-900 border border-stone-200'
             }`}
           >
-            All Outfits ({INITIAL_PRODUCTS.length})
+            All Outfits ({productsList.length})
           </button>
           {CATEGORIES.map((cat) => (
             <button

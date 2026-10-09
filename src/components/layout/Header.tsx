@@ -12,6 +12,7 @@ export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const pathname = usePathname();
   const isHome = pathname === '/';
+  const isAdmin = pathname?.startsWith('/admin');
 
   useEffect(() => {
     const handleScroll = () => {
@@ -25,6 +26,10 @@ export default function Header() {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  if (isAdmin) {
+    return null;
+  }
 
   const isTransparent = isHome && !isScrolled;
 
@@ -126,6 +131,14 @@ export default function Header() {
             >
               All Outfits
             </Link>
+            <Link
+              href="/gallery"
+              className={`transition-colors font-medium tracking-wide ${
+                isTransparent ? 'hover:text-amber-300' : 'hover:text-[#8b1828]'
+              }`}
+            >
+              Gallery
+            </Link>
           </nav>
 
           {/* Action Callouts */}
@@ -219,6 +232,13 @@ export default function Header() {
             className="block text-stone-800 font-medium text-base hover:text-[#8b1828]"
           >
             Browse All Outfits
+          </Link>
+          <Link
+            href="/gallery"
+            onClick={() => setMobileMenuOpen(false)}
+            className="block text-stone-800 font-medium text-base hover:text-[#8b1828]"
+          >
+            Real Wedding Gallery
           </Link>
           <div className="pt-2 border-t border-stone-100 flex items-center justify-end">
             <Link

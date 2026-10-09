@@ -1,3 +1,13 @@
+export interface ProductReview {
+  author: string;
+  city?: string;
+  date?: string;
+  rating: number;
+  comment: string;
+  image?: string;
+  tag?: string;
+}
+
 export interface Product {
   _id?: string;
   id: string;
@@ -19,6 +29,7 @@ export interface Product {
   sizes: string[];
   rentalDays: string;
   isTrending?: boolean;
+  reviews?: ProductReview[];
   metaDescription: string;
 }
 
@@ -435,10 +446,10 @@ export const OCCASION_CATEGORIES = [
 export const SITE_CONFIG = {
   name: 'Ghar Shagna Da',
   tagline: 'Complete Store of All Wedding Accessories & Outfits on Rent',
-  phone: '+91 98765 43210',
-  whatsappNumber: '919876543210',
-  email: 'contact@gharshagnada.com',
-  address: 'Mall Road / Model Town, Punjab, India',
+  phone: '+91 95408 95061',
+  whatsappNumber: '919540895061',
+  email: 'gharshagnada@gmail.com',
+  address: 'Zirakpur-Panchkula-Kalka Highway, Dhakoli, Zirakpur, Punjab 160104, India',
   domain: 'https://gharshagnada.com',
   description: 'Ghar Shagna Da is Punjab’s premier wedding studio offering designer Bridal Lehengas, Wedding Dresses, and Royal Groom Sherwanis on rent with custom alterations and doorstep hygiene packaging.',
 };

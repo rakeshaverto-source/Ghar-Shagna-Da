@@ -3,7 +3,8 @@ import { Inter, Playfair_Display, Dancing_Script, Cinzel } from 'next/font/googl
 import './globals.css';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
-import { LocalBusinessJsonLd } from '@/components/seo/JsonLd';
+import { LocalBusinessJsonLd, WebSiteJsonLd } from '@/components/seo/JsonLd';
+import AnalyticsScripts from '@/components/seo/AnalyticsScripts';
 import { constructMetadata } from '@/lib/seo';
 
 const inter = Inter({
@@ -43,8 +44,10 @@ export default function RootLayout({
     <html lang="en" className={`${inter.variable} ${playfair.variable} ${cinzel.variable} ${dancingScript.variable} scroll-smooth`}>
       <head>
         <LocalBusinessJsonLd />
+        <WebSiteJsonLd />
       </head>
       <body className="min-h-screen flex flex-col bg-white text-stone-900 selection:bg-[#8b1828] selection:text-white antialiased">
+        <AnalyticsScripts />
         <Header />
         <main className="flex-grow bg-white">{children}</main>
         <Footer />

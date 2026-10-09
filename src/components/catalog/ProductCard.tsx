@@ -60,7 +60,7 @@ export default function ProductCard({ product }: ProductCardProps) {
       <div className="p-5 flex-1 flex flex-col justify-between space-y-4">
         <div>
           {product.subtitle && (
-            <p className="font-script text-xl text-[#8b1828] leading-tight">
+            <p className="font-script text-2xl font-bold text-[#8b1828] leading-snug drop-shadow-sm tracking-wide">
               {product.subtitle}
             </p>
           )}
@@ -68,15 +68,16 @@ export default function ProductCard({ product }: ProductCardProps) {
             {product.title}
           </h3>
 
-          {/* Luxury Spec Chips */}
-          <div className="mt-3 grid grid-cols-2 gap-2 text-xs bg-[#faf8f5] p-2.5 rounded-xl border border-stone-200/70">
-            <div>
-              <span className="text-stone-400 block text-[9.5px] uppercase tracking-wider font-semibold">Fabric</span>
-              <span className="truncate block font-medium text-stone-800">{product.fabric}</span>
+          {/* Luxury Spec Strip */}
+          <div className="mt-3 flex items-center justify-between gap-2.5 bg-gradient-to-r from-[#FAF8F5] via-[#FDFBF7] to-[#FAF8F5] px-3 py-2 rounded-xl border border-[#EDE4D8] shadow-[inset_0_1px_2px_rgba(0,0,0,0.02)]">
+            <div className="min-w-0 flex-1">
+              <span className="text-[#968270] block text-[9px] uppercase tracking-[0.14em] font-semibold">Fabric</span>
+              <span className="truncate block font-medium text-xs text-stone-900 pt-0.5" title={product.fabric}>{product.fabric}</span>
             </div>
-            <div>
-              <span className="text-stone-400 block text-[9.5px] uppercase tracking-wider font-semibold">Occasion</span>
-              <span className="truncate block font-medium text-stone-800">{product.occasion}</span>
+            <div className="h-6 w-[1px] bg-[#E5D7C6]/80 flex-shrink-0" />
+            <div className="min-w-0 flex-1 pl-1">
+              <span className="text-[#968270] block text-[9px] uppercase tracking-[0.14em] font-semibold">Occasion</span>
+              <span className="truncate block font-medium text-xs text-stone-900 pt-0.5" title={product.occasion}>{product.occasion}</span>
             </div>
           </div>
         </div>

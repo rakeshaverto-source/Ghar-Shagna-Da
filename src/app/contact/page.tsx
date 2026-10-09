@@ -24,7 +24,7 @@ export const metadata: Metadata = constructMetadata({
 
 export default function ContactPage() {
   return (
-    <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12">
+    <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 sm:pt-36 pb-16 space-y-12">
       <div className="text-center space-y-3">
         <div className="inline-flex items-center gap-2 bg-rose-50 border border-rose-200/60 px-3.5 py-1 rounded-full text-xs font-semibold text-[#8b1828]">
           <span className="font-script text-base text-[#8b1828]">Get in Touch</span>

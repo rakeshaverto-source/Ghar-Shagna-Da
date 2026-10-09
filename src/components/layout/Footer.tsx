@@ -1,10 +1,18 @@
+'use client';
+
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { usePathname } from 'next/navigation';
 import { Phone, Mail, MapPin, MessageCircle, Heart, ShieldCheck } from 'lucide-react';
 import { SITE_CONFIG, CATEGORIES } from '@/data/products';
 
 export default function Footer() {
+  const pathname = usePathname();
+  if (pathname?.startsWith('/admin')) {
+    return null;
+  }
+
   return (
     <footer className="bg-[#faf7f2] text-stone-700 border-t border-[#f0eae1] pt-16 pb-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -35,7 +43,7 @@ export default function Footer() {
 
           {/* Quick Categories */}
           <div>
-            <h3 className="font-serif-luxury text-base font-bold text-stone-900 mb-4 tracking-wide uppercase">
+            <h3 className="text-sm font-bold text-stone-900 mb-4 tracking-wider uppercase font-sans">
               Rentals Catalog
             </h3>
             <ul className="space-y-2.5 text-sm">
@@ -43,10 +51,10 @@ export default function Footer() {
                 <li key={cat.id}>
                   <Link
                     href={`/category/${cat.slug}`}
-                    className="hover:text-[#8b1828] transition-colors flex items-center justify-between"
+                    className="hover:text-[#8b1828] text-stone-600 hover:translate-x-1 transition-all flex items-center justify-between group"
                   >
                     <span>{cat.title}</span>
-                    <span className="font-script text-sm text-[#c68a4c]">{cat.handwrittenSubtitle}</span>
+                    <span className="text-stone-300 group-hover:text-[#8b1828] transition-colors text-xs">→</span>
                   </Link>
                 </li>
               ))}
@@ -63,13 +71,18 @@ export default function Footer() {
 
           {/* Customer Support */}
           <div>
-            <h3 className="font-serif-luxury text-base font-bold text-stone-900 mb-4 tracking-wide uppercase">
+            <h3 className="text-sm font-bold text-stone-900 mb-4 tracking-wider uppercase font-sans">
               Customer Information
             </h3>
             <ul className="space-y-2.5 text-sm text-stone-600">
               <li>
                 <Link href="/how-rental-works" className="hover:text-[#8b1828] transition-colors">
                   How Rental Works (Process)
+                </Link>
+              </li>
+              <li>
+                <Link href="/gallery" className="hover:text-[#8b1828] transition-colors font-medium">
+                  Real Wedding Photo Gallery
                 </Link>
               </li>
               <li>
@@ -85,7 +98,7 @@ export default function Footer() {
 
           {/* Store Address & Contact */}
           <div>
-            <h3 className="font-serif-luxury text-base font-bold text-stone-900 mb-4 tracking-wide uppercase">
+            <h3 className="text-sm font-bold text-stone-900 mb-4 tracking-wider uppercase font-sans">
               Contact & Studio
             </h3>
             <div className="space-y-3 text-sm text-stone-600">

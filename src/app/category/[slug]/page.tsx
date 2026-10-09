@@ -1,11 +1,17 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
+import { connection } from 'next/server';
 import Link from 'next/link';
 import Image from 'next/image';
 import { CheckCircle2 } from 'lucide-react';
-import { CATEGORIES, INITIAL_PRODUCTS } from '@/data/products';
+import { CATEGORIES, INITIAL_PRODUCTS, SITE_CONFIG, Product } from '@/data/products';
 import ProductCard from '@/components/catalog/ProductCard';
 import { constructMetadata } from '@/lib/seo';
+import { BreadcrumbJsonLd } from '@/components/seo/JsonLd';
+import { connectDB } from '@/lib/mongodb';
+import ProductModel from '@/models/Product';
+
+export const instant = false;
 
 interface CategoryPageProps {
   params: Promise<{
@@ -39,6 +45,56 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
   });
 }
 
+async function getCategoryProducts(categorySlug: string): Promise<Product[]> {
+  try {
+    try {
+      await connection();
+    } catch {
+      // In static prerender, connection() rejects by design; fallback gracefully
+    }
+    const conn = await connectDB();
+    if (conn) {
+      const dbProducts = await ProductModel.find({
+        $or: [
+          { categorySlug: categorySlug },
+          { category: categorySlug },
+        ],
+      }).sort({ createdAt: -1 }).lean();
+
+      if (dbProducts && dbProducts.length > 0) {
+        return dbProducts.map((p) => ({
+          _id: p._id ? p._id.toString() : undefined,
+          id: p.id || p.slug,
+          slug: p.slug,
+          title: p.title,
+          subtitle: p.subtitle || '',
+          category: (p.categorySlug || p.category || categorySlug) as any,
+          categoryLabel: p.category || categorySlug,
+          rentalPrice: p.price,
+          securityDeposit: p.deposit,
+          originalPrice: p.originalValue,
+          color: p.color || '',
+          fabric: p.fabric || '',
+          embroidery: p.work || '',
+          occasion: p.occasion || '',
+          description: p.description || '',
+          includes: p.includes || [],
+          images: p.images || [],
+          sizes: p.sizes || ['Custom Fit Available'],
+          rentalDays: p.duration || '3 Days',
+          isTrending: p.featured || false,
+          reviews: p.reviews || [],
+          metaDescription: p.description ? p.description.slice(0, 160) : '',
+        }));
+      }
+    }
+  } catch (err) {
+    console.error('Error fetching category products from DB:', err);
+  }
+
+  return INITIAL_PRODUCTS.filter((p) => p.category === categorySlug);
+}
+
 export default async function CategoryPage({ params }: CategoryPageProps) {
   const resolvedParams = await params;
   const category = CATEGORIES.find((c) => c.slug === resolvedParams.slug);
@@ -47,10 +103,18 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
     notFound();
   }
 
-  const categoryProducts = INITIAL_PRODUCTS.filter((p) => p.category === category.slug);
+  const categoryProducts = await getCategoryProducts(category.slug);
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-12">
+    <>
+      <BreadcrumbJsonLd
+        items={[
+          { name: 'Home', url: SITE_CONFIG.domain },
+          { name: 'Catalog', url: `${SITE_CONFIG.domain}/catalog` },
+          { name: category.title, url: `${SITE_CONFIG.domain}/category/${category.slug}` },
+        ]}
+      />
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 sm:pt-36 pb-12 space-y-12">
       {/* Breadcrumbs */}
       <nav className="flex items-center gap-2 text-xs text-stone-500">
         <Link href="/" className="hover:text-[#8b1828]">
@@ -68,7 +132,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
       <div className="relative rounded-3xl overflow-hidden border border-[#f0eae1] bg-[#faf7f2] p-8 sm:p-12 shadow-sm">
         <div className="relative z-10 max-w-2xl space-y-3">
           <div className="inline-flex items-center gap-2 bg-rose-50 border border-rose-200/60 px-3.5 py-1 rounded-full text-xs font-semibold text-[#8b1828]">
-            <span className="font-script text-base text-[#8b1828]">{category.handwrittenSubtitle}</span>
+            <span className="text-xs uppercase tracking-wider font-semibold text-[#8b1828]">{category.handwrittenSubtitle}</span>
           </div>
 
           <h1 className="font-serif-luxury text-3xl sm:text-5xl font-bold text-stone-900">
@@ -121,5 +185,6 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
         </div>
       </section>
     </div>
+    </>
   );
 }
