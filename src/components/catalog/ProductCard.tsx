@@ -44,10 +44,35 @@ export default function ProductCard({ product }: ProductCardProps) {
         <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/85 via-black/45 to-transparent pt-10 pb-3.5 px-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-              <span className="text-xs uppercase tracking-wider font-medium text-amber-200">
-                Available On Rent
-              </span>
+              {product.status === 'reserved' ? (
+                <>
+                  <span className="w-2 h-2 rounded-full bg-amber-400" />
+                  <span className="text-xs uppercase tracking-wider font-semibold text-amber-300">
+                    Reserved
+                  </span>
+                </>
+              ) : product.status === 'rented' ? (
+                <>
+                  <span className="w-2 h-2 rounded-full bg-rose-400" />
+                  <span className="text-xs uppercase tracking-wider font-semibold text-rose-300">
+                    Rented Out
+                  </span>
+                </>
+              ) : product.status === 'maintenance' ? (
+                <>
+                  <span className="w-2 h-2 rounded-full bg-stone-400" />
+                  <span className="text-xs uppercase tracking-wider font-semibold text-stone-300">
+                    In Maintenance
+                  </span>
+                </>
+              ) : (
+                <>
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                  <span className="text-xs uppercase tracking-wider font-medium text-amber-200">
+                    Available On Rent
+                  </span>
+                </>
+              )}
             </div>
             <span className="text-[10.5px] text-stone-200 bg-white/15 backdrop-blur-md px-2.5 py-1 rounded-full border border-white/20 font-medium">
               {product.rentalDays}

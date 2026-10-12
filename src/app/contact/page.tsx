@@ -5,10 +5,14 @@ import {
   MapPin, 
   MessageCircle, 
   Clock, 
-  CalendarCheck
+  CalendarCheck,
+  Sparkles,
+  ShieldCheck,
+  CheckCircle2
 } from 'lucide-react';
 import { SITE_CONFIG } from '@/data/products';
 import { constructMetadata } from '@/lib/seo';
+import ContactForm from '@/components/contact/ContactForm';
 
 export const metadata: Metadata = constructMetadata({
   title: 'Contact Us & Book Fitting Trial | Ghar Shagna Da',
@@ -24,150 +28,119 @@ export const metadata: Metadata = constructMetadata({
 
 export default function ContactPage() {
   return (
-    <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 sm:pt-36 pb-16 space-y-12">
-      <div className="text-center space-y-3">
-        <div className="inline-flex items-center gap-2 bg-rose-50 border border-rose-200/60 px-3.5 py-1 rounded-full text-xs font-semibold text-[#8b1828]">
-          <span className="font-script text-base text-[#8b1828]">Get in Touch</span>
-        </div>
-        <h1 className="font-serif text-3xl sm:text-5xl font-bold text-white">
-          Visit Us or Send a Direct Inquiry
-        </h1>
-        <p className="text-sm sm:text-base text-gray-300 max-w-xl mx-auto">
-          We invite you for personalized fitting trials. Schedule your visit or chat with us online to reserve your outfit.
-        </p>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        {/* Contact Info Card */}
-        <div className="bg-[#180e0f] border border-[#D4AF37]/30 rounded-3xl p-6 sm:p-8 space-y-6">
-          <h2 className="font-serif text-xl font-bold text-[#D4AF37]">
-            Boutique & Studio Details
-          </h2>
-
-          <div className="space-y-5 text-sm">
-            <div className="flex items-start gap-4">
-              <div className="p-3 bg-[#D4AF37]/10 rounded-xl border border-[#D4AF37]/20 text-[#D4AF37]">
-                <MapPin className="w-5 h-5" />
-              </div>
-              <div>
-                <p className="font-semibold text-white">Location / Address</p>
-                <p className="text-xs text-gray-300 mt-0.5">{SITE_CONFIG.address}</p>
-                <p className="text-[11px] text-gray-400 mt-0.5">Trials by appointment recommended</p>
-              </div>
-            </div>
-
-            <div className="flex items-start gap-4">
-              <div className="p-3 bg-[#D4AF37]/10 rounded-xl border border-[#D4AF37]/20 text-[#D4AF37]">
-                <Phone className="w-5 h-5" />
-              </div>
-              <div>
-                <p className="font-semibold text-white">Phone Support</p>
-                <p className="text-xs text-gray-300 mt-0.5">{SITE_CONFIG.phone}</p>
-                <p className="text-[11px] text-gray-400 mt-0.5">Monday to Sunday, 10:00 AM - 8:30 PM</p>
-              </div>
-            </div>
-
-            <div className="flex items-start gap-4">
-              <div className="p-3 bg-[#D4AF37]/10 rounded-xl border border-[#D4AF37]/20 text-[#D4AF37]">
-                <Mail className="w-5 h-5" />
-              </div>
-              <div>
-                <p className="font-semibold text-white">Email Address</p>
-                <p className="text-xs text-gray-300 mt-0.5">{SITE_CONFIG.email}</p>
-              </div>
-            </div>
-
-            <div className="flex items-start gap-4">
-              <div className="p-3 bg-[#D4AF37]/10 rounded-xl border border-[#D4AF37]/20 text-[#D4AF37]">
-                <Clock className="w-5 h-5" />
-              </div>
-              <div>
-                <p className="font-semibold text-white">Opening Hours</p>
-                <p className="text-xs text-gray-300 mt-0.5">Open 7 Days a week for wedding season fittings</p>
-              </div>
-            </div>
+    <div className="bg-[#FAF8F5]/60 min-h-screen pt-28 sm:pt-36 pb-20">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+        {/* Luxury Header */}
+        <div className="text-center space-y-3.5 max-w-2xl mx-auto">
+          <div className="inline-flex items-center bg-rose-50 border border-rose-200/80 px-4 py-1.5 rounded-full shadow-2xs">
+            <span className="font-script text-lg text-[#8b1828] font-bold">Personalized Fitting Trials</span>
           </div>
-
-          <div className="pt-4 border-t border-white/10">
-            <a
-              href={`https://wa.me/${SITE_CONFIG.whatsappNumber}?text=${encodeURIComponent(
-                'Hello Ghar Shagna Da team, I want to book an appointment to visit your studio for bridal fitting.'
-              )}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-full inline-flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#20ba5a] text-white font-bold py-3 px-6 rounded-2xl text-sm transition-all shadow-lg"
-            >
-              <MessageCircle className="w-5 h-5" />
-              <span>Book Appointment on WhatsApp</span>
-            </a>
-          </div>
-        </div>
-
-        {/* Quick Inquiry Form */}
-        <div className="bg-[#180e0f] border border-[#D4AF37]/30 rounded-3xl p-6 sm:p-8 space-y-4">
-          <h2 className="font-serif text-xl font-bold text-white flex items-center gap-2">
-            <CalendarCheck className="w-5 h-5 text-[#D4AF37]" />
-            <span>Send Quick Inquiry</span>
-          </h2>
-          <p className="text-xs text-gray-300">
-            Leave your wedding date and required outfit. Our team will contact you with matching catalog choices.
+          <h1 className="font-serif-luxury text-3xl sm:text-5xl font-bold text-stone-900 tracking-tight">
+            Visit Our Studio or Send a Direct Inquiry
+          </h1>
+          <p className="text-sm sm:text-base text-stone-600 leading-relaxed font-normal">
+            We warmly invite you for exclusive fitting trials and custom alterations. Schedule your boutique visit or connect with our bridal stylists online.
           </p>
+        </div>
 
-          <form
-            action={`https://wa.me/${SITE_CONFIG.whatsappNumber}`}
-            method="GET"
-            target="_blank"
-            className="space-y-4 pt-2"
-          >
-            <div>
-              <label className="block text-xs text-gray-300 mb-1">Your Name</label>
-              <input
-                type="text"
-                name="name"
-                required
-                placeholder="Jaspreet Kaur"
-                className="w-full bg-[#100708] border border-[#D4AF37]/30 rounded-xl py-2 px-3 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#D4AF37]"
-              />
+        {/* Main 2-Column Luxury Cards with Equal Size & Equal Height */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
+          {/* Left Column: Boutique & Studio Details */}
+          <div className="bg-white border border-[#EDE4D8] rounded-3xl p-6 sm:p-8 shadow-[0_8px_30px_rgba(0,0,0,0.04)] relative overflow-hidden flex flex-col justify-between h-full">
+            <div className="space-y-6">
+              <div className="flex items-center justify-between border-b border-[#F0EAE1] pb-4">
+                <div>
+                  <span className="text-[10px] font-extrabold uppercase tracking-widest text-[#8b1828] bg-rose-50 px-2.5 py-0.5 rounded-md border border-rose-200/60">
+                    Studio & Store
+                  </span>
+                  <h2 className="font-serif-luxury text-xl sm:text-2xl font-bold text-stone-900 mt-1">
+                    Boutique Details
+                  </h2>
+                </div>
+                <div className="w-10 h-10 rounded-2xl bg-[#8b1828]/5 border border-[#8b1828]/15 flex items-center justify-center text-[#8b1828]">
+                  <MapPin className="w-5 h-5" />
+                </div>
+              </div>
+
+              <div className="space-y-4 text-xs sm:text-sm">
+                {/* Location */}
+                <div className="flex items-start gap-3.5 p-3 rounded-2xl hover:bg-[#FAF8F5] transition-colors">
+                  <div className="p-2.5 bg-rose-50 rounded-xl text-[#8b1828] shrink-0 border border-rose-100">
+                    <MapPin className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <p className="font-bold text-stone-900">Store Address</p>
+                    <p className="text-xs text-stone-600 mt-0.5 leading-relaxed">{SITE_CONFIG.address}</p>
+                    <span className="inline-flex items-center gap-1 text-[11px] text-amber-700 font-semibold mt-1">
+                      <CheckCircle2 className="w-3 h-3 text-amber-600" /> Walk-in & Trials Welcome
+                    </span>
+                  </div>
+                </div>
+
+                {/* Phone */}
+                <div className="flex items-start gap-3.5 p-3 rounded-2xl hover:bg-[#FAF8F5] transition-colors">
+                  <div className="p-2.5 bg-rose-50 rounded-xl text-[#8b1828] shrink-0 border border-rose-100">
+                    <Phone className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <p className="font-bold text-stone-900">Direct Phone Support</p>
+                    <a
+                      href={`tel:${SITE_CONFIG.phone}`}
+                      className="text-xs sm:text-sm font-semibold text-[#8b1828] hover:underline mt-0.5 block"
+                    >
+                      {SITE_CONFIG.phone}
+                    </a>
+                    <p className="text-[11px] text-stone-400 mt-0.5">Monday to Sunday, 10:00 AM - 8:30 PM</p>
+                  </div>
+                </div>
+
+                {/* Email */}
+                <div className="flex items-start gap-3.5 p-3 rounded-2xl hover:bg-[#FAF8F5] transition-colors">
+                  <div className="p-2.5 bg-rose-50 rounded-xl text-[#8b1828] shrink-0 border border-rose-100">
+                    <Mail className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <p className="font-bold text-stone-900">Email Inquiries</p>
+                    <a
+                      href={`mailto:${SITE_CONFIG.email}`}
+                      className="text-xs text-stone-700 hover:text-[#8b1828] transition-colors mt-0.5 block"
+                    >
+                      {SITE_CONFIG.email}
+                    </a>
+                  </div>
+                </div>
+
+                {/* Opening Hours */}
+                <div className="flex items-start gap-3.5 p-3 rounded-2xl hover:bg-[#FAF8F5] transition-colors">
+                  <div className="p-2.5 bg-rose-50 rounded-xl text-[#8b1828] shrink-0 border border-rose-100">
+                    <Clock className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <p className="font-bold text-stone-900">Opening Hours</p>
+                    <p className="text-xs text-stone-600 mt-0.5">Open 7 Days a week for wedding season fittings</p>
+                  </div>
+                </div>
+              </div>
             </div>
 
-            <div>
-              <label className="block text-xs text-gray-300 mb-1">Looking for</label>
-              <select
-                name="category"
-                className="w-full bg-[#100708] border border-[#D4AF37]/30 rounded-xl py-2 px-3 text-xs text-white focus:outline-none focus:border-[#D4AF37]"
+            {/* WhatsApp Appointment CTA */}
+            <div className="pt-3 border-t border-[#F0EAE1]">
+              <a
+                href={`https://wa.me/${SITE_CONFIG.whatsappNumber}?text=${encodeURIComponent(
+                  'Hello Ghar Shagna Da team, I want to book an appointment to visit your studio for bridal fitting.'
+                )}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full inline-flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#20ba5a] text-white font-bold py-3.5 px-6 rounded-2xl text-xs sm:text-sm transition-all shadow-md hover:shadow-lg active:scale-98 cursor-pointer"
               >
-                <option value="Bridal Lehenga">Bridal Lehenga</option>
-                <option value="Wedding Dress / Gown">Wedding Dress / Gown</option>
-                <option value="Groom Sherwani">Groom Sherwani</option>
-                <option value="Both Bridal & Groom">Both Bridal & Groom Combo</option>
-              </select>
+                <MessageCircle className="w-4 h-4 sm:w-5 sm:h-5" />
+                <span>Book Appointment on WhatsApp</span>
+              </a>
             </div>
+          </div>
 
-            <div>
-              <label className="block text-xs text-gray-300 mb-1">Wedding / Function Date</label>
-              <input
-                type="date"
-                required
-                className="w-full bg-[#100708] border border-[#D4AF37]/30 rounded-xl py-2 px-3 text-xs text-white focus:outline-none focus:border-[#D4AF37]"
-              />
-            </div>
-
-            <div>
-              <label className="block text-xs text-gray-300 mb-1">Message / Questions</label>
-              <textarea
-                rows={3}
-                placeholder="Tell us any specific color, designer style, or measurement preference..."
-                className="w-full bg-[#100708] border border-[#D4AF37]/30 rounded-xl py-2 px-3 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#D4AF37]"
-              />
-            </div>
-
-            <button
-              type="submit"
-              className="w-full bg-[#D4AF37] hover:bg-amber-400 text-black font-bold py-3 rounded-xl text-xs uppercase tracking-wider transition-colors shadow-md"
-            >
-              Submit & Connect on WhatsApp
-            </button>
-          </form>
+          {/* Right Column: Send Quick Inquiry Form (7 Cols) */}
+          <ContactForm />
         </div>
       </div>
     </div>

@@ -21,7 +21,7 @@ export default function Footer() {
           <div className="space-y-4">
             <div className="relative w-44 h-16">
               <Image
-                src="/Logo.png"
+                src="/logo.png"
                 alt="घर शगनां दा"
                 fill
                 sizes="180px"

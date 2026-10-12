@@ -64,20 +64,53 @@ Please let me know if this is available for my wedding date.`
 
       {/* Booking & Rental Policy Box */}
       <div className="bg-[#faf8f5] border border-stone-200/80 rounded-2xl p-6 space-y-2">
-        <div className="flex items-baseline justify-between">
+        <div className="flex items-baseline justify-between flex-wrap gap-2">
           <div>
             <span className="text-xs text-stone-500 uppercase tracking-wider block font-medium">Rental Availability</span>
-            <span className="font-serif-luxury text-2xl font-bold text-[#8b1828]">
-              Available on Rent
-            </span>
-            <span className="text-xs text-stone-600 ml-2">({product.rentalDays} standard booking)</span>
+            <div className="flex items-center gap-2 mt-0.5">
+              {product.status === 'reserved' && (
+                <span className="font-serif-luxury text-2xl font-bold text-amber-700">
+                  Reserved / Booked
+                </span>
+              )}
+              {product.status === 'rented' && (
+                <span className="font-serif-luxury text-2xl font-bold text-rose-700">
+                  Currently Out on Rent
+                </span>
+              )}
+              {product.status === 'maintenance' && (
+                <span className="font-serif-luxury text-2xl font-bold text-stone-600">
+                  Under Dry-Clean & Maintenance
+                </span>
+              )}
+              {(!product.status || product.status === 'available') && (
+                <span className="font-serif-luxury text-2xl font-bold text-[#8b1828]">
+                  Available on Rent
+                </span>
+              )}
+              <span className="text-xs text-stone-600 ml-1">({product.rentalDays} standard booking)</span>
+            </div>
           </div>
-          <span className="text-xs font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-3 py-1 rounded-full">
-            Custom Alterations Free
-          </span>
+          {product.status === 'reserved' ? (
+            <span className="text-xs font-bold text-amber-800 bg-amber-100 border border-amber-300 px-3 py-1 rounded-full">
+              Advance Booked for Event
+            </span>
+          ) : product.status === 'rented' ? (
+            <span className="text-xs font-bold text-rose-800 bg-rose-100 border border-rose-300 px-3 py-1 rounded-full">
+              Booking on Return
+            </span>
+          ) : (
+            <span className="text-xs font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-3 py-1 rounded-full">
+              Custom Alterations Free
+            </span>
+          )}
         </div>
         <p className="text-xs text-stone-500 pt-1">
-          * Send a quick WhatsApp query or book a fitting appointment for custom rental package & dates.
+          {product.status === 'reserved'
+            ? '* This outfit has dates booked. Send a WhatsApp query to check availability for your specific dates.'
+            : product.status === 'rented'
+            ? '* Currently dispatched for an event. You can pre-book for upcoming dates via WhatsApp.'
+            : '* Send a quick WhatsApp query or book a fitting appointment for custom rental package & dates.'}
         </p>
       </div>
 

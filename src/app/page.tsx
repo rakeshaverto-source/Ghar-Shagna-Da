@@ -3,9 +3,9 @@
 import React, { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { 
-  MessageCircle, 
-  ArrowRight, 
+import {
+  MessageCircle,
+  ArrowRight,
   Calendar,
   ChevronRight,
   ChevronLeft,
@@ -162,6 +162,7 @@ export default function HomePage() {
             sizes: p.sizes || ['Custom Fit Available'],
             rentalDays: p.duration || p.rentalDays || '3 Days',
             isTrending: Boolean(p.featured ?? p.isTrending),
+            status: p.status || 'available',
             reviews: p.reviews || [],
             metaDescription: p.description || '',
           }));
@@ -244,7 +245,7 @@ export default function HomePage() {
                 >
                   {/* Studio Central Sunlight Beam */}
                   <div className={`absolute -inset-x-10 top-0 h-4/5 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] ${cat.spotlight}`} />
-                  
+
                   {/* Left Side Soft Tone for text legibility */}
                   <div className="absolute inset-y-0 left-0 w-1/4 bg-gradient-to-r from-black/25 via-black/10 to-transparent z-10 pointer-events-none" />
 
@@ -281,7 +282,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 3. EXPLORE OUR COLLECTIONS - SHOP BY CATEGORY (INTERACTIVE HORIZONTAL LUXURY PILLAR CAROUSEL) */}
+      {/* 3. EXPLORE OUR COLLECTIONS - Rent Now (INTERACTIVE HORIZONTAL LUXURY PILLAR CAROUSEL) */}
       <section id="categories" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4 sm:space-y-10 scroll-mt-28">
         {/* Section Header with Left-Right Carousel Navigation Controls */}
         <div className="relative pb-1 sm:pb-3 flex flex-col items-center text-center">
@@ -290,35 +291,37 @@ export default function HomePage() {
               Explore Our Collections
             </p>
             <h2 className="font-cinzel text-lg xs:text-xl sm:text-3xl lg:text-4xl font-bold tracking-[0.08em] sm:tracking-[0.14em] uppercase text-stone-900 leading-snug">
-              SHOP BY CATEGORY
+              RENT BY CATEGORY
             </h2>
             <div className="w-12 sm:w-20 h-0.5 bg-[#8b1828]/40 mx-auto rounded-full mt-1 sm:mt-2" />
           </div>
-
-          {/* Desktop/Tablet Slider Arrow Controls */}
-          <div className="hidden sm:flex items-center gap-2 mt-4 md:mt-0 md:absolute md:right-0 md:bottom-6">
-            <button
-              onClick={() => scrollCategories('left')}
-              aria-label="Previous Category"
-              className="w-10 h-10 rounded-full border border-stone-300 hover:border-[#8b1828] hover:bg-[#8b1828] hover:text-white text-stone-700 flex items-center justify-center transition-all duration-300 shadow-sm active:scale-95"
-            >
-              <ChevronLeft className="w-5 h-5" />
-            </button>
-            <button
-              onClick={() => scrollCategories('right')}
-              aria-label="Next Category"
-              className="w-10 h-10 rounded-full border border-stone-300 hover:border-[#8b1828] hover:bg-[#8b1828] hover:text-white text-stone-700 flex items-center justify-center transition-all duration-300 shadow-sm active:scale-95"
-            >
-              <ChevronRight className="w-5 h-5" />
-            </button>
-          </div>
         </div>
 
-        {/* Horizontal Carousel Track (Swipeable on touch & smoothly scrollable) */}
-        <div
-          ref={categoryScrollRef}
-          className="flex gap-4 sm:gap-6 overflow-x-auto scroll-smooth pb-0 sm:pb-6 pt-6 sm:pt-10 -mx-4 px-4 sm:mx-0 sm:px-0 no-scrollbar touch-pan-x snap-x snap-mandatory"
-        >
+        {/* Category Carousel Container with Left/Right Navigation on PC */}
+        <div className="relative group/carousel">
+          {/* Left Arrow Button (PC Only) */}
+          <button
+            onClick={() => scrollCategories('left')}
+            aria-label="Previous Category"
+            className="hidden lg:flex absolute -left-5 top-1/2 -translate-y-1/2 z-30 w-12 h-12 rounded-full bg-white/95 hover:bg-[#8b1828] text-stone-800 hover:text-white border border-stone-200 shadow-xl items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95 cursor-pointer backdrop-blur-xs"
+          >
+            <ChevronLeft className="w-6 h-6" />
+          </button>
+
+          {/* Right Arrow Button (PC Only) */}
+          <button
+            onClick={() => scrollCategories('right')}
+            aria-label="Next Category"
+            className="hidden lg:flex absolute -right-5 top-1/2 -translate-y-1/2 z-30 w-12 h-12 rounded-full bg-white/95 hover:bg-[#8b1828] text-stone-800 hover:text-white border border-stone-200 shadow-xl items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95 cursor-pointer backdrop-blur-xs"
+          >
+            <ChevronRight className="w-6 h-6" />
+          </button>
+
+          {/* Horizontal Carousel Track (Swipeable on touch & smoothly scrollable) */}
+          <div
+            ref={categoryScrollRef}
+            className="flex gap-4 sm:gap-6 overflow-x-auto scroll-smooth pb-0 sm:pb-6 pt-6 sm:pt-10 -mx-4 px-4 sm:mx-0 sm:px-0 no-scrollbar touch-pan-x snap-x snap-mandatory"
+          >
           {CATEGORIES.map((cat, idx) => (
             <Link
               key={cat.id}
@@ -377,6 +380,7 @@ export default function HomePage() {
               </div>
             </Link>
           ))}
+          </div>
         </div>
       </section>
 
@@ -393,7 +397,7 @@ export default function HomePage() {
             href="/catalog"
             className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-[#8b1828] hover:underline"
           >
-            <span>View Complete Collection ({productsList.length})</span>
+            <span>View Complete Collection</span>
             <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
@@ -408,7 +412,7 @@ export default function HomePage() {
       {/* 5. HOW THE RENTAL PROCESS WORKS (EXACT REFERENCE DESIGN) */}
       <section className="bg-[#FCFAF7] border-y border-[#F3EDE5] py-7 sm:py-9 overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 sm:space-y-8">
-          
+
           {/* Header */}
           <div className="text-center space-y-1 max-w-2xl mx-auto">
             <p className="font-script text-2xl sm:text-3xl text-[#8b1828]">
@@ -424,7 +428,7 @@ export default function HomePage() {
 
           {/* 4 Cards Grid with Responsive Layout & Desktop Connectors */}
           <div className="relative grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-7 items-stretch">
-            
+
             {/* Step 01 */}
             <div className="relative flex">
               <div className="group w-full bg-white rounded-[24px] p-8 sm:p-9 border border-[#F6EBEA] shadow-[0_8px_30px_rgba(235,185,188,0.12)] hover:shadow-[0_14px_35px_rgba(200,120,130,0.18)] hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between">
@@ -438,7 +442,7 @@ export default function HomePage() {
                       {/* Blush divider line below step number */}
                       <div className="w-9 h-[2px] bg-[#EBB4B6] rounded-full mt-3 mb-5" />
                     </div>
-                    
+
                     {/* Circular Icon Area (Prominent & Luxury) */}
                     <div className="w-20 h-20 rounded-full bg-[#FAF0F0] flex items-center justify-center transition-transform duration-300 group-hover:scale-105 shrink-0 relative">
                       <svg className="w-11 h-11 text-[#A85860]" viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -486,7 +490,7 @@ export default function HomePage() {
                       {/* Blush divider line below step number */}
                       <div className="w-9 h-[2px] bg-[#EBB4B6] rounded-full mt-3 mb-5" />
                     </div>
-                    
+
                     {/* Circular Icon Area (Prominent & Luxury) */}
                     <div className="w-20 h-20 rounded-full bg-[#FAF0F0] flex items-center justify-center transition-transform duration-300 group-hover:scale-105 shrink-0 relative">
                       <svg className="w-11 h-11 text-[#A85860]" viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -535,7 +539,7 @@ export default function HomePage() {
                       {/* Blush divider line below step number */}
                       <div className="w-9 h-[2px] bg-[#EBB4B6] rounded-full mt-3 mb-5" />
                     </div>
-                    
+
                     {/* Circular Icon Area (Prominent & Luxury) */}
                     <div className="w-20 h-20 rounded-full bg-[#FAF0F0] flex items-center justify-center transition-transform duration-300 group-hover:scale-105 shrink-0 relative">
                       <svg className="w-11 h-11 text-[#A85860]" viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -583,7 +587,7 @@ export default function HomePage() {
                       {/* Blush divider line below step number */}
                       <div className="w-9 h-[2px] bg-[#EBB4B6] rounded-full mt-3 mb-5" />
                     </div>
-                    
+
                     {/* Circular Icon Area (Prominent & Luxury) */}
                     <div className="w-20 h-20 rounded-full bg-[#FAF0F0] flex items-center justify-center transition-transform duration-300 group-hover:scale-105 shrink-0 relative">
                       <svg className="w-11 h-11 text-[#A85860]" viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -683,11 +687,10 @@ export default function HomePage() {
                   {[...Array(5)].map((_, i) => (
                     <Star
                       key={i}
-                      className={`w-3.5 h-3.5 ${
-                        i < (rev.rating || 5)
+                      className={`w-3.5 h-3.5 ${i < (rev.rating || 5)
                           ? 'fill-amber-400 text-amber-400'
                           : 'fill-stone-200 text-stone-200'
-                      }`}
+                        }`}
                     />
                   ))}
                 </div>
@@ -723,7 +726,7 @@ export default function HomePage() {
       {/* 6. FREQUENTLY ASKED QUESTIONS (FAQ ACCORDION) */}
       <section className="bg-[#FAF8F5] border-y border-[#F0EAE1] py-8 sm:py-12">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-7 sm:space-y-8">
-          
+
           {/* FAQ Header */}
           <div className="text-center space-y-2">
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-rose-50 border border-rose-200 text-xs font-semibold text-[#8b1828]">
@@ -754,9 +757,8 @@ export default function HomePage() {
                   >
                     <span className="leading-snug">{faq.question}</span>
                     <div
-                      className={`w-7 h-7 rounded-full bg-[#FAF0F1] flex items-center justify-center shrink-0 transition-transform duration-300 ${
-                        isOpen ? 'rotate-180 bg-[#8b1828] text-white' : 'text-[#8b1828]'
-                      }`}
+                      className={`w-7 h-7 rounded-full bg-[#FAF0F1] flex items-center justify-center shrink-0 transition-transform duration-300 ${isOpen ? 'rotate-180 bg-[#8b1828] text-white' : 'text-[#8b1828]'
+                        }`}
                     >
                       <ChevronDown className="w-4 h-4" />
                     </div>

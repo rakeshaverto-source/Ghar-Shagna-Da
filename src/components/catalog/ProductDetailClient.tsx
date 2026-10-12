@@ -123,6 +123,8 @@ export default function ProductDetailClient({ product, relatedProducts }: Produc
         isOpen={reviewModalOpen}
         onClose={() => setReviewModalOpen(false)}
         onSubmitReview={handleAddReview}
+        productTitle={product.title}
+        productImage={product.images && product.images[0]}
       />
     </div>
   );

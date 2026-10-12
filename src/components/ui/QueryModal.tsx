@@ -27,6 +27,11 @@ export default function QueryModal({
   });
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [minDate, setMinDate] = useState('');
+
+  React.useEffect(() => {
+    setMinDate(new Date().toISOString().split('T')[0]);
+  }, []);
 
   if (!isOpen) return null;
 
@@ -145,6 +150,7 @@ export default function QueryModal({
                     <input
                       type="date"
                       required
+                      min={minDate}
                       value={formData.eventDate}
                       onChange={(e) => setFormData({ ...formData, eventDate: e.target.value })}
                       className="w-full bg-stone-50/80 border border-stone-200/90 rounded-xl py-2.5 pl-10 pr-3 text-sm text-stone-900 focus:outline-none focus:border-[#8b1828] focus:bg-white focus:ring-2 focus:ring-[#8b1828]/10 transition-all shadow-inner"

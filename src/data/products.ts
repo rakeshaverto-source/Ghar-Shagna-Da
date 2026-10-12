@@ -29,6 +29,7 @@ export interface Product {
   sizes: string[];
   rentalDays: string;
   isTrending?: boolean;
+  status?: 'available' | 'rented' | 'reserved' | 'maintenance';
   reviews?: ProductReview[];
   metaDescription: string;
 }

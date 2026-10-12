@@ -37,6 +37,7 @@ export default function CatalogPage() {
             sizes: p.sizes || ['Custom Fit Available'],
             rentalDays: p.duration || p.rentalDays || '3 Days',
             isTrending: Boolean(p.featured ?? p.isTrending),
+            status: p.status || 'available',
             reviews: p.reviews || [],
             metaDescription: p.description || '',
           }));

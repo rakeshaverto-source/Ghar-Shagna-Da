@@ -45,7 +45,16 @@ async function getProductBySlug(slug: string): Promise<Product | null> {
           sizes: dbProduct.sizes || ['Custom Fit Available'],
           rentalDays: dbProduct.duration || '3 Days',
           isTrending: dbProduct.featured || false,
-          reviews: dbProduct.reviews || [],
+          status: (dbProduct.status as any) || 'available',
+          reviews: (dbProduct.reviews || []).map((r: any) => ({
+            author: r.author || '',
+            city: r.city || '',
+            date: r.date || '',
+            rating: Number(r.rating) || 5,
+            comment: r.comment || '',
+            image: r.image || '',
+            tag: r.tag || '',
+          })),
           metaDescription: dbProduct.description ? dbProduct.description.slice(0, 160) : '',
         };
       }

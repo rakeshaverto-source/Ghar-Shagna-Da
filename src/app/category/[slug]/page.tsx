@@ -17,12 +17,18 @@ interface CategoryPageProps {
   params: Promise<{
     slug: string;
   }>;
+  searchParams?: Promise<{
+    occasion?: string;
+    type?: string;
+  }>;
 }
 
 export async function generateStaticParams() {
-  return CATEGORIES.map((category) => ({
-    slug: category.slug,
-  }));
+  return [
+    { slug: 'bridal-lehengas' },
+    { slug: 'wedding-dresses' },
+    { slug: 'sherwanis' },
+  ];
 }
 
 export async function generateMetadata({ params }: CategoryPageProps): Promise<Metadata> {
@@ -45,7 +51,10 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
   });
 }
 
-async function getCategoryProducts(categorySlug: string): Promise<Product[]> {
+async function getCategoryProducts(
+  categorySlug: string,
+  filter?: { occasion?: string; type?: string }
+): Promise<Product[]> {
   try {
     try {
       await connection();
@@ -54,12 +63,30 @@ async function getCategoryProducts(categorySlug: string): Promise<Product[]> {
     }
     const conn = await connectDB();
     if (conn) {
-      const dbProducts = await ProductModel.find({
+      const query: any = {
         $or: [
           { categorySlug: categorySlug },
           { category: categorySlug },
         ],
-      }).sort({ createdAt: -1 }).lean();
+      };
+
+      if (filter?.occasion) {
+        query.occasion = { $regex: new RegExp(filter.occasion, 'i') };
+      }
+
+      if (filter?.type) {
+        query.$and = [
+          {
+            $or: [
+              { title: { $regex: new RegExp(filter.type, 'i') } },
+              { subtitle: { $regex: new RegExp(filter.type, 'i') } },
+              { description: { $regex: new RegExp(filter.type, 'i') } },
+            ],
+          },
+        ];
+      }
+
+      const dbProducts = await ProductModel.find(query).sort({ createdAt: -1 }).lean();
 
       if (dbProducts && dbProducts.length > 0) {
         return dbProducts.map((p) => ({
@@ -83,7 +110,16 @@ async function getCategoryProducts(categorySlug: string): Promise<Product[]> {
           sizes: p.sizes || ['Custom Fit Available'],
           rentalDays: p.duration || '3 Days',
           isTrending: p.featured || false,
-          reviews: p.reviews || [],
+          status: (p.status as any) || 'available',
+          reviews: (p.reviews || []).map((r: any) => ({
+            author: r.author || '',
+            city: r.city || '',
+            date: r.date || '',
+            rating: Number(r.rating) || 5,
+            comment: r.comment || '',
+            image: r.image || '',
+            tag: r.tag || '',
+          })),
           metaDescription: p.description ? p.description.slice(0, 160) : '',
         }));
       }
@@ -92,18 +128,46 @@ async function getCategoryProducts(categorySlug: string): Promise<Product[]> {
     console.error('Error fetching category products from DB:', err);
   }
 
-  return INITIAL_PRODUCTS.filter((p) => p.category === categorySlug);
+  let staticList = INITIAL_PRODUCTS.filter((p) => p.category === categorySlug);
+  if (filter?.occasion) {
+    const occRegex = new RegExp(filter.occasion, 'i');
+    staticList = staticList.filter((p) => occRegex.test(p.occasion));
+  }
+  if (filter?.type) {
+    const typeRegex = new RegExp(filter.type, 'i');
+    staticList = staticList.filter(
+      (p) =>
+        typeRegex.test(p.title) ||
+        typeRegex.test(p.subtitle || '') ||
+        typeRegex.test(p.description || '')
+    );
+  }
+  return staticList;
 }
 
-export default async function CategoryPage({ params }: CategoryPageProps) {
+export default async function CategoryPage({ params, searchParams }: CategoryPageProps) {
   const resolvedParams = await params;
+  const resolvedSearchParams = searchParams ? await searchParams : {};
   const category = CATEGORIES.find((c) => c.slug === resolvedParams.slug);
 
   if (!category) {
     notFound();
   }
 
-  const categoryProducts = await getCategoryProducts(category.slug);
+  const activeOccasion = resolvedSearchParams.occasion;
+  const activeType = resolvedSearchParams.type;
+
+  const categoryProducts = await getCategoryProducts(category.slug, {
+    occasion: activeOccasion,
+    type: activeType,
+  });
+
+  // Dynamic filter title badge
+  const filterLabel = activeOccasion
+    ? `${activeOccasion.charAt(0).toUpperCase() + activeOccasion.slice(1)} Special`
+    : activeType
+    ? `${activeType.charAt(0).toUpperCase() + activeType.slice(1)} Collection`
+    : null;
 
   return (
     <>
@@ -125,22 +189,39 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
           Catalog
         </Link>
         <span>/</span>
-        <span className="text-[#8b1828] font-semibold">{category.title}</span>
+        <Link href={`/category/${category.slug}`} className="hover:text-[#8b1828]">
+          {category.title}
+        </Link>
+        {filterLabel && (
+          <>
+            <span>/</span>
+            <span className="text-[#8b1828] font-semibold">{filterLabel}</span>
+          </>
+        )}
       </nav>
 
       {/* Category Hero Banner */}
       <div className="relative rounded-3xl overflow-hidden border border-[#f0eae1] bg-[#faf7f2] p-8 sm:p-12 shadow-sm">
         <div className="relative z-10 max-w-2xl space-y-3">
-          <div className="inline-flex items-center gap-2 bg-rose-50 border border-rose-200/60 px-3.5 py-1 rounded-full text-xs font-semibold text-[#8b1828]">
-            <span className="text-xs uppercase tracking-wider font-semibold text-[#8b1828]">{category.handwrittenSubtitle}</span>
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="inline-flex items-center gap-2 bg-rose-50 border border-rose-200/60 px-3.5 py-1 rounded-full text-xs font-semibold text-[#8b1828] uppercase tracking-wider">
+              {category.handwrittenSubtitle}
+            </span>
+            {filterLabel && (
+              <span className="inline-flex items-center gap-1.5 bg-amber-50 border border-amber-300/70 px-3 py-1 rounded-full text-xs font-bold text-amber-900 tracking-wide">
+                ✨ {filterLabel}
+              </span>
+            )}
           </div>
 
           <h1 className="font-serif-luxury text-3xl sm:text-5xl font-bold text-stone-900">
-            {category.title} on Rent
+            {filterLabel ? `${filterLabel} • ` : ''}{category.title} on Rent
           </h1>
 
           <p className="text-sm sm:text-base text-stone-600 font-normal leading-relaxed">
-            {category.tagline}. Every piece is carefully preserved, sanitized, and altered to your measurements by master artisans.
+            {filterLabel
+              ? `Handpicked luxury ensembles specially curated for ${activeOccasion || activeType}. Preserved in pristine condition and altered to your measurements.`
+              : `${category.tagline}. Every piece is carefully preserved, sanitized, and altered to your measurements by master artisans.`}
           </p>
 
           <div className="pt-2 flex flex-wrap gap-4 text-xs text-stone-700 font-medium">
@@ -170,19 +251,54 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
       {/* Products Grid */}
       <section className="space-y-6">
         <div className="flex items-center justify-between border-b border-stone-200 pb-3">
-          <h2 className="font-serif-luxury text-xl sm:text-2xl font-bold text-stone-900">
-            Available Designs ({categoryProducts.length})
-          </h2>
+          <div className="flex items-center gap-3">
+            <h2 className="font-serif-luxury text-xl sm:text-2xl font-bold text-stone-900">
+              {filterLabel ? `${filterLabel} Outfits` : 'Available Designs'}
+            </h2>
+            {filterLabel && (
+              <Link
+                href={`/category/${category.slug}`}
+                className="text-xs text-[#8b1828] hover:underline font-medium"
+              >
+                Clear Filter (View All)
+              </Link>
+            )}
+          </div>
           <span className="text-xs text-stone-500">
             Select an outfit to enquire or check dates
           </span>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          {categoryProducts.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
-        </div>
+        {categoryProducts.length > 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            {categoryProducts.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-16 bg-white rounded-2xl border border-stone-200/80 p-8 space-y-4">
+            <p className="font-cinzel text-lg font-bold text-stone-800">
+              No specific outfits found matching this filter
+            </p>
+            <p className="text-xs sm:text-sm text-stone-500 max-w-md mx-auto">
+              We have a vast collection of bridal and wedding outfits available at our showroom.
+            </p>
+            <div className="pt-2 flex justify-center gap-3">
+              <Link
+                href={`/category/${category.slug}`}
+                className="px-5 py-2.5 rounded-full bg-[#8b1828] text-white text-xs font-semibold hover:bg-[#70121f] transition-colors"
+              >
+                View All {category.title}
+              </Link>
+              <Link
+                href="/catalog"
+                className="px-5 py-2.5 rounded-full border border-stone-300 text-stone-700 text-xs font-semibold hover:bg-stone-50 transition-colors"
+              >
+                Browse All Outfits
+              </Link>
+            </div>
+          </div>
+        )}
       </section>
     </div>
     </>

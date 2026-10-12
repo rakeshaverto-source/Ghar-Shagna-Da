@@ -162,10 +162,10 @@ export default function GalleryPage() {
                 index % 4 === 0
                   ? 'aspect-2/3'      // Badi / Extra Tall (Featured)
                   : index % 3 === 0
-                  ? 'aspect-4/5'      // Medium Tall
-                  : index % 2 === 0
-                  ? 'aspect-1/1'      // Choti / Square
-                  : 'aspect-3/4';     // Standard Portrait
+                    ? 'aspect-4/5'      // Medium Tall
+                    : index % 2 === 0
+                      ? 'aspect-1/1'      // Choti / Square
+                      : 'aspect-3/4';     // Standard Portrait
 
               return (
                 <div

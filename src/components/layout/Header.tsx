@@ -35,16 +35,14 @@ export default function Header() {
 
   return (
     <header
-      className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${
-        isTransparent
+      className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${isTransparent
           ? 'bg-gradient-to-b from-black/80 via-black/40 to-transparent text-white border-transparent'
           : 'bg-white/95 backdrop-blur-md text-stone-900 border-b border-[#f0eae1] shadow-xs'
-      }`}
+        }`}
     >
       {/* Top marquee ticker - Only visible when scrolled or on other pages so hero video is 100% clean */}
-      <div className={`overflow-hidden text-xs py-1.5 sm:py-2 border-b bg-[#8b1828] text-white border-[#70121f] transition-all duration-300 ${
-        isTransparent ? 'hidden' : 'block'
-      }`}>
+      <div className={`overflow-hidden text-xs py-1.5 sm:py-2 border-b bg-[#8b1828] text-white border-[#70121f] transition-all duration-300 ${isTransparent ? 'hidden' : 'block'
+        }`}>
         <div className="animate-marquee items-center gap-10 whitespace-nowrap text-[12px] font-medium tracking-wider">
           <div className="flex items-center gap-8">
             <span>Wedding Season Bookings Open • Luxury Bridal Lehengas on Rent</span>
@@ -75,67 +73,66 @@ export default function Header() {
         <div className="flex items-center justify-between h-16 sm:h-20">
           {/* Logo - Pure & Clean, no artificial dark box */}
           <Link href="/" className="flex items-center gap-2 group">
-            <div className="relative w-28 xs:w-32 sm:w-44 h-11 sm:h-14 transition-transform group-hover:scale-105">
+            <div
+              className={`relative w-36 xs:w-40 sm:w-48 h-11 sm:h-14 transition-all duration-300 rounded-2xl px-2.5 py-1 ${
+                isTransparent
+                  ? 'bg-white/90 backdrop-blur-md shadow-[0_4px_24px_rgba(0,0,0,0.35)] border border-white/40 ring-1 ring-amber-300/30'
+                  : ''
+              } group-hover:scale-105`}
+            >
               <Image
-                src="/Logo.png"
+                src="/logo.png"
                 alt="घर शगनां दा - Complete Store of All Wedding Accessories"
                 fill
                 priority
-                sizes="(max-width: 640px) 130px, 180px"
-                className="object-contain object-left drop-shadow-md"
+                sizes="(max-width: 640px) 140px, 190px"
+                className="object-contain object-left p-0.5"
               />
             </div>
           </Link>
 
           {/* Desktop Navigation - Clean luxury typography */}
-          <nav className={`hidden lg:flex items-center space-x-8 text-sm font-medium transition-colors ${
-            isTransparent ? 'text-white drop-shadow-md' : 'text-stone-700'
-          }`}>
+          <nav className={`hidden lg:flex items-center space-x-8 text-sm font-medium transition-colors ${isTransparent ? 'text-white drop-shadow-md' : 'text-stone-700'
+            }`}>
             <Link
               href="/"
-              className={`transition-colors font-semibold tracking-wide ${
-                isTransparent ? 'text-amber-300 hover:text-white' : 'hover:text-[#8b1828]'
-              }`}
+              className={`transition-colors font-semibold tracking-wide ${isTransparent ? 'text-amber-300 hover:text-white' : 'hover:text-[#8b1828]'
+                }`}
             >
               Home
             </Link>
             <Link
               href="/category/bridal-lehengas"
-              className={`transition-colors font-medium tracking-wide ${
-                isTransparent ? 'hover:text-amber-300' : 'hover:text-[#8b1828]'
-              }`}
+              className={`transition-colors font-medium tracking-wide ${isTransparent ? 'hover:text-amber-300' : 'hover:text-[#8b1828]'
+                }`}
             >
               Bridal Lehengas
             </Link>
             <Link
               href="/category/wedding-dresses"
-              className={`transition-colors ${
-                isTransparent ? 'hover:text-amber-300' : 'hover:text-[#8b1828]'
-              }`}
+              className={`transition-colors ${isTransparent ? 'hover:text-amber-300' : 'hover:text-[#8b1828]'
+                }`}
             >
               Wedding Dresses
             </Link>
             <Link
               href="/category/sherwanis"
-              className={`transition-colors ${
-                isTransparent ? 'hover:text-amber-300' : 'hover:text-[#8b1828]'
-              }`}
+              className={`transition-colors ${isTransparent ? 'hover:text-amber-300' : 'hover:text-[#8b1828]'
+                }`}
             >
               Sherwanis
             </Link>
             <Link
               href="/catalog"
-              className={`transition-colors ${
-                isTransparent ? 'hover:text-amber-300' : 'hover:text-[#8b1828]'
-              }`}
+              className={`transition-colors ${isTransparent ? 'hover:text-amber-300' : 'hover:text-[#8b1828]'
+                }`}
             >
               All Outfits
             </Link>
             <Link
               href="/gallery"
-              className={`transition-colors font-medium tracking-wide ${
-                isTransparent ? 'hover:text-amber-300' : 'hover:text-[#8b1828]'
-              }`}
+              className={`transition-colors font-medium tracking-wide ${isTransparent ? 'hover:text-amber-300' : 'hover:text-[#8b1828]'
+                }`}
             >
               Gallery
             </Link>
@@ -157,11 +154,10 @@ export default function Header() {
 
             <Link
               href="/contact"
-              className={`inline-flex items-center gap-1.5 px-4 py-2.5 rounded-full text-xs font-semibold transition-all ${
-                isTransparent
+              className={`inline-flex items-center gap-1.5 px-4 py-2.5 rounded-full text-xs font-semibold transition-all ${isTransparent
                   ? 'border border-amber-300/80 text-amber-200 bg-black/30 backdrop-blur-xs hover:bg-[#8b1828] hover:border-[#8b1828] hover:text-white'
                   : 'border border-[#8b1828] text-[#8b1828] hover:bg-[#8b1828] hover:text-white'
-              }`}
+                }`}
             >
               <Phone className="w-3.5 h-3.5" />
               <span>Book Trial</span>
@@ -184,9 +180,8 @@ export default function Header() {
 
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className={`p-2 transition-colors ${
-                isTransparent ? 'text-white hover:text-amber-300' : 'text-stone-700 hover:text-[#8b1828]'
-              }`}
+              className={`p-2 transition-colors ${isTransparent ? 'text-white hover:text-amber-300' : 'text-stone-700 hover:text-[#8b1828]'
+                }`}
               aria-label="Toggle Menu"
             >
               {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}

@@ -2,11 +2,10 @@
 
 import React, { useState } from 'react';
 import { X, Save } from 'lucide-react';
-import { OutfitItem, ProductReviewItem } from './types';
+import { OutfitItem } from './types';
 import OutfitBasicPricingSection from './outfit-modal/OutfitBasicPricingSection';
 import OutfitGallerySection from './outfit-modal/OutfitGallerySection';
 import OutfitCraftDetailsSection from './outfit-modal/OutfitCraftDetailsSection';
-import OutfitReviewsSection from './outfit-modal/OutfitReviewsSection';
 
 interface OutfitModalProps {
   isOpen: boolean;
@@ -34,15 +33,6 @@ export default function OutfitModal({
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
 
-  // State for adding a new customer review to this outfit
-  const [showAddReview, setShowAddReview] = useState(false);
-  const [revAuthor, setRevAuthor] = useState('');
-  const [revCity, setRevCity] = useState('');
-  const [revRating, setRevRating] = useState<number>(5);
-  const [revComment, setRevComment] = useState('');
-  const [revImage, setRevImage] = useState('');
-  const [revTag, setRevTag] = useState('Verified Bride');
-
   if (!isOpen) return null;
 
   // Swap / Move image positions helper
@@ -52,42 +42,6 @@ export default function OutfitModal({
     const [movedItem] = list.splice(fromIdx, 1);
     list.splice(toIdx, 0, movedItem);
     setFormData((prev) => ({ ...prev, images: list }));
-  };
-
-  // Add Review to this outfit
-  const handleAddReviewToOutfit = () => {
-    if (!revAuthor.trim() || !revComment.trim()) {
-      alert('Please enter Client Name and Review Message!');
-      return;
-    }
-    const newRev: ProductReviewItem = {
-      author: revAuthor.trim(),
-      city: revCity.trim() || 'Punjab',
-      date: new Date().toLocaleDateString('en-US', { month: 'numeric', day: 'numeric', year: 'numeric' }),
-      rating: revRating,
-      comment: revComment.trim(),
-      image: revImage.trim() || undefined,
-      tag: revTag,
-    };
-    setFormData((prev) => ({
-      ...prev,
-      reviews: [newRev, ...(prev.reviews || [])],
-    }));
-    // Reset form
-    setRevAuthor('');
-    setRevCity('');
-    setRevComment('');
-    setRevImage('');
-    setRevRating(5);
-    setShowAddReview(false);
-  };
-
-  // Remove Review from this outfit
-  const handleRemoveReview = (index: number) => {
-    setFormData((prev) => ({
-      ...prev,
-      reviews: (prev.reviews || []).filter((_, i) => i !== index),
-    }));
   };
 
   // Drag and drop handlers
@@ -114,50 +68,49 @@ export default function OutfitModal({
 
   const handleDrop = (e: React.DragEvent, dropIndex: number) => {
     e.preventDefault();
-    if (draggedIndex !== null && draggedIndex !== dropIndex) {
-      moveImage(draggedIndex, dropIndex);
-    }
+    if (draggedIndex === null || draggedIndex === dropIndex) return;
+
+    const list = [...(formData.images || [])];
+    const [draggedItem] = list.splice(draggedIndex, 1);
+    list.splice(dropIndex, 0, draggedItem);
+
+    setFormData((prev) => ({ ...prev, images: list }));
     setDraggedIndex(null);
     setDragOverIndex(null);
   };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-stone-950/75 backdrop-blur-md overflow-y-auto animate-in fade-in duration-200">
-      <div className="bg-white border border-[#EDE4D8] rounded-3xl max-w-3xl w-full shadow-2xl relative my-6 overflow-hidden flex flex-col max-h-[92vh]">
-        {/* 👑 LUXURY HEADER WITH BURGUNDY ACCENTS */}
-        <div className="relative px-6 py-5 bg-gradient-to-r from-[#FAF8F5] via-white to-[#FAF8F5] border-b border-[#EDE4D8] flex items-center justify-between shrink-0">
+      <div className="bg-white border border-[#EDE4D8] rounded-3xl max-w-4xl w-full shadow-2xl relative my-6 overflow-hidden flex flex-col max-h-[92vh]">
+        {/* 🌟 HEADER */}
+        <div className="px-6 sm:px-8 py-5 bg-gradient-to-r from-[#FAF8F5] via-white to-[#FAF8F5] border-b border-[#EDE4D8] flex items-center justify-between shrink-0">
           <div>
             <div className="flex items-center gap-2">
-              <span className="text-[10px] font-extrabold uppercase tracking-widest text-[#8b1828] bg-rose-50 px-2 py-0.5 rounded-md border border-rose-200/60">
-                {editingProduct ? 'EDIT COUTURE PIECE' : 'NEW CATALOG OUTFIT'}
+              <span className="text-[10px] font-extrabold uppercase tracking-widest text-[#8b1828] bg-rose-50 px-2.5 py-0.5 rounded-full border border-rose-200/60">
+                {editingProduct ? 'Update Design' : 'New Collection'}
               </span>
-              {formData.status && (
-                <span className="text-[10px] font-semibold uppercase tracking-wider text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">
-                  {formData.status}
-                </span>
-              )}
+              <span className="text-xs text-stone-400">• Luxury Bridal & Groom</span>
             </div>
-            <h2 className="text-lg sm:text-xl font-serif font-bold text-stone-900 tracking-tight mt-0.5 line-clamp-1">
-              {editingProduct?.title || 'Add Handcrafted Outfit to Catalog'}
+            <h2 className="text-xl sm:text-2xl font-serif font-bold text-stone-900 mt-0.5">
+              {editingProduct ? `Edit: ${editingProduct.title}` : 'Add New Designer Outfit'}
             </h2>
           </div>
-
           <button
             type="button"
             onClick={onClose}
-            className="w-9 h-9 rounded-full bg-stone-100 hover:bg-stone-200 text-stone-500 hover:text-stone-800 flex items-center justify-center transition-all cursor-pointer border border-stone-200 shrink-0"
-            title="Close modal"
+            className="w-10 h-10 rounded-full bg-stone-100 hover:bg-stone-200 text-stone-500 hover:text-stone-800 flex items-center justify-center transition-all cursor-pointer"
+            aria-label="Close"
           >
-            <X className="w-4 h-4" />
+            <X className="w-5 h-5" />
           </button>
         </div>
 
-        {/* 📜 SCROLLABLE FORM BODY */}
-        <form onSubmit={handleSaveProduct} className="flex-1 overflow-y-auto p-6 sm:p-7 space-y-6">
-          {/* Section 1 & 2: Basic Info, Category & Pricing */}
+        {/* 📝 SCROLLABLE FORM BODY */}
+        <form onSubmit={handleSaveProduct} className="p-6 sm:p-8 space-y-7 overflow-y-auto flex-1">
+          {/* Section 1: Basic Info & Pricing */}
           <OutfitBasicPricingSection formData={formData} setFormData={setFormData} />
 
-          {/* Section 3: Multi-Image Upload & Drag & Drop Gallery */}
+          {/* Section 2 & 3: Photos Gallery & Reordering */}
           <OutfitGallerySection
             formData={formData}
             setFormData={setFormData}
@@ -176,47 +129,25 @@ export default function OutfitModal({
           {/* Section 4 & 5: Craftsmanship Details & Description */}
           <OutfitCraftDetailsSection formData={formData} setFormData={setFormData} />
 
-          {/* Section 6: Customer Reviews & Testimonials */}
-          <OutfitReviewsSection
-            reviews={formData.reviews || []}
-            showAddReview={showAddReview}
-            setShowAddReview={setShowAddReview}
-            revAuthor={revAuthor}
-            setRevAuthor={setRevAuthor}
-            revCity={revCity}
-            setRevCity={setRevCity}
-            revRating={revRating}
-            setRevRating={setRevRating}
-            revComment={revComment}
-            setRevComment={setRevComment}
-            revImage={revImage}
-            setRevImage={setRevImage}
-            revTag={revTag}
-            setRevTag={setRevTag}
-            onAddReview={handleAddReviewToOutfit}
-            onRemoveReview={handleRemoveReview}
-          />
-
           {/* 🏁 STICKY BOTTOM ACTIONS */}
           <div className="pt-4 flex items-center justify-between border-t border-[#EDE4D8]">
             <p className="text-[11px] text-stone-500 hidden sm:block">
-              Changes sync live across Catalog, Product Detail, and Schema JSON-LD.
+              Ensure high-resolution photos and accurate rental pricing before saving.
             </p>
-
-            <div className="flex items-center gap-3 w-full sm:w-auto justify-end">
+            <div className="flex items-center gap-3 ml-auto">
               <button
                 type="button"
                 onClick={onClose}
-                className="px-5 py-2.5 border border-stone-300 hover:border-stone-400 bg-white hover:bg-stone-50 rounded-xl text-xs font-bold text-stone-700 transition-all cursor-pointer"
+                className="px-5 py-2.5 rounded-xl border border-stone-200 text-stone-700 font-bold text-xs hover:bg-stone-100 transition-colors cursor-pointer"
               >
                 Cancel
               </button>
               <button
                 type="submit"
-                className="inline-flex items-center justify-center gap-2 bg-[#8b1828] hover:bg-[#721320] text-white px-6 py-2.5 rounded-xl text-xs font-bold tracking-wide uppercase transition-all shadow-md shadow-[#8b1828]/25 hover:shadow-lg active:scale-95 cursor-pointer"
+                className="px-7 py-2.5 rounded-xl bg-gradient-to-r from-[#8b1828] to-[#6a111e] hover:from-[#721320] hover:to-[#550d18] text-white font-bold text-xs shadow-lg hover:shadow-xl active:scale-95 transition-all flex items-center gap-2 cursor-pointer"
               >
-                <Save className="w-4 h-4 text-white" />
-                <span>Save Outfit</span>
+                <Save className="w-4 h-4" />
+                <span>{editingProduct ? 'Save All Changes' : 'Publish Outfit'}</span>
               </button>
             </div>
           </div>
