@@ -306,6 +306,8 @@ export default function AdminDashboardPage() {
         {/* Top Minimal Admin Bar */}
         <AdminHeader
           activeTab={activeTab}
+          bookings={bookings}
+          onSelectTab={setActiveTab}
           onRefresh={() => {
             if (activeTab === 'products') fetchProducts();
             else if (activeTab === 'bookings') fetchBookings();

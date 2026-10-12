@@ -41,12 +41,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${playfair.variable} ${cinzel.variable} ${dancingScript.variable} scroll-smooth`}>
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className={`${inter.variable} ${playfair.variable} ${cinzel.variable} ${dancingScript.variable} scroll-smooth`}
+    >
       <head>
         <LocalBusinessJsonLd />
         <WebSiteJsonLd />
       </head>
-      <body className="min-h-screen flex flex-col bg-white text-stone-900 selection:bg-[#8b1828] selection:text-white antialiased">
+      <body
+        suppressHydrationWarning
+        className="min-h-screen flex flex-col bg-white text-stone-900 selection:bg-[#8b1828] selection:text-white antialiased"
+      >
         <AnalyticsScripts />
         <Header />
         <main className="flex-grow bg-white">{children}</main>
