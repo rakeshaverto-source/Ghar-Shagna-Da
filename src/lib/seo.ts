@@ -35,6 +35,7 @@ export function constructMetadata({
     keywords: keywords.join(', '),
     authors: [{ name: SITE_CONFIG.name }],
     creator: SITE_CONFIG.name,
+    publisher: SITE_CONFIG.name,
     metadataBase: new URL(SITE_CONFIG.domain),
     alternates: {
       canonical: canonical,
