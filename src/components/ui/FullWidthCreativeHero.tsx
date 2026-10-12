@@ -223,15 +223,15 @@ export default function FullWidthCreativeHero({ onOpenModal }: FullWidthHeroProp
 
               {/* Huge Serif Headline with BOLD Handwritten Script Highlight */}
               <div className="space-y-1">
-                {idx === 0 ? (
-                  <h1 className="font-serif-luxury text-3xl sm:text-6xl lg:text-7xl xl:text-8xl font-bold tracking-[0.06em] uppercase text-white leading-none drop-shadow-[0_4px_16px_rgba(0,0,0,0.8)]">
-                    {mediaMode === 'video' ? videoContent.headingPrefix : slide.headingPrefix}
+                {/* 1 Sole H1 for entire homepage SEO ranking */}
+                {idx === 0 && (
+                  <h1 className="text-[11px] sm:text-xs tracking-[0.25em] sm:tracking-[0.3em] uppercase text-amber-300 font-semibold mb-1 sm:mb-2 drop-shadow-md">
+                    Best Bridal Lehenga in Chandigarh & Punjab
                   </h1>
-                ) : (
-                  <span className="font-serif-luxury text-3xl sm:text-6xl lg:text-7xl xl:text-8xl font-bold tracking-[0.06em] uppercase text-white leading-none drop-shadow-[0_4px_16px_rgba(0,0,0,0.8)] block">
-                    {mediaMode === 'video' ? videoContent.headingPrefix : slide.headingPrefix}
-                  </span>
                 )}
+                <span className="font-serif-luxury text-3xl sm:text-6xl lg:text-7xl xl:text-8xl font-bold tracking-[0.06em] uppercase text-white leading-none drop-shadow-[0_4px_16px_rgba(0,0,0,0.8)] block">
+                  {mediaMode === 'video' ? videoContent.headingPrefix : slide.headingPrefix}
+                </span>
                 <span className="font-script text-5xl sm:text-8xl lg:text-9xl xl:text-[10rem] text-[#f7c843] block -mt-2 sm:-mt-5 lg:-mt-7 font-bold tracking-normal drop-shadow-[0_8px_30px_rgba(0,0,0,0.9)] filter brightness-110">
                   {mediaMode === 'video' ? videoContent.headingHighlight : slide.headingHighlight}
                 </span>
