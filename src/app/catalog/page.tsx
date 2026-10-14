@@ -50,8 +50,19 @@ export default function CatalogPage() {
   }, []);
 
   const filteredProducts = productsList.filter((product) => {
-    const matchesCategory =
-      selectedCategory === 'all' || product.category === selectedCategory;
+    let matchesCategory = selectedCategory === 'all';
+    if (!matchesCategory) {
+      const [baseCat, queryStr] = selectedCategory.split('?');
+      if (product.category === baseCat || product.category === selectedCategory) {
+        if (queryStr && queryStr.includes('type=')) {
+          const typeVal = queryStr.split('type=')[1]?.toLowerCase();
+          const pText = `${product.title} ${product.subtitle} ${product.description}`.toLowerCase();
+          matchesCategory = pText.includes(typeVal);
+        } else {
+          matchesCategory = true;
+        }
+      }
+    }
     const matchesSearch =
       (product.title || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
       (product.fabric || '').toLowerCase().includes(searchQuery.toLowerCase()) ||

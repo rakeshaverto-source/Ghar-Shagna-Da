@@ -20,7 +20,7 @@ import OutfitInquiriesModal from '@/components/admin/OutfitInquiriesModal';
 import ReviewsTab from '@/components/admin/ReviewsTab';
 import GalleryTab from '@/components/admin/GalleryTab';
 import BlogsTab from '@/components/admin/BlogsTab';
-import { OutfitItem, HomeReviewItem, GalleryItemType, BlogPostItem } from '@/components/admin/types';
+import { OutfitItem, HomeReviewItem, GalleryItemType, BlogPostItem, BookingLead } from '@/components/admin/types';
 
 // Partitioned Custom Hooks
 import { useAdminAuth } from '@/components/admin/hooks/useAdminAuth';
@@ -30,6 +30,7 @@ import { useAdminInquiries, useAdminSeoAnalytics } from '@/components/admin/hook
 
 export default function AdminDashboardPage() {
   const [activeTab, setActiveTab] = useState<'products' | 'bookings' | 'hero' | 'reviews' | 'gallery' | 'blogs' | 'analytics' | 'pageseo'>('products');
+  const [selectedInquiryLead, setSelectedInquiryLead] = useState<BookingLead | null>(null);
 
   // Modular Auth State & Actions
   const {
@@ -330,6 +331,10 @@ export default function AdminDashboardPage() {
           activeTab={activeTab}
           bookings={bookings}
           onSelectTab={setActiveTab}
+          onSelectInquiry={(lead) => {
+            setSelectedInquiryLead(lead);
+            setActiveTab('bookings');
+          }}
           onRefresh={() => {
             if (activeTab === 'products') fetchProducts();
             else if (activeTab === 'bookings') fetchBookings();
@@ -379,6 +384,8 @@ export default function AdminDashboardPage() {
               loadingBookings={loadingBookings}
               fetchBookings={fetchBookings}
               handleUpdateBookingStatus={handleUpdateBookingStatus}
+              selectedLead={selectedInquiryLead}
+              onSelectLead={setSelectedInquiryLead}
             />
           )}
 

@@ -22,6 +22,8 @@ interface InquiriesTabProps {
   loadingBookings: boolean;
   fetchBookings: () => void;
   handleUpdateBookingStatus: (id: string, status: string) => void;
+  selectedLead?: BookingLead | null;
+  onSelectLead?: (lead: BookingLead | null) => void;
 }
 
 export default function InquiriesTab({
@@ -29,8 +31,19 @@ export default function InquiriesTab({
   loadingBookings,
   fetchBookings,
   handleUpdateBookingStatus,
+  selectedLead: externalSelectedLead,
+  onSelectLead,
 }: InquiriesTabProps) {
-  const [selectedLead, setSelectedLead] = useState<BookingLead | null>(null);
+  const [internalSelectedLead, setInternalSelectedLead] = useState<BookingLead | null>(null);
+
+  const activeLead = externalSelectedLead !== undefined ? externalSelectedLead : internalSelectedLead;
+  const setActiveLead = (lead: BookingLead | null) => {
+    if (onSelectLead) {
+      onSelectLead(lead);
+    } else {
+      setInternalSelectedLead(lead);
+    }
+  };
 
   const cleanPhone = (phone: string) => phone.replace(/[^0-9]/g, '');
 
@@ -87,7 +100,7 @@ export default function InquiriesTab({
                   <tr
                     key={b._id}
                     className="hover:bg-stone-50/80 transition-colors cursor-pointer group"
-                    onClick={() => setSelectedLead(b)}
+                    onClick={() => setActiveLead(b)}
                   >
                     <td className="py-3 px-4">
                       <span className="font-semibold text-stone-900 block text-sm group-hover:text-[#8b1828] transition-colors">
@@ -139,7 +152,7 @@ export default function InquiriesTab({
                         {/* View Full Details Button */}
                         <button
                           type="button"
-                          onClick={() => setSelectedLead(b)}
+                          onClick={() => setActiveLead(b)}
                           className="inline-flex items-center gap-1 bg-stone-100 hover:bg-stone-200 text-stone-700 px-2.5 py-1 rounded-lg text-[11px] font-semibold transition-colors cursor-pointer border border-stone-200"
                           title="View lead details"
                         >
@@ -173,7 +186,7 @@ export default function InquiriesTab({
       </div>
 
       {/* 🔍 VIEW LEAD DETAILS MODAL */}
-      {selectedLead && (
+      {activeLead && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-stone-950/70 backdrop-blur-sm overflow-y-auto animate-in fade-in duration-150">
           <div className="bg-white border border-[#EDE4D8] rounded-3xl max-w-lg w-full p-6 shadow-2xl relative my-6 space-y-5">
             {/* Modal Header */}
@@ -186,13 +199,13 @@ export default function InquiriesTab({
                   <span className="text-[10px] font-extrabold uppercase tracking-widest text-[#8b1828] block">
                     CUSTOMER INQUIRY DETAILS
                   </span>
-                  <h3 className="text-lg font-bold text-stone-900">{selectedLead.customerName}</h3>
+                  <h3 className="text-lg font-bold text-stone-900">{activeLead.customerName}</h3>
                 </div>
               </div>
 
               <button
                 type="button"
-                onClick={() => setSelectedLead(null)}
+                onClick={() => setActiveLead(null)}
                 className="w-8 h-8 rounded-full bg-stone-100 hover:bg-stone-200 text-stone-500 flex items-center justify-center cursor-pointer transition-colors"
                 title="Close"
               >
@@ -209,7 +222,7 @@ export default function InquiriesTab({
                     <span>Outfit Requested:</span>
                   </span>
                   <span className="font-bold text-stone-900 text-sm text-right">
-                    {selectedLead.productTitle}
+                    {activeLead.productTitle}
                   </span>
                 </div>
 
@@ -219,12 +232,12 @@ export default function InquiriesTab({
                     <span>WhatsApp Contact:</span>
                   </span>
                   <a
-                    href={`https://wa.me/${cleanPhone(selectedLead.phone)}`}
+                    href={`https://wa.me/${cleanPhone(activeLead.phone)}`}
                     target="_blank"
                     rel="noreferrer"
                     className="font-mono font-bold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full hover:underline"
                   >
-                    {selectedLead.phone}
+                    {activeLead.phone}
                   </a>
                 </div>
               </div>
@@ -236,7 +249,7 @@ export default function InquiriesTab({
                     <span>Event Date</span>
                   </span>
                   <p className="font-semibold text-stone-800 text-sm">
-                    {selectedLead.eventDate || 'Flexible / Not fixed'}
+                    {activeLead.eventDate || 'Flexible / Not fixed'}
                   </p>
                 </div>
 
@@ -246,7 +259,7 @@ export default function InquiriesTab({
                     <span>City / Location</span>
                   </span>
                   <p className="font-semibold text-stone-800 text-sm">
-                    {selectedLead.city || 'Punjab / Chandigarh'}
+                    {activeLead.city || 'Punjab / Chandigarh'}
                   </p>
                 </div>
 
@@ -256,7 +269,7 @@ export default function InquiriesTab({
                     <span>Rental Duration</span>
                   </span>
                   <p className="font-semibold text-stone-800 text-sm">
-                    {selectedLead.rentalDuration || '3 - 4 Days'}
+                    {activeLead.rentalDuration || '3 - 4 Days'}
                   </p>
                 </div>
 
@@ -265,11 +278,11 @@ export default function InquiriesTab({
                     Current Status
                   </span>
                   <select
-                    value={selectedLead.status}
+                    value={activeLead.status}
                     onChange={(e) => {
                       const newStat = e.target.value;
-                      handleUpdateBookingStatus(selectedLead._id, newStat);
-                      setSelectedLead({ ...selectedLead, status: newStat as BookingLead['status'] });
+                      handleUpdateBookingStatus(activeLead._id, newStat);
+                      setActiveLead({ ...activeLead, status: newStat as BookingLead['status'] });
                     }}
                     className="w-full bg-white border border-stone-300 rounded-lg text-xs py-1 px-2 font-semibold text-stone-800 focus:outline-none focus:border-[#8b1828]"
                   >
@@ -289,7 +302,7 @@ export default function InquiriesTab({
                   <span>Client Notes / Fitting Requirements:</span>
                 </span>
                 <p className="text-xs text-stone-800 leading-relaxed font-medium bg-white p-2.5 rounded-xl border border-stone-200 min-h-[50px]">
-                  {selectedLead.notes || 'No extra notes provided by client.'}
+                  {activeLead.notes || 'No extra notes provided by client.'}
                 </p>
               </div>
             </div>
@@ -298,17 +311,17 @@ export default function InquiriesTab({
             <div className="pt-2 flex items-center justify-between border-t border-[#EDE4D8]">
               <button
                 type="button"
-                onClick={() => setSelectedLead(null)}
+                onClick={() => setActiveLead(null)}
                 className="px-4 py-2 border border-stone-300 rounded-xl text-xs font-semibold text-stone-700 hover:bg-stone-50 cursor-pointer"
               >
                 Close
               </button>
 
               <a
-                href={`https://wa.me/${cleanPhone(selectedLead.phone)}?text=Hi%20${encodeURIComponent(
-                  selectedLead.customerName
+                href={`https://wa.me/${cleanPhone(activeLead.phone)}?text=Hi%20${encodeURIComponent(
+                  activeLead.customerName
                 )},%20thank%20you%20for%20inquiring%20about%20${encodeURIComponent(
-                  selectedLead.productTitle
+                  activeLead.productTitle
                 )}%20at%20Ghar%20Shagna%20Da.%20We%20would%20love%20to%20help%20you%20with%20your%20fitting%20trial%20and%20dates.`}
                 target="_blank"
                 rel="noreferrer"

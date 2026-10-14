@@ -33,7 +33,9 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: CategoryPageProps): Promise<Metadata> {
   const resolvedParams = await params;
-  const category = CATEGORIES.find((c) => c.slug === resolvedParams.slug);
+  const category =
+    CATEGORIES.find((c) => c.slug.split('?')[0] === resolvedParams.slug) ||
+    CATEGORIES.find((c) => c.slug === resolvedParams.slug);
 
   if (!category) {
     return constructMetadata({ title: 'Category Not Found' });
@@ -42,7 +44,7 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
   return constructMetadata({
     title: `${category.title} on Rent | Ghar Shagna Da`,
     description: `Rent handcrafted ${category.title} for weddings and Anand Karaj in Punjab. Custom fitting, hygienic sanitization and affordable rentals.`,
-    canonical: `https://gharshagnada.com/category/${category.slug}`,
+    canonical: `https://gharshagnada.com/category/${resolvedParams.slug}`,
     keywords: [
       `${category.title} on rent`,
       `wedding ${category.title} rental`,
@@ -148,7 +150,9 @@ async function getCategoryProducts(
 export default async function CategoryPage({ params, searchParams }: CategoryPageProps) {
   const resolvedParams = await params;
   const resolvedSearchParams = searchParams ? await searchParams : {};
-  const category = CATEGORIES.find((c) => c.slug === resolvedParams.slug);
+  const category =
+    CATEGORIES.find((c) => c.slug.split('?')[0] === resolvedParams.slug) ||
+    CATEGORIES.find((c) => c.slug === resolvedParams.slug);
 
   if (!category) {
     notFound();

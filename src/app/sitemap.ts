@@ -58,9 +58,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   ];
 
-  // 2. Category Pages
-  const categoryRoutes: MetadataRoute.Sitemap = CATEGORIES.map((cat) => ({
-    url: `${baseUrl}/category/${cat.slug}`,
+  // 2. Category Pages (Unique canonical routes)
+  const uniqueCategorySlugs = Array.from(new Set(CATEGORIES.map((cat) => cat.slug.split('?')[0])));
+  const categoryRoutes: MetadataRoute.Sitemap = uniqueCategorySlugs.map((slug) => ({
+    url: `${baseUrl}/category/${slug}`,
     lastModified: new Date(),
     changeFrequency: 'daily',
     priority: 0.85,

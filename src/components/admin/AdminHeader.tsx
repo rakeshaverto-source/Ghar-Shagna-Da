@@ -12,6 +12,7 @@ interface AdminHeaderProps {
   onAddNewBlog?: () => void;
   bookings?: BookingLead[];
   onSelectTab?: (tab: 'products' | 'bookings' | 'hero' | 'reviews' | 'gallery' | 'blogs' | 'analytics' | 'pageseo') => void;
+  onSelectInquiry?: (lead: BookingLead) => void;
 }
 
 export default function AdminHeader({
@@ -22,6 +23,7 @@ export default function AdminHeader({
   onAddNewBlog,
   bookings = [],
   onSelectTab,
+  onSelectInquiry,
 }: AdminHeaderProps) {
   const [showNotifications, setShowNotifications] = useState(false);
   const newBookings = bookings.filter((b) => b.status === 'new');
@@ -118,6 +120,7 @@ export default function AdminHeader({
                       onClick={() => {
                         setShowNotifications(false);
                         onSelectTab?.('bookings');
+                        onSelectInquiry?.(b);
                       }}
                       className="p-3 hover:bg-rose-50/40 transition-colors cursor-pointer text-left"
                     >
