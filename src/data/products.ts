@@ -312,7 +312,7 @@ export const CATEGORIES = [
     title: 'Lehenga',
     handwrittenSubtitle: 'Classic Heritage',
     tagline: 'Timeless flared lehengas with rich embroidery & zari needlework',
-    image: '/SHOP BY CATEGORY/Bridal-Lehenga.png',
+    image: '/SHOP BY CATEGORY/Bridal-Lehenga-1.png',
     bgGradient: 'from-[#421a24] via-[#2d1017] to-[#14060a]',
     spotlight: 'from-amber-100/30 via-rose-900/15 to-transparent',
     accentBorder: 'border-amber-300/80',
