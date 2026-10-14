@@ -19,7 +19,8 @@ import QuickReviewModal from '@/components/admin/QuickReviewModal';
 import OutfitInquiriesModal from '@/components/admin/OutfitInquiriesModal';
 import ReviewsTab from '@/components/admin/ReviewsTab';
 import GalleryTab from '@/components/admin/GalleryTab';
-import { OutfitItem, HomeReviewItem, GalleryItemType } from '@/components/admin/types';
+import BlogsTab from '@/components/admin/BlogsTab';
+import { OutfitItem, HomeReviewItem, GalleryItemType, BlogPostItem } from '@/components/admin/types';
 
 // Partitioned Custom Hooks
 import { useAdminAuth } from '@/components/admin/hooks/useAdminAuth';
@@ -28,7 +29,7 @@ import { useAdminHero } from '@/components/admin/hooks/useAdminHero';
 import { useAdminInquiries, useAdminSeoAnalytics } from '@/components/admin/hooks/useAdminInquiries';
 
 export default function AdminDashboardPage() {
-  const [activeTab, setActiveTab] = useState<'products' | 'bookings' | 'hero' | 'reviews' | 'gallery' | 'analytics' | 'pageseo'>('products');
+  const [activeTab, setActiveTab] = useState<'products' | 'bookings' | 'hero' | 'reviews' | 'gallery' | 'blogs' | 'analytics' | 'pageseo'>('products');
 
   // Modular Auth State & Actions
   const {
@@ -134,6 +135,25 @@ export default function AdminDashboardPage() {
   // Modular Gallery State & Actions
   const [galleryItems, setGalleryItems] = useState<GalleryItemType[]>([]);
   const [loadingGallery, setLoadingGallery] = useState(false);
+
+  // Modular Blogs State & Actions
+  const [blogs, setBlogs] = useState<BlogPostItem[]>([]);
+  const [loadingBlogs, setLoadingBlogs] = useState(false);
+
+  const fetchBlogs = async () => {
+    setLoadingBlogs(true);
+    try {
+      const res = await fetch('/api/blogs?admin=true');
+      const data = await res.json();
+      if (data.posts) {
+        setBlogs(data.posts);
+      }
+    } catch (err) {
+      console.error('Failed to load blogs', err);
+    } finally {
+      setLoadingBlogs(false);
+    }
+  };
 
   const fetchGallery = async () => {
     setLoadingGallery(true);
@@ -254,6 +274,7 @@ export default function AdminDashboardPage() {
       fetchBookings();
       fetchHomeReviews();
       fetchGallery();
+      fetchBlogs();
       fetchHeroSlides().then((data) => {
         if (data) syncAnalyticsFromApi(data);
       });
@@ -297,6 +318,7 @@ export default function AdminDashboardPage() {
         heroSlidesCount={heroSlides.length}
         reviewsCount={homeReviews.length}
         galleryCount={galleryItems.length}
+        blogsCount={blogs.length}
         handleAddNewProduct={handleAddNewProduct}
         handleLogout={handleLogout}
       />
@@ -313,6 +335,7 @@ export default function AdminDashboardPage() {
             else if (activeTab === 'bookings') fetchBookings();
             else if (activeTab === 'reviews') fetchHomeReviews();
             else if (activeTab === 'gallery') fetchGallery();
+            else if (activeTab === 'blogs') fetchBlogs();
             else {
               fetchHeroSlides().then((data) => {
                 if (data) syncAnalyticsFromApi(data);
@@ -404,7 +427,17 @@ export default function AdminDashboardPage() {
             />
           )}
 
-          {/* TAB 5: PER-PAGE SEO (TITLES & METAS) */}
+          {/* TAB 6: WEDDING STORIES & BLOG POSTS */}
+          {activeTab === 'blogs' && (
+            <BlogsTab
+              blogs={blogs}
+              loadingBlogs={loadingBlogs}
+              onRefresh={fetchBlogs}
+              setIsAuthenticated={setIsAuthenticated}
+            />
+          )}
+
+          {/* TAB 7: PER-PAGE SEO (TITLES & METAS) */}
           {activeTab === 'pageseo' && (
             <PageSeoTab
               analyticsSettings={analyticsSettings}

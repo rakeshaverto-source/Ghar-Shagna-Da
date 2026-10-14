@@ -58,9 +58,9 @@ export default function ProductDetailClient({ product, relatedProducts }: Produc
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 sm:pt-36 pb-16 space-y-16">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-28 pb-14 space-y-10">
       {/* Breadcrumbs */}
-      <nav className="flex items-center gap-2 text-xs text-stone-500">
+      <nav className="flex items-center gap-2 text-xs text-stone-500 mb-2">
         <Link href="/" className="hover:text-[#8b1828]">
           Home
         </Link>

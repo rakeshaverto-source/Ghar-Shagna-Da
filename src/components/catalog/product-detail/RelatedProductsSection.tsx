@@ -19,7 +19,7 @@ export default function RelatedProductsSection({
   if (!relatedProducts || relatedProducts.length === 0) return null;
 
   return (
-    <section className="border-t border-stone-200/90 pt-12 space-y-6">
+    <section className="border-t border-stone-200/90 pt-8 space-y-6">
       <div className="flex items-end justify-between">
         <div>
           <p className="font-script text-2xl text-[#8b1828]">More Options</p>

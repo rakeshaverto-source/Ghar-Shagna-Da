@@ -141,3 +141,26 @@ export interface GalleryItemType {
   createdAt?: string;
   updatedAt?: string;
 }
+
+export interface BlogPostItem {
+  _id?: string;
+  id: string;
+  slug: string;
+  title: string;
+  excerpt: string;
+  content: string;
+  coverImage: string;
+  category: string;
+  author: string;
+  authorRole?: string;
+  readTime: string;
+  tags: string[];
+  metaTitle?: string;
+  metaDescription?: string;
+  isPublished: boolean;
+  isFeatured: boolean;
+  publishedAt?: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
+

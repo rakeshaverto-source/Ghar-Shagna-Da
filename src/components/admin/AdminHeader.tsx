@@ -5,12 +5,13 @@ import { RefreshCw, Plus, Bell } from 'lucide-react';
 import { BookingLead } from './types';
 
 interface AdminHeaderProps {
-  activeTab: 'products' | 'bookings' | 'hero' | 'reviews' | 'gallery' | 'analytics' | 'pageseo';
+  activeTab: 'products' | 'bookings' | 'hero' | 'reviews' | 'gallery' | 'blogs' | 'analytics' | 'pageseo';
   onRefresh: () => void;
   onAddNewProduct: () => void;
   onAddNewHero: () => void;
+  onAddNewBlog?: () => void;
   bookings?: BookingLead[];
-  onSelectTab?: (tab: 'products' | 'bookings' | 'hero' | 'reviews' | 'gallery' | 'analytics' | 'pageseo') => void;
+  onSelectTab?: (tab: 'products' | 'bookings' | 'hero' | 'reviews' | 'gallery' | 'blogs' | 'analytics' | 'pageseo') => void;
 }
 
 export default function AdminHeader({
@@ -18,6 +19,7 @@ export default function AdminHeader({
   onRefresh,
   onAddNewProduct,
   onAddNewHero,
+  onAddNewBlog,
   bookings = [],
   onSelectTab,
 }: AdminHeaderProps) {
@@ -35,6 +37,8 @@ export default function AdminHeader({
         return 'Home Page Reviews & Client Testimonials';
       case 'gallery':
         return 'Photo Gallery & Real Bride Showcase';
+      case 'blogs':
+        return 'Wedding Stories & Bridal Articles';
       case 'pageseo':
         return 'Per-Page SEO (Meta Titles & Descriptions)';
       case 'analytics':
@@ -55,6 +59,8 @@ export default function AdminHeader({
         return 'Post, edit, feature or remove verified bride reviews shown on the Home Page';
       case 'gallery':
         return 'Upload client photoshoot pictures, categorize bridal moments, and tag outfits';
+      case 'blogs':
+        return 'Write and publish wedding rental guides, styling advice, and bridal couture trends';
       case 'pageseo':
         return 'Customize Google search preview, meta descriptions, and keywords for individual pages';
       case 'analytics':
@@ -185,6 +191,17 @@ export default function AdminHeader({
           >
             <Plus className="w-3.5 h-3.5" />
             <span>Add Banner Slide</span>
+          </button>
+        )}
+
+        {activeTab === 'blogs' && onAddNewBlog && (
+          <button
+            type="button"
+            onClick={onAddNewBlog}
+            className="inline-flex items-center gap-1.5 bg-[#8b1828] hover:bg-[#721320] text-white px-3.5 py-2 rounded-xl text-xs font-semibold transition-all shadow-sm active:scale-95 cursor-pointer"
+          >
+            <Plus className="w-3.5 h-3.5" />
+            <span>Write New Article</span>
           </button>
         )}
       </div>

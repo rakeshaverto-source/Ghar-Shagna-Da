@@ -13,16 +13,18 @@ import {
   LineChart,
   Globe,
   Star,
+  BookOpen,
 } from 'lucide-react';
 
 interface AdminSidebarProps {
-  activeTab: 'products' | 'bookings' | 'hero' | 'reviews' | 'gallery' | 'analytics' | 'pageseo';
-  setActiveTab: (tab: 'products' | 'bookings' | 'hero' | 'reviews' | 'gallery' | 'analytics' | 'pageseo') => void;
+  activeTab: 'products' | 'bookings' | 'hero' | 'reviews' | 'gallery' | 'blogs' | 'analytics' | 'pageseo';
+  setActiveTab: (tab: 'products' | 'bookings' | 'hero' | 'reviews' | 'gallery' | 'blogs' | 'analytics' | 'pageseo') => void;
   productsCount: number;
   bookingsCount: number;
   heroSlidesCount: number;
   reviewsCount?: number;
   galleryCount?: number;
+  blogsCount?: number;
   handleAddNewProduct: () => void;
   handleLogout: () => void;
 }
@@ -35,6 +37,7 @@ export default function AdminSidebar({
   heroSlidesCount,
   reviewsCount = 0,
   galleryCount = 0,
+  blogsCount = 0,
   handleAddNewProduct,
   handleLogout,
 }: AdminSidebarProps) {
@@ -163,6 +166,27 @@ export default function AdminSidebar({
         </button>
 
         <button
+          onClick={() => setActiveTab('blogs')}
+          className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all ${
+            activeTab === 'blogs'
+              ? 'bg-[#8b1828] text-white shadow-md shadow-[#8b1828]/20'
+              : 'text-stone-600 hover:bg-stone-100 hover:text-stone-900'
+          }`}
+        >
+          <div className="flex items-center gap-2.5">
+            <BookOpen className="w-4 h-4 text-purple-600" />
+            <span>Wedding Blogs</span>
+          </div>
+          <span
+            className={`text-[10px] px-2 py-0.5 rounded-full font-bold ${
+              activeTab === 'blogs' ? 'bg-white/20 text-white' : 'bg-purple-100 text-purple-800'
+            }`}
+          >
+            {blogsCount}
+          </span>
+        </button>
+
+        <button
           onClick={() => setActiveTab('pageseo')}
           className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all ${
             activeTab === 'pageseo'
@@ -216,12 +240,36 @@ export default function AdminSidebar({
             <span>Open Live Store</span>
           </Link>
 
+          <Link
+            href="/blog"
+            target="_blank"
+            className="w-full flex items-center gap-2.5 px-3.5 py-2 rounded-xl text-xs font-medium text-stone-600 hover:bg-stone-100 hover:text-stone-900 transition-colors"
+          >
+            <ExternalLink className="w-3.5 h-3.5 text-stone-400" />
+            <span>View All Live Blogs</span>
+          </Link>
+
           <button
             onClick={handleAddNewProduct}
             className="w-full mt-2 flex items-center gap-2.5 px-3.5 py-2 rounded-xl text-xs font-semibold text-[#8b1828] bg-rose-50 hover:bg-rose-100/70 border border-rose-200/60 transition-colors"
           >
             <Plus className="w-3.5 h-3.5" />
             <span>Add New Outfit</span>
+          </button>
+
+          <button
+            onClick={() => {
+              setActiveTab('blogs');
+            }}
+            className="w-full mt-2 flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold text-purple-900 bg-purple-50 hover:bg-purple-100/80 border border-purple-200/70 transition-colors shadow-xs"
+          >
+            <div className="flex items-center gap-2">
+              <BookOpen className="w-4 h-4 text-purple-700" />
+              <span>All Blogs (Edit / Delete)</span>
+            </div>
+            <span className="text-[10px] px-2 py-0.5 rounded-full font-bold bg-purple-200/80 text-purple-900">
+              {blogsCount}
+            </span>
           </button>
         </div>
       </div>

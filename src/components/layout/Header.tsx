@@ -10,11 +10,13 @@ import { SITE_CONFIG } from '@/data/products';
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
   const isHome = pathname === '/';
   const isAdmin = pathname?.startsWith('/admin');
 
   useEffect(() => {
+    setMounted(true);
     const handleScroll = () => {
       if (window.scrollY > 40) {
         setIsScrolled(true);
@@ -92,49 +94,42 @@ export default function Header() {
           </Link>
 
           {/* Desktop Navigation - Clean luxury typography */}
-          <nav className={`hidden lg:flex items-center space-x-8 text-sm font-medium transition-colors ${isTransparent ? 'text-white drop-shadow-md' : 'text-stone-700'
+          <nav className={`hidden lg:flex items-center space-x-8 text-sm font-semibold tracking-wide transition-colors ${isTransparent ? 'text-white drop-shadow-md' : 'text-stone-700'
             }`}>
             <Link
               href="/"
-              className={`transition-colors font-semibold tracking-wide ${isTransparent ? 'text-amber-300 hover:text-white' : 'hover:text-[#8b1828]'
+              className={`transition-colors uppercase tracking-wider text-xs font-bold ${isTransparent ? 'hover:text-amber-300' : 'hover:text-[#8b1828]'
                 }`}
             >
               Home
             </Link>
             <Link
-              href="/category/bridal-lehengas"
-              className={`transition-colors font-medium tracking-wide ${isTransparent ? 'hover:text-amber-300' : 'hover:text-[#8b1828]'
+              href="/men"
+              className={`transition-colors uppercase tracking-wider text-xs font-bold ${isTransparent ? 'hover:text-amber-300' : 'hover:text-[#8b1828]'
                 }`}
             >
-              Bridal Lehengas
+              Men
             </Link>
             <Link
-              href="/category/wedding-dresses"
-              className={`transition-colors ${isTransparent ? 'hover:text-amber-300' : 'hover:text-[#8b1828]'
+              href="/women"
+              className={`transition-colors uppercase tracking-wider text-xs font-bold ${isTransparent ? 'hover:text-amber-300' : 'hover:text-[#8b1828]'
                 }`}
             >
-              Wedding Dresses
-            </Link>
-            <Link
-              href="/category/sherwanis"
-              className={`transition-colors ${isTransparent ? 'hover:text-amber-300' : 'hover:text-[#8b1828]'
-                }`}
-            >
-              Sherwanis
-            </Link>
-            <Link
-              href="/catalog"
-              className={`transition-colors ${isTransparent ? 'hover:text-amber-300' : 'hover:text-[#8b1828]'
-                }`}
-            >
-              All Outfits
+              Women
             </Link>
             <Link
               href="/gallery"
-              className={`transition-colors font-medium tracking-wide ${isTransparent ? 'hover:text-amber-300' : 'hover:text-[#8b1828]'
+              className={`transition-colors uppercase tracking-wider text-xs font-bold ${isTransparent ? 'hover:text-amber-300' : 'hover:text-[#8b1828]'
                 }`}
             >
               Gallery
+            </Link>
+            <Link
+              href="/blog"
+              className={`transition-colors uppercase tracking-wider text-xs font-bold ${isTransparent ? 'hover:text-amber-300' : 'hover:text-[#8b1828]'
+                }`}
+            >
+              Blog
             </Link>
           </nav>
 
@@ -196,44 +191,37 @@ export default function Header() {
           <Link
             href="/"
             onClick={() => setMobileMenuOpen(false)}
-            className="block text-stone-800 font-medium text-base hover:text-[#8b1828]"
+            className="block text-stone-800 font-semibold text-base hover:text-[#8b1828]"
           >
             Home
           </Link>
           <Link
-            href="/category/bridal-lehengas"
+            href="/men"
             onClick={() => setMobileMenuOpen(false)}
-            className="block text-stone-800 font-medium text-base hover:text-[#8b1828]"
+            className="block text-stone-800 font-semibold text-base hover:text-[#8b1828]"
           >
-            Bridal Lehengas
+            Men
           </Link>
           <Link
-            href="/category/wedding-dresses"
+            href="/women"
             onClick={() => setMobileMenuOpen(false)}
-            className="block text-stone-800 font-medium text-base hover:text-[#8b1828]"
+            className="block text-stone-800 font-semibold text-base hover:text-[#8b1828]"
           >
-            Wedding Dresses & Gowns
-          </Link>
-          <Link
-            href="/category/sherwanis"
-            onClick={() => setMobileMenuOpen(false)}
-            className="block text-stone-800 font-medium text-base hover:text-[#8b1828]"
-          >
-            Groom Sherwanis
-          </Link>
-          <Link
-            href="/catalog"
-            onClick={() => setMobileMenuOpen(false)}
-            className="block text-stone-800 font-medium text-base hover:text-[#8b1828]"
-          >
-            Browse All Outfits
+            Women
           </Link>
           <Link
             href="/gallery"
             onClick={() => setMobileMenuOpen(false)}
-            className="block text-stone-800 font-medium text-base hover:text-[#8b1828]"
+            className="block text-stone-800 font-semibold text-base hover:text-[#8b1828]"
           >
-            Real Wedding Gallery
+            Gallery
+          </Link>
+          <Link
+            href="/blog"
+            onClick={() => setMobileMenuOpen(false)}
+            className="block text-stone-800 font-semibold text-base hover:text-[#8b1828]"
+          >
+            Blog
           </Link>
           <div className="pt-2 border-t border-stone-100 flex items-center justify-end">
             <Link

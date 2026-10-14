@@ -219,3 +219,61 @@ export function BreadcrumbJsonLd({
     />
   );
 }
+
+/**
+ * 5. BlogPosting / Article Schema (For Blog Detail Pages)
+ */
+export function BlogPostingJsonLd({
+  title,
+  description,
+  slug,
+  date,
+  author,
+  image,
+}: {
+  title: string;
+  description: string;
+  slug: string;
+  date: string;
+  author: string;
+  image: string;
+}) {
+  const postUrl = `${SITE_CONFIG.domain}/blog/${slug}`;
+  const fullImage = image.startsWith('http')
+    ? image
+    : `${SITE_CONFIG.domain}${image.startsWith('/') ? image : `/${image}`}`;
+
+  const schema = {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': postUrl,
+    },
+    headline: title,
+    description: description,
+    image: [fullImage],
+    datePublished: date,
+    dateModified: date,
+    author: {
+      '@type': 'Person',
+      name: author || 'Ghar Shagna Da Editorial Team',
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: SITE_CONFIG.name,
+      logo: {
+        '@type': 'ImageObject',
+        url: `${SITE_CONFIG.domain}/logo.png`,
+      },
+    },
+  };
+
+  return (
+    <script
+      id={`schema-blog-${slug}`}
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+    />
+  );
+}

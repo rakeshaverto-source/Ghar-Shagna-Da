@@ -21,10 +21,34 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.9,
     },
     {
+      url: `${baseUrl}/men`,
+      lastModified: new Date(),
+      changeFrequency: 'daily',
+      priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/women`,
+      lastModified: new Date(),
+      changeFrequency: 'daily',
+      priority: 0.9,
+    },
+    {
       url: `${baseUrl}/how-rental-works`,
       lastModified: new Date(),
       changeFrequency: 'weekly',
       priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/gallery`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/blog`,
+      lastModified: new Date(),
+      changeFrequency: 'daily',
+      priority: 0.85,
     },
     {
       url: `${baseUrl}/contact`,
@@ -75,5 +99,23 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8,
   }));
 
-  return [...staticRoutes, ...categoryRoutes, ...productRoutes];
+  // 4. Dynamic Blog Posts
+  let blogRoutes: MetadataRoute.Sitemap = [];
+  try {
+    const conn = await connectDB();
+    const BlogPost = (await import('@/models/BlogPost')).default;
+    const posts = conn ? await BlogPost.find({ isPublished: true }, 'slug updatedAt').lean() : [];
+    if (posts && posts.length > 0) {
+      blogRoutes = posts.map((b: any) => ({
+        url: `${baseUrl}/blog/${b.slug}`,
+        lastModified: b.updatedAt ? new Date(b.updatedAt) : new Date(),
+        changeFrequency: 'weekly',
+        priority: 0.75,
+      }));
+    }
+  } catch (e) {
+    // silently fallback
+  }
+
+  return [...staticRoutes, ...categoryRoutes, ...productRoutes, ...blogRoutes];
 }

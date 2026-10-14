@@ -18,7 +18,7 @@ export default function ProductReviewsSection({
   onOpenWriteReview,
 }: ProductReviewsSectionProps) {
   return (
-    <section className="border-t border-stone-200/90 pt-12 space-y-6">
+    <section className="border-t border-stone-200/90 pt-8 space-y-6">
       <div>
         <h2 className="text-2xl sm:text-3xl font-bold text-stone-900 tracking-tight">
           Customer Reviews

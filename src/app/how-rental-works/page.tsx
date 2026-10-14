@@ -51,7 +51,7 @@ export default function HowRentalWorksPage() {
       step: '03',
       title: 'Pristine Sanitized Handover',
       punjabiTitle: 'Steam Ironed & Sanitized Garment Box',
-      desc: 'Collect your outfit 1 to 2 days prior to your special function. Every ensemble is hospital-grade steam sanitized, dry-cleaned, carefully packaged in luxury garment bags with all accessories.',
+      desc: 'We hand over or deliver your sanitized outfit as per your requirement prior to your special function. Every ensemble is hospital-grade steam sanitized, dry-cleaned, and carefully packaged in luxury garment bags with all accessories.',
       icon: ShieldCheck,
       tag: 'Step 3'
     },

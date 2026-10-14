@@ -44,6 +44,7 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
+      data-scroll-behavior="smooth"
       className={`${inter.variable} ${playfair.variable} ${cinzel.variable} ${dancingScript.variable} scroll-smooth`}
     >
       <head>

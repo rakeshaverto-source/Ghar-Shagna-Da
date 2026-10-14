@@ -376,14 +376,13 @@ export const CATEGORIES = [
 
 export const OCCASION_CATEGORIES = [
   {
-    id: 'cocktail',
-    slug: 'wedding-dresses?occasion=cocktail',
-    title: 'COCKTAIL',
-    image: '/Categery/Cocktail.png',
-    // Balanced Muted Slate & Dusty Navy (Not black, not washed out — makes black sequins sparkle)
-    bgGradient: 'from-[#3a445d] via-[#2a3245] to-[#1c2230]',
-    spotlight: 'from-amber-100/25 via-white/10 to-transparent',
-    archBorder: 'border-amber-300/80',
+    id: 'bridal',
+    slug: 'bridal-lehengas?occasion=wedding',
+    title: 'WEDDING',
+    image: '/SHOP BY CATEGORY/Bridal-Lehenga.png',
+    bgGradient: 'from-[#4a2e1f] via-[#331e13] to-[#1c0f08]',
+    spotlight: 'from-amber-100/35 via-amber-200/10 to-transparent',
+    archBorder: 'border-amber-300',
     accentColor: 'text-amber-200',
   },
   {
@@ -391,42 +390,28 @@ export const OCCASION_CATEGORIES = [
     slug: 'bridal-lehengas?occasion=reception',
     title: 'RECEPTION',
     image: '/Categery/reception.png',
-    // Warm Rich Caramel & Cinnamon Amber (Perfect medium depth for nude-gold lehenga)
-    bgGradient: 'from-[#6e523f] via-[#543d2e] to-[#38271c]',
-    spotlight: 'from-amber-100/30 via-white/10 to-transparent',
-    archBorder: 'border-amber-300',
-    accentColor: 'text-amber-200',
+    bgGradient: 'from-[#1e293b] via-[#0f172a] to-[#050a14]',
+    spotlight: 'from-cyan-100/30 via-white/10 to-transparent',
+    archBorder: 'border-slate-300/80',
+    accentColor: 'text-slate-100',
   },
   {
     id: 'sangeet',
     slug: 'wedding-dresses?occasion=sangeet',
     title: 'SANGEET',
-    image: '/Categery/Sangeet.png',
-    // Rich Imperial Maroon & Ruby Wine (Vibrant festive tone)
-    bgGradient: 'from-[#6a2034] via-[#521727] to-[#380e1a]',
-    spotlight: 'from-rose-100/25 via-white/10 to-transparent',
-    archBorder: 'border-rose-300',
-    accentColor: 'text-rose-100',
-  },
-  {
-    id: 'bridesmaid',
-    slug: 'wedding-dresses?occasion=bridesmaid',
-    title: 'BRIDESMAID',
-    image: '/Categery/Bridesmaid.png',
-    // Elegant Mauve Berry & Warm Plum (Complements the pastel pink floral saree)
-    bgGradient: 'from-[#6b4754] via-[#533541] to-[#3a232c]',
-    spotlight: 'from-pink-100/30 via-white/10 to-transparent',
-    archBorder: 'border-pink-300',
-    accentColor: 'text-pink-100',
+    image: '/Categery/Sangeet1.png',
+    bgGradient: 'from-[#1e1b4b] via-[#141236] to-[#09081e]',
+    spotlight: 'from-amber-200/30 via-rose-300/10 to-transparent',
+    archBorder: 'border-amber-300/70',
+    accentColor: 'text-amber-100',
   },
   {
     id: 'mehendi',
     slug: 'wedding-dresses?occasion=mehendi',
     title: 'MEHENDI',
     image: '/Categery/mehendi-v3.png',
-    // Rich Olive Sage & Forest Moss (Vibrant festive mehendi green depth)
-    bgGradient: 'from-[#3a583e] via-[#2c4430] to-[#1e2f21]',
-    spotlight: 'from-emerald-100/25 via-white/10 to-transparent',
+    bgGradient: 'from-[#1f3a2b] via-[#14261c] to-[#0a150e]',
+    spotlight: 'from-emerald-100/30 via-white/10 to-transparent',
     archBorder: 'border-emerald-300',
     accentColor: 'text-emerald-100',
   },
@@ -435,11 +420,89 @@ export const OCCASION_CATEGORIES = [
     slug: 'wedding-dresses?occasion=haldi',
     title: 'HALDI',
     image: '/Categery/haldi-new.png',
-    // Warm Golden Marigold & Saffron Honey (Rich, joyful and festive without being harsh)
-    bgGradient: 'from-[#78541c] via-[#5e4113] to-[#402b0a]',
-    spotlight: 'from-amber-100/30 via-white/15 to-transparent',
+    bgGradient: 'from-[#543810] via-[#3c2709] to-[#221603]',
+    spotlight: 'from-amber-100/40 via-amber-300/15 to-transparent',
     archBorder: 'border-amber-300',
     accentColor: 'text-amber-100',
+  },
+  {
+    id: 'cocktail',
+    slug: 'wedding-dresses?occasion=cocktail',
+    title: 'COCKTAIL',
+    image: '/Categery/Cocktail.png',
+    bgGradient: 'from-[#132735] via-[#0c1a24] to-[#050e14]',
+    spotlight: 'from-sky-100/30 via-white/10 to-transparent',
+    archBorder: 'border-cyan-200/70',
+    accentColor: 'text-cyan-100',
+  },
+];
+
+export const OCCASION_CATEGORIES_MEN = [
+  {
+    id: 'groom-wedding',
+    slug: 'sherwanis?occasion=wedding',
+    title: 'WEDDING',
+    image: '/Categery/Sherwani.png',
+    // Soft Warm Champagne & Ivory Sand (Ivory/Gold sherwani pops beautifully with royal warmth)
+    bgGradient: 'from-[#FAF3EA] via-[#F3E7D5] to-[#E5D2BA]',
+    spotlight: 'from-white/70 via-amber-100/30 to-transparent',
+    archBorder: 'border-[#CBB28A]',
+    accentColor: 'text-[#8b1828]',
+  },
+  {
+    id: 'groom-reception',
+    slug: 'sherwanis?occasion=reception',
+    title: 'RECEPTION',
+    image: '/Categery/reception-men.png',
+    // Elegant Platinum Silver Mist (Black embroidered achkan stands out with high contrast)
+    bgGradient: 'from-[#F1F5F9] via-[#E2E8F0] to-[#CBD5E1]',
+    spotlight: 'from-white/80 via-slate-200/40 to-transparent',
+    archBorder: 'border-[#94A3B8]',
+    accentColor: 'text-[#8b1828]',
+  },
+  {
+    id: 'groom-sangeet',
+    slug: 'sherwanis?occasion=sangeet',
+    title: 'SANGEET',
+    image: '/Categery/Sangeet-men.png',
+    // Soft Rose Quartz & Lavender Mist (Deep Maroon/Wine outfit pops sharply)
+    bgGradient: 'from-[#FDF2F4] via-[#FCE4E8] to-[#E8D0D6]',
+    spotlight: 'from-white/80 via-rose-100/40 to-transparent',
+    archBorder: 'border-[#D4A5B0]',
+    accentColor: 'text-[#8b1828]',
+  },
+  {
+    id: 'groom-mehendi',
+    slug: 'sherwanis?occasion=mehendi',
+    title: 'MEHENDI',
+    image: '/Categery/Mehendi-men.png',
+    // Fresh Light Pistachio / Sage Green (Olive/Mint sherwani pops cleanly)
+    bgGradient: 'from-[#F2F7F4] via-[#E2EFE7] to-[#C9DFC2]',
+    spotlight: 'from-white/80 via-emerald-100/30 to-transparent',
+    archBorder: 'border-[#A3C7B0]',
+    accentColor: 'text-[#8b1828]',
+  },
+  {
+    id: 'groom-haldi',
+    slug: 'sherwanis?occasion=haldi',
+    title: 'HALDI',
+    image: '/Categery/Haldi-men.png',
+    // Soft Creamy Buttercup / Light Amber Pastel (Vibrant yellow outfit is highlighted smoothly)
+    bgGradient: 'from-[#FEFBF0] via-[#FEF3C7] to-[#FDE68A]/70',
+    spotlight: 'from-white/80 via-amber-100/40 to-transparent',
+    archBorder: 'border-[#E0C068]',
+    accentColor: 'text-[#8b1828]',
+  },
+  {
+    id: 'groom-cocktail',
+    slug: 'sherwanis?occasion=cocktail',
+    title: 'COCKTAIL',
+    image: '/Categery/Cocktail-men.png',
+    // Subtle Ice Blue / Soft Slate Pearl (Shimmering black tuxedo creates gorgeous studio contrast)
+    bgGradient: 'from-[#F0F6FA] via-[#E0EDF5] to-[#C8DDEB]',
+    spotlight: 'from-white/80 via-sky-100/40 to-transparent',
+    archBorder: 'border-[#98BACF]',
+    accentColor: 'text-[#8b1828]',
   },
 ];
 
@@ -447,8 +510,8 @@ export const OCCASION_CATEGORIES = [
 export const SITE_CONFIG = {
   name: 'Ghar Shagna Da',
   tagline: 'Complete Store of All Wedding Accessories & Outfits on Rent',
-  phone: '+91 95408 95061',
-  whatsappNumber: '919540895061',
+  phone: '+91 92169 96130',
+  whatsappNumber: '919216996130',
   email: 'gharshagnada@gmail.com',
   address: 'Zirakpur-Panchkula-Kalka Highway, Dhakoli, Zirakpur, Punjab 160104, India',
   domain: 'https://gharshagnada.com',

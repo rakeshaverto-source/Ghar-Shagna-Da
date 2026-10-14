@@ -58,7 +58,7 @@ interface FullWidthHeroProps {
 export default function FullWidthCreativeHero({ onOpenModal }: FullWidthHeroProps) {
   const [slides, setSlides] = useState<CreativeSlide[]>(CREATIVE_SLIDES);
   const [isHeroEnabled, setIsHeroEnabled] = useState<boolean>(true);
-  const [mediaMode, setMediaMode] = useState<'video' | 'image'>('video');
+  const [mediaMode, setMediaMode] = useState<'video' | 'image'>('image');
   const [videoUrl, setVideoUrl] = useState<string>('/luxury_lehengas.mp4');
   const [videoContent, setVideoContent] = useState({
     headingPrefix: 'SHAGNA DI',
@@ -104,14 +104,18 @@ export default function FullWidthCreativeHero({ onOpenModal }: FullWidthHeroProp
       .catch(() => { });
   }, []);
 
+  const [isHovered, setIsHovered] = useState(false);
+
   useEffect(() => {
-    if (slides.length <= 1) return;
+    // If only 1 slide, or video mode is active, or user is hovering with mouse, do not auto-advance
+    if (slides.length <= 1 || mediaMode === 'video' || isHovered) return;
+
     const timer = setInterval(() => {
       setCurrent((prev) => (prev + 1) % slides.length);
-    }, 6000);
+    }, 5500);
 
     return () => clearInterval(timer);
-  }, [slides.length]);
+  }, [slides.length, mediaMode, isHovered]);
 
   const nextSlide = () => {
     setCurrent((prev) => (prev + 1) % slides.length);
@@ -174,15 +178,6 @@ export default function FullWidthCreativeHero({ onOpenModal }: FullWidthHeroProp
                 className="w-full h-full object-cover object-[center_top] filter brightness-[0.96] contrast-[1.08] saturate-[1.05]"
               >
                 <source src={videoUrl} type="video/mp4" />
-                {/* Fallback to image if video not supported or slow connection */}
-                <Image
-                  src={slide.desktopImage}
-                  alt={slide.headingPrefix}
-                  fill
-                  priority={idx === 0}
-                  sizes="100vw"
-                  className="object-cover object-[center_top]"
-                />
               </video>
             ) : (
               <>
@@ -223,11 +218,15 @@ export default function FullWidthCreativeHero({ onOpenModal }: FullWidthHeroProp
 
               {/* Huge Serif Headline with BOLD Handwritten Script Highlight */}
               <div className="space-y-1">
-                {/* 1 Sole H1 for entire homepage SEO ranking */}
-                {idx === 0 && (
+                {/* SEO Category Eyebrow: H1 for Lehenga on bridal slide, H2 for Sherwani on groom slide */}
+                {idx === 0 ? (
                   <h1 className="text-[11px] sm:text-xs tracking-[0.25em] sm:tracking-[0.3em] uppercase text-amber-300 font-semibold mb-1 sm:mb-2 drop-shadow-md">
-                    Best Bridal Lehenga in Chandigarh & Punjab
+                    Lehenga on Rent
                   </h1>
+                ) : (
+                  <h2 className="text-[11px] sm:text-xs tracking-[0.25em] sm:tracking-[0.3em] uppercase text-amber-300 font-semibold mb-1 sm:mb-2 drop-shadow-md">
+                    Sherwani on Rent
+                  </h2>
                 )}
                 <span className="font-serif-luxury text-3xl sm:text-6xl lg:text-7xl xl:text-8xl font-bold tracking-[0.06em] uppercase text-white leading-none drop-shadow-[0_4px_16px_rgba(0,0,0,0.8)] block">
                   {mediaMode === 'video' ? videoContent.headingPrefix : slide.headingPrefix}
@@ -247,8 +246,12 @@ export default function FullWidthCreativeHero({ onOpenModal }: FullWidthHeroProp
                 </p>
               </div>
 
-              {/* Action Buttons: Perfectly sized for mobile screen width */}
-              <div className="flex items-center gap-2 sm:gap-5 pt-2 sm:pt-6 w-full max-w-full">
+              {/* Action Buttons: Perfectly sized for mobile screen width - Pauses slider when hovering buttons */}
+              <div
+                onMouseEnter={() => setIsHovered(true)}
+                onMouseLeave={() => setIsHovered(false)}
+                className="flex items-center gap-2 sm:gap-5 pt-2 sm:pt-6 w-full max-w-full"
+              >
                 <Link
                   href={mediaMode === 'video' ? videoContent.ctaLink : slide.ctaLink}
                   className="group inline-flex items-center justify-center gap-1.5 bg-gradient-to-r from-[#8b1828] via-[#a01d30] to-[#73121f] hover:from-[#a01d30] hover:to-[#8b1828] text-white font-semibold py-2.5 sm:py-4 px-3 sm:px-8 rounded-full text-[11px] sm:text-sm uppercase tracking-wider transition-all duration-300 shadow-[0_8px_25px_rgba(139,24,40,0.5)] active:scale-95 shrink-0 whitespace-nowrap border border-white/20"
@@ -278,6 +281,28 @@ export default function FullWidthCreativeHero({ onOpenModal }: FullWidthHeroProp
           <div className="w-1 h-2 rounded-full bg-amber-300 animate-bounce" />
         </div>
       </div>
+
+      {/* Luxury Navigation Dots Indicator at Bottom Center */}
+      {mediaMode === 'image' && slides.length > 1 && (
+        <div className="absolute bottom-6 sm:bottom-8 left-1/2 -translate-x-1/2 z-30 flex items-center gap-2 sm:gap-2.5 px-3.5 py-1.5 rounded-full bg-black/40 backdrop-blur-md border border-white/10 shadow-lg">
+          {slides.map((_, dotIdx) => {
+            const isActive = dotIdx === current;
+            return (
+              <button
+                key={dotIdx}
+                type="button"
+                onClick={() => setCurrent(dotIdx)}
+                aria-label={`Go to slide ${dotIdx + 1}`}
+                className={`transition-all duration-300 rounded-full cursor-pointer ${
+                  isActive
+                    ? 'w-7 sm:w-8 h-2 bg-gradient-to-r from-amber-300 to-amber-200 shadow-[0_0_12px_rgba(245,158,11,0.8)]'
+                    : 'w-2 h-2 bg-white/40 hover:bg-white/80'
+                }`}
+              />
+            );
+          })}
+        </div>
+      )}
 
     </section>
   );

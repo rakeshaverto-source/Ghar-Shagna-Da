@@ -42,7 +42,7 @@ export async function GET() {
       return NextResponse.json({ 
         slides: DEFAULT_HERO_SLIDES, 
         isHeroEnabled: true,
-        heroMediaMode: 'video', 
+        heroMediaMode: 'image', 
         videoUrl: '/luxury_lehengas.mp4' 
       });
     }
@@ -60,7 +60,7 @@ export async function GET() {
       settings = await SiteSettings.create({
         key: 'global',
         isHeroEnabled: true,
-        heroMediaMode: 'video',
+        heroMediaMode: 'image',
         videoUrl: '/luxury_lehengas.mp4',
       });
     }

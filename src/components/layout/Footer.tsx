@@ -29,16 +29,13 @@ export default function Footer() {
               />
             </div>
             <p className="font-script text-2xl text-[#8b1828]">
-              Cherishing Your Special Moments
+              Cherishing Your Special Moments since 2009
             </p>
-            <p className="text-xs text-stone-600 leading-relaxed">
-              Complete Store of All Wedding Accessories & Outfits on Rent. We provide sanitized, designer bridal lehengas and groom wear with custom alterations at budget-friendly rental rates.
-            </p>
-            <div className="pt-1">
+            {/* <div className="pt-1">
               <span className="inline-flex items-center gap-1.5 text-xs text-[#8b1828] bg-rose-50 px-3 py-1 rounded-full border border-rose-100 font-medium">
                 <ShieldCheck className="w-3.5 h-3.5" /> 100% Sanitized & Custom Altered
               </span>
-            </div>
+            </div> */}
           </div>
 
           {/* Quick Categories */}
@@ -83,6 +80,11 @@ export default function Footer() {
               <li>
                 <Link href="/gallery" className="hover:text-[#8b1828] transition-colors font-medium">
                   Real Wedding Photo Gallery
+                </Link>
+              </li>
+              <li>
+                <Link href="/blog" className="hover:text-[#8b1828] transition-colors font-medium">
+                  Wedding Stories & Styling Blog
                 </Link>
               </li>
               <li>
@@ -141,7 +143,7 @@ export default function Footer() {
         </div>
 
         <div className="border-t border-stone-200/60 pt-6 flex flex-col sm:flex-row items-center justify-between text-xs text-stone-500 gap-4">
-          <p>© 2026 Ghar Shagna Da. All Rights Reserved.</p>
+          <p>© 2009 Ghar Shagna Da. All Rights Reserved.</p>
           <p className="flex items-center gap-1">
             Crafted with <Heart className="w-3.5 h-3.5 text-rose-600 fill-rose-600" /> for your celebration
           </p>
