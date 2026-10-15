@@ -3,22 +3,7 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { GalleryItemType, OutfitItem } from './types';
-import {
-  Image as ImageIcon,
-  Plus,
-  Trash2,
-  Edit3,
-  Search,
-  ExternalLink,
-  RefreshCw,
-  Upload,
-  Check,
-  X,
-  Sparkles,
-  Eye,
-  MapPin,
-  Heart,
-} from 'lucide-react';
+import { Image as ImageIcon, Plus, Trash2, Edit3, Search, ExternalLink, RefreshCw, Upload, Check, X, Eye, MapPin, Heart } from 'lucide-react';
 
 interface GalleryTabProps {
   galleryItems: GalleryItemType[];
@@ -30,14 +15,6 @@ interface GalleryTabProps {
   products?: OutfitItem[];
 }
 
-const GALLERY_CATEGORIES = [
-  'All',
-  'Bridal Lehengas',
-  'Groom Sherwanis',
-  'Wedding Gowns',
-  'Real Brides & Grooms',
-  'Haldi & Sangeet',
-];
 
 export default function GalleryTab({
   galleryItems,
@@ -46,10 +23,9 @@ export default function GalleryTab({
   onCreateGalleryItem,
   onUpdateGalleryItem,
   onDeleteGalleryItem,
-  products = [],
 }: GalleryTabProps) {
-  const [selectedCategory, setSelectedCategory] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCategory] = useState('All');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<GalleryItemType | null>(null);
 

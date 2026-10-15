@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { OutfitItem } from '../types';
 
-export function useAdminProducts(setIsAuthenticated: (val: boolean) => void) {
+export function useAdminProducts() {
   const [products, setProducts] = useState<OutfitItem[]>([]);
   const [loadingProducts, setLoadingProducts] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');

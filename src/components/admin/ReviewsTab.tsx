@@ -2,20 +2,7 @@
 
 import React, { useState } from 'react';
 import { HomeReviewItem } from './types';
-import {
-  Star,
-  Plus,
-  Trash2,
-  Edit3,
-  Search,
-  CheckCircle2,
-  RefreshCw,
-  MessageSquare,
-  Eye,
-  EyeOff,
-  X,
-  Save,
-} from 'lucide-react';
+import { Star, Plus, Trash2, Edit3, Search, RefreshCw, MessageSquare, X, Save } from 'lucide-react';
 
 interface ReviewsTabProps {
   reviews: HomeReviewItem[];

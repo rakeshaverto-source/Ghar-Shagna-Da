@@ -2,18 +2,7 @@
 
 import React from 'react';
 import { OutfitItem, BookingLead } from './types';
-import {
-  X,
-  MessageCircle,
-  Phone,
-  Calendar,
-  Clock,
-  MapPin,
-  User,
-  CheckCircle2,
-  CalendarCheck,
-  AlertCircle,
-} from 'lucide-react';
+import { X, MessageCircle, Calendar, Clock, MapPin, CalendarCheck } from 'lucide-react';
 
 interface OutfitInquiriesModalProps {
   product: OutfitItem | null;

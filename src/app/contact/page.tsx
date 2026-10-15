@@ -1,15 +1,5 @@
 import { Metadata } from 'next';
-import { 
-  Phone, 
-  Mail, 
-  MapPin, 
-  MessageCircle, 
-  Clock, 
-  CalendarCheck,
-  Sparkles,
-  ShieldCheck,
-  CheckCircle2
-} from 'lucide-react';
+import { Phone, Mail, MapPin, MessageCircle, Clock, CheckCircle2 } from 'lucide-react';
 import { SITE_CONFIG } from '@/data/products';
 import { constructMetadata } from '@/lib/seo';
 import ContactForm from '@/components/contact/ContactForm';

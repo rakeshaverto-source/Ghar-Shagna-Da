@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { BlogPostItem } from '@/data/blogs';
-import { BookOpen, ArrowRight, Clock, Sparkles } from 'lucide-react';
+import { BookOpen, ArrowRight, Clock } from 'lucide-react';
 
 interface HomeBlogSectionProps {
   initialPosts?: BlogPostItem[];

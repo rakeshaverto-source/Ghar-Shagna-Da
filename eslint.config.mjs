@@ -11,6 +11,7 @@ const eslintConfig = defineConfig([
       // Legacy API/data code uses loose typing; mount-time setState is intentional for SSR-safe hydration.
       "@typescript-eslint/no-explicit-any": "warn",
       "react-hooks/set-state-in-effect": "warn",
+      "@next/next/no-img-element": "off", // admin previews of user-uploaded URLs
     },
   },
   globalIgnores([

@@ -13,7 +13,6 @@ interface QueryModalProps {
 
 export default function QueryModal({
   productTitle,
-  productPrice,
   isOpen,
   onClose,
 }: QueryModalProps) {
@@ -25,7 +24,7 @@ export default function QueryModal({
     city: '',
     notes: '',
   });
-  const [loading, setLoading] = useState(false);
+  const [loading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [minDate, setMinDate] = useState('');
 

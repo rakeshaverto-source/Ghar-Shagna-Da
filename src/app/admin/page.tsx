@@ -67,7 +67,7 @@ export default function AdminDashboardPage() {
     handleImageUpload,
     handleSaveProduct,
     handleUpdateProductReviews,
-  } = useAdminProducts(setIsAuthenticated);
+  } = useAdminProducts();
 
   // Quick Review Modal State directly from Outfit Table
   const [reviewOutfit, setReviewOutfit] = useState<OutfitItem | null>(null);

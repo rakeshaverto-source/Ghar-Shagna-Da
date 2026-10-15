@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { BlogPostItem } from '@/components/admin/types';
-import { X, Upload, Sparkles, Image as ImageIcon } from 'lucide-react';
+import { X, Upload, Sparkles } from 'lucide-react';
 
 interface BlogModalProps {
   isOpen: boolean;
@@ -11,6 +11,8 @@ interface BlogModalProps {
   onSuccess: () => void;
   setIsAuthenticated: (val: boolean) => void;
 }
+
+const STANDARD_CATEGORIES = ['Bridal Fashion', 'Groom Wear', 'NRI Brides', 'Wedding Tips', 'Celebrity & Trends'];
 
 export default function BlogModal({
   isOpen,
@@ -44,7 +46,6 @@ export default function BlogModal({
   const [isCustomCategory, setIsCustomCategory] = useState(false);
   const [customCategory, setCustomCategory] = useState('');
 
-  const STANDARD_CATEGORIES = ['Bridal Fashion', 'Groom Wear', 'NRI Brides', 'Wedding Tips', 'Celebrity & Trends'];
 
   useEffect(() => {
     if (blog) {

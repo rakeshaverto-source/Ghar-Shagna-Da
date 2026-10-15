@@ -4,19 +4,17 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { Menu, X, Phone, MessageCircle, Shield } from 'lucide-react';
+import { Menu, X, Phone, MessageCircle } from 'lucide-react';
 import { SITE_CONFIG } from '@/data/products';
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
   const isHome = pathname === '/';
   const isAdmin = pathname?.startsWith('/admin');
 
   useEffect(() => {
-    setMounted(true);
     const handleScroll = () => {
       if (window.scrollY > 40) {
         setIsScrolled(true);

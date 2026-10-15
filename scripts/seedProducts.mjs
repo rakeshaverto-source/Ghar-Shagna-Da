@@ -12,7 +12,7 @@ if (!uri) {
     if (match) {
       uri = match[1].trim();
     }
-  } catch (e) {
+  } catch {
     console.error('Could not read .env.local');
   }
 }
@@ -441,8 +441,6 @@ async function seed() {
     await mongoose.connect(uri);
     console.log('✅ Connected successfully!');
 
-    let inserted = 0;
-    let updated = 0;
 
     for (const item of INITIAL_DATA) {
       const res = await Product.findOneAndUpdate(
@@ -452,14 +450,13 @@ async function seed() {
       );
       if (res) {
         console.log(`✓ Seeded/Updated: ${item.title} (${item.slug})`);
-        updated++;
       }
     }
 
     const total = await Product.countDocuments();
     console.log(`\n🎉 MongoDB Seeding Complete! Total Outfits in Database: ${total}`);
     process.exit(0);
-  } catch (err) {
+  } catch {
     console.error('❌ Seeding failed:', err);
     process.exit(1);
   }

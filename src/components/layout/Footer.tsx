@@ -4,7 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { Phone, Mail, MapPin, MessageCircle, Heart, ShieldCheck } from 'lucide-react';
+import { Phone, Mail, MapPin, MessageCircle, Heart } from 'lucide-react';
 import { SITE_CONFIG, CATEGORIES } from '@/data/products';
 
 export default function Footer() {

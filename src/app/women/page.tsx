@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Search, Sparkles, MessageCircle, Phone, ArrowLeft } from 'lucide-react';
+import { Search, MessageCircle } from 'lucide-react';
 import { INITIAL_PRODUCTS, SITE_CONFIG } from '@/data/products';
 import ProductCard from '@/components/catalog/ProductCard';
 

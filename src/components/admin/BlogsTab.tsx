@@ -2,20 +2,7 @@
 
 import React, { useState } from 'react';
 import { BlogPostItem } from '@/components/admin/types';
-import {
-  FileText,
-  Plus,
-  Search,
-  Edit,
-  Trash2,
-  ExternalLink,
-  Eye,
-  EyeOff,
-  Star,
-  Clock,
-  Sparkles,
-  BookOpen,
-} from 'lucide-react';
+import { FileText, Plus, Search, Edit, Trash2, ExternalLink, Eye, EyeOff, Star, Clock, BookOpen } from 'lucide-react';
 import BlogModal from '@/components/admin/BlogModal';
 
 interface BlogsTabProps {

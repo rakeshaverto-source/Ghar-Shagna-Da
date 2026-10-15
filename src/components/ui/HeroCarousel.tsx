@@ -68,7 +68,6 @@ export default function HeroCarousel() {
     setCurrent((prev) => (prev - 1 + HERO_SLIDES.length) % HERO_SLIDES.length);
   };
 
-  const activeSlide = HERO_SLIDES[current];
 
   return (
     <div className="relative w-full max-w-sm sm:max-w-md h-[520px] sm:h-[620px] flex items-end justify-center select-none group">

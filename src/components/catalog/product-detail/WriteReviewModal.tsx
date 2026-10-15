@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useRef } from 'react';
-import { Star, Camera, Image as ImageIcon, Sparkles, CheckCircle2, X } from 'lucide-react';
+import { Star, Camera, Image as ImageIcon, CheckCircle2, X } from 'lucide-react';
 import { ReviewItem } from './reviewsData';
 
 interface WriteReviewModalProps {

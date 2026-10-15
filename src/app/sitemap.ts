@@ -114,7 +114,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         priority: 0.75,
       }));
     }
-  } catch (e) {
+  } catch {
     // silently fallback
   }
 

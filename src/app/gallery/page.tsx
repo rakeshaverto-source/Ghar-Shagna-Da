@@ -3,24 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import {
-  Camera,
-  Heart,
-  Sparkles,
-  MapPin,
-  Calendar,
-  Eye,
-  MessageCircle,
-  X,
-  ChevronLeft,
-  ChevronRight,
-  Filter,
-  CheckCircle2,
-  ShieldCheck,
-  ShoppingBag,
-  ArrowRight,
-  PhoneCall,
-} from 'lucide-react';
+import { Camera, Heart, MapPin, Eye, MessageCircle, X, ChevronLeft, ChevronRight, ShoppingBag, ArrowRight } from 'lucide-react';
 import { SITE_CONFIG } from '@/data/products';
 
 interface GalleryItem {
@@ -38,19 +21,11 @@ interface GalleryItem {
   order: number;
 }
 
-const CATEGORIES = [
-  'All',
-  'Bridal Lehengas',
-  'Groom Sherwanis',
-  'Wedding Gowns',
-  'Real Brides & Grooms',
-  'Haldi & Sangeet',
-];
 
 export default function GalleryPage() {
   const [items, setItems] = useState<GalleryItem[]>([]);
   const [loading, setLoading] = useState(true);
-  const [activeCategory, setActiveCategory] = useState('All');
+  const [activeCategory] = useState('All');
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
   // Fetch gallery items from MongoDB API

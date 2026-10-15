@@ -7,20 +7,7 @@ import { INITIAL_BLOG_POSTS, BlogPostItem } from '@/data/blogs';
 import { SITE_CONFIG, CATEGORIES } from '@/data/products';
 import BlogPost from '@/models/BlogPost';
 import { connectDB } from '@/lib/mongodb';
-import {
-  Clock,
-  ArrowLeft,
-  Share2,
-  MessageCircle,
-  Phone,
-  Sparkles,
-  Tag,
-  ChevronRight,
-  ShieldCheck,
-  CalendarCheck,
-  Scissors,
-  CheckCircle2,
-} from 'lucide-react';
+import { Clock, ArrowLeft, Share2, MessageCircle, Phone, Tag, ChevronRight, ShieldCheck, CalendarCheck, CheckCircle2 } from 'lucide-react';
 
 import { connection } from 'next/server';
 import { BlogPostingJsonLd, BreadcrumbJsonLd } from '@/components/seo/JsonLd';
@@ -62,7 +49,7 @@ async function getRecentPosts(currentSlug: string): Promise<BlogPostItem[]> {
       .sort({ publishedAt: -1 })
       .limit(4);
     return JSON.parse(JSON.stringify(posts));
-  } catch (err) {
+  } catch {
     return INITIAL_BLOG_POSTS.filter((p) => p.slug !== currentSlug).slice(0, 4);
   }
 }

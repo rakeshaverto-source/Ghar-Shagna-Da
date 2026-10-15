@@ -4,18 +4,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { BlogPostItem } from '@/data/blogs';
-import {
-  Clock,
-  ArrowRight,
-  BookOpen,
-  Search,
-  Sparkles,
-  ChevronRight,
-  MessageCircle,
-  Tag,
-  Flame,
-  CheckCircle2,
-} from 'lucide-react';
+import { Clock, ArrowRight, BookOpen, MessageCircle } from 'lucide-react';
 import { SITE_CONFIG } from '@/data/products';
 
 interface BlogClientViewProps {
@@ -28,7 +17,6 @@ export default function BlogClientView({ posts }: BlogClientViewProps) {
 
   const categories = ['all', ...Array.from(new Set(posts.map((p) => p.category))).filter(Boolean)];
 
-  const featuredPost = posts.find((p) => p.isFeatured) || posts[0];
 
   const filteredPosts = posts.filter((p) => {
     const matchesCategory = selectedCategory === 'all' || p.category === selectedCategory;

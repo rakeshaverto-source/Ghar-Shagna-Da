@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import Link from 'next/link';
 import { Search } from 'lucide-react';
 import { INITIAL_PRODUCTS, CATEGORIES } from '@/data/products';
 import ProductCard from '@/components/catalog/ProductCard';

@@ -1,18 +1,6 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
-import { 
-  Calendar, 
-  Scissors, 
-  ShieldCheck, 
-  RotateCcw, 
-  MessageCircle, 
-  CheckCircle2, 
-  HelpCircle,
-  Sparkles,
-  ArrowRight,
-  Shirt,
-  HeartHandshake
-} from 'lucide-react';
+import { Scissors, ShieldCheck, RotateCcw, CheckCircle2, ArrowRight, Shirt } from 'lucide-react';
 import { SITE_CONFIG } from '@/data/products';
 import { constructMetadata } from '@/lib/seo';
 
