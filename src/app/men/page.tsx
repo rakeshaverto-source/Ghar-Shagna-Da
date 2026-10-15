@@ -82,7 +82,7 @@ export default function MenCatalogPage() {
             Home
           </Link>
           <span>/</span>
-          <span className="text-[#8b1828] font-bold">Men's Wedding Collection</span>
+          <span className="text-[#8b1828] font-bold">Men&apos;s Wedding Collection</span>
         </nav>
 
         {/* Header */}

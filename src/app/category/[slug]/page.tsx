@@ -38,7 +38,7 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
     CATEGORIES.find((c) => c.slug === resolvedParams.slug);
 
   if (!category) {
-    return constructMetadata({ title: 'Category Not Found' });
+    return constructMetadata({ title: 'Category Not Found | Ghar Shagna Da', noIndex: true });
   }
 
   return constructMetadata({

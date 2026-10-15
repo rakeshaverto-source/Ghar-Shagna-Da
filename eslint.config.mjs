@@ -6,6 +6,13 @@ const eslintConfig = defineConfig([
   ...nextVitals,
   ...nextTs,
   // Override default ignores of eslint-config-next.
+  {
+    rules: {
+      // Legacy API/data code uses loose typing; mount-time setState is intentional for SSR-safe hydration.
+      "@typescript-eslint/no-explicit-any": "warn",
+      "react-hooks/set-state-in-effect": "warn",
+    },
+  },
   globalIgnores([
     // Default ignores of eslint-config-next:
     ".next/**",

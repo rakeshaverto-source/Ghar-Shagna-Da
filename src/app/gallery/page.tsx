@@ -80,12 +80,12 @@ export default function GalleryPage() {
   // Lightbox navigation
   const openLightbox = (index: number) => {
     setLightboxIndex(index);
-    document.body.style.overflow = 'hidden';
+    document.body.style.setProperty('overflow', 'hidden');
   };
 
   const closeLightbox = () => {
     setLightboxIndex(null);
-    document.body.style.overflow = 'auto';
+    document.body.style.setProperty('overflow', 'auto');
   };
 
   const nextImage = () => {

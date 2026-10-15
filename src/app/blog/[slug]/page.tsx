@@ -73,6 +73,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!post) {
     return {
       title: 'Article Not Found | Ghar Shagna Da',
+      robots: { index: false, follow: false },
     };
   }
 
@@ -83,7 +84,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: finalTitle,
     description: finalDescription,
     keywords: post.tags?.join(', ') || 'bridal rental, ghar shagna da',
+    alternates: { canonical: `https://gharshagnada.com/blog/${post.slug}` },
     openGraph: {
+      type: 'article',
+      url: `https://gharshagnada.com/blog/${post.slug}`,
       title: finalTitle,
       description: finalDescription,
       images: [

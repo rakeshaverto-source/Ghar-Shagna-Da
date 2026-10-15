@@ -179,7 +179,7 @@ export default function OutfitBasicPricingSection({
               Featured on Homepage (Trending Now)
             </label>
             <p className="text-[11px] text-stone-500">
-              When checked, this outfit appears in the "Featured Outfits on Rent" section on the home page.
+              When checked, this outfit appears in the &quot;Featured Outfits on Rent&quot; section on the home page.
             </p>
           </div>
           <input

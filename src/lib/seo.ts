@@ -5,7 +5,7 @@ export function constructMetadata({
   title = `${SITE_CONFIG.name} | Luxury Bridal Lehengas & Sherwanis on Rent`,
   description = SITE_CONFIG.description,
   image = 'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?q=80&w=1200&auto=format&fit=crop',
-  canonical = SITE_CONFIG.domain,
+  canonical = './',
   noIndex = false,
   keywords = [
     'bridal lehenga on rent',
@@ -27,10 +27,7 @@ export function constructMetadata({
   keywords?: string[];
 } = {}): Metadata {
   return {
-    title: {
-      default: title,
-      template: `%s | ${SITE_CONFIG.name}`,
-    },
+    title: { absolute: title },
     description,
     keywords: keywords.join(', '),
     authors: [{ name: SITE_CONFIG.name }],

@@ -120,7 +120,7 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
   const product = await getProductBySlug(resolvedParams.slug);
 
   if (!product) {
-    return constructMetadata({ title: 'Product Not Found' });
+    return constructMetadata({ title: 'Product Not Found | Ghar Shagna Da', noIndex: true });
   }
 
   const primaryImage = product.images?.[0] || 'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b';

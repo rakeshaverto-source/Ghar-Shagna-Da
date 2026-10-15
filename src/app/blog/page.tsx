@@ -10,6 +10,7 @@ import { connection } from 'next/server';
 export const instant = false;
 
 export const metadata: Metadata = {
+  alternates: { canonical: 'https://gharshagnada.com/blog' },
   title: 'Wedding Wear & Bridal Rental Guides | Ghar Shagna Da Blog',
   description:
     'Explore expert bridal styling tips, wedding lehenga rental guides, groom sherwani trends, and NRI bridal advice curated by Ghar Shagna Da.',
