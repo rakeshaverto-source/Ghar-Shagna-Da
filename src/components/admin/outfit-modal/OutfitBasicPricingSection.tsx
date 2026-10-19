@@ -2,7 +2,25 @@
 
 import React from 'react';
 import { Tag, DollarSign } from 'lucide-react';
-import { CATEGORY_OPTIONS, OCCASION_OPTIONS, OutfitItem, slugify } from '../types';
+import { OCCASION_OPTIONS, OutfitItem, slugify } from '../types';
+import { CATEGORIES } from '@/data/products';
+
+// Women's & men's "Shop by Category" collections from the website (occasion pages excluded)
+const OUTFIT_CATEGORY_OPTIONS = CATEGORIES.filter((c) => !c.slug.includes('occasion=')).map((c) => ({
+  id: c.id,
+  label: c.title,
+  slug: c.slug,
+  base: c.slug.split('?')[0],
+}));
+
+function getSelectedCategoryId(formData: Partial<OutfitItem>) {
+  const base = formData.categorySlug || 'bridal-lehengas';
+  const match =
+    OUTFIT_CATEGORY_OPTIONS.find((c) => c.base === base && c.label === formData.category) ||
+    OUTFIT_CATEGORY_OPTIONS.find((c) => c.slug === base) ||
+    OUTFIT_CATEGORY_OPTIONS.find((c) => c.base === base);
+  return match ? match.id : OUTFIT_CATEGORY_OPTIONS[0].id;
+}
 
 interface OutfitBasicPricingSectionProps {
   formData: Partial<OutfitItem>;
@@ -91,22 +109,32 @@ export default function OutfitBasicPricingSection({
             </label>
             <div className="relative">
               <select
-                value={formData.categorySlug || 'bridal-lehengas'}
+                value={getSelectedCategoryId(formData)}
                 onChange={(e) => {
-                  const selected = CATEGORY_OPTIONS.find((c) => c.slug === e.target.value);
+                  const selected = OUTFIT_CATEGORY_OPTIONS.find((c) => c.id === e.target.value);
+                  if (!selected) return;
                   setFormData({
                     ...formData,
-                    categorySlug: e.target.value,
-                    category: selected ? selected.label : 'Bridal Lehengas',
+                    categorySlug: selected.base,
+                    category: selected.label,
                   });
                 }}
                 className="w-full bg-[#FAF8F5] border border-stone-200 focus:border-[#8b1828] focus:bg-white rounded-xl py-2.5 px-3 text-xs sm:text-sm text-stone-800 font-semibold focus:outline-none focus:ring-2 focus:ring-[#8b1828]/10 transition-all appearance-none cursor-pointer pr-8"
               >
-                {CATEGORY_OPTIONS.map((c) => (
-                  <option key={c.slug} value={c.slug}>
-                    {c.label}
-                  </option>
-                ))}
+                <optgroup label="Women">
+                  {OUTFIT_CATEGORY_OPTIONS.filter((c) => c.base !== 'sherwanis').map((c) => (
+                    <option key={c.id} value={c.id}>
+                      {c.label}
+                    </option>
+                  ))}
+                </optgroup>
+                <optgroup label="Men">
+                  {OUTFIT_CATEGORY_OPTIONS.filter((c) => c.base === 'sherwanis').map((c) => (
+                    <option key={c.id} value={c.id}>
+                      {c.label}
+                    </option>
+                  ))}
+                </optgroup>
               </select>
               <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2.5 text-stone-500">
                 <svg className="w-4 h-4 fill-current" viewBox="0 0 20 20">

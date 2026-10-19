@@ -77,12 +77,15 @@ async function getCategoryProducts(
       }
 
       if (filter?.type) {
+        // "indo-western" should also match "Indo Western"
+        const typeRegex = new RegExp(filter.type.replace(/-/g, '[- ]'), 'i');
         query.$and = [
           {
             $or: [
-              { title: { $regex: new RegExp(filter.type, 'i') } },
-              { subtitle: { $regex: new RegExp(filter.type, 'i') } },
-              { description: { $regex: new RegExp(filter.type, 'i') } },
+              { category: { $regex: typeRegex } },
+              { title: { $regex: typeRegex } },
+              { subtitle: { $regex: typeRegex } },
+              { description: { $regex: typeRegex } },
             ],
           },
         ];
@@ -136,7 +139,7 @@ async function getCategoryProducts(
     staticList = staticList.filter((p) => occRegex.test(p.occasion));
   }
   if (filter?.type) {
-    const typeRegex = new RegExp(filter.type, 'i');
+    const typeRegex = new RegExp(filter.type.replace(/-/g, '[- ]'), 'i');
     staticList = staticList.filter(
       (p) =>
         typeRegex.test(p.title) ||
