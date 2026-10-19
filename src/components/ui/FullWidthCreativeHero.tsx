@@ -147,9 +147,10 @@ export default function FullWidthCreativeHero({ onOpenModal }: FullWidthHeroProp
     setTouchStart(null);
   };
 
-  // If hero section is toggled OFF by admin, do not render on homepage
+  // If hero section is toggled OFF by admin, do not render on homepage,
+  // but keep the page's single H1 (it normally lives on the first slide)
   if (!isHeroEnabled) {
-    return null;
+    return <h1 className="sr-only">Lehenga on Rent</h1>;
   }
 
   return (
