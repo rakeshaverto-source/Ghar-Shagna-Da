@@ -3,7 +3,7 @@
 import React from 'react';
 import Image from 'next/image';
 import { Search, RefreshCw, Package, Edit3, Trash2, Star, CalendarCheck } from 'lucide-react';
-import { OutfitItem, CATEGORY_OPTIONS, OCCASION_OPTIONS, BookingLead } from './types';
+import { OutfitItem, CATEGORY_OPTIONS, OCCASION_OPTIONS, BookingLead, isPendingReview } from './types';
 
 interface OutfitsTabProps {
   products: OutfitItem[];
@@ -138,6 +138,17 @@ export default function OutfitsTab({
                               <span>{(p.reviews || []).length} Reviews</span>
                               <span className="text-amber-500 font-bold ml-0.5">+</span>
                             </button>
+
+                            {(p.reviews || []).some(isPendingReview) && (
+                              <button
+                                type="button"
+                                onClick={() => onOpenReviews && onOpenReviews(p)}
+                                className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-500 hover:bg-amber-600 text-white transition-colors cursor-pointer animate-pulse"
+                                title="Customer reviews waiting for approval"
+                              >
+                                {(p.reviews || []).filter(isPendingReview).length} Pending Approval
+                              </button>
+                            )}
 
                             {/* Inquiries Pill for this product */}
                             {(() => {

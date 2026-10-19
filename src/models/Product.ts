@@ -8,6 +8,7 @@ export interface IProductReview {
   comment: string;
   image?: string;
   tag?: string;
+  approved?: boolean;
 }
 
 export interface IProduct extends Document {
@@ -71,6 +72,8 @@ const ProductSchema = new Schema<IProduct>(
           comment: { type: String, required: true },
           image: { type: String, default: '' },
           tag: { type: String, default: 'Verified Bride' },
+          // Customer-submitted reviews start as false until approved in admin
+          approved: { type: Boolean, default: true },
         },
       ],
       default: [],

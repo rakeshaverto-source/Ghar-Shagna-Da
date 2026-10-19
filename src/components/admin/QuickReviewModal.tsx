@@ -79,6 +79,18 @@ export default function QuickReviewModal({
     }
   };
 
+  const handleApproveReview = async (index: number) => {
+    const updated = currentReviews.map((r, i) => (i === index ? { ...r, approved: true } : r));
+    setIsSubmitting(true);
+    try {
+      await onUpdateProductReviews(product._id || product.id, updated);
+    } catch {
+      alert('Failed to approve review');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-stone-950/75 backdrop-blur-md overflow-y-auto animate-in fade-in duration-200">
       <div className="bg-white border border-[#EDE4D8] rounded-3xl max-w-2xl w-full shadow-2xl relative my-6 overflow-hidden flex flex-col max-h-[90vh]">
@@ -117,6 +129,7 @@ export default function QuickReviewModal({
             reviews={currentReviews}
             isSubmitting={isSubmitting}
             onDeleteReview={handleDeleteReview}
+            onApproveReview={handleApproveReview}
           />
         </div>
       </div>

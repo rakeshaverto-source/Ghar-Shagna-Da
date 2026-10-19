@@ -24,7 +24,7 @@ export default function ProductDetailClient({ product, relatedProducts }: Produc
   const [showAllReviews, setShowAllReviews] = useState(true);
 
   // Reviews initialized from product.reviews if set in Admin, else fallback defaults
-  const [reviews, setReviews] = useState<ReviewItem[]>(() => {
+  const [reviews] = useState<ReviewItem[]>(() => {
     if (product.reviews && product.reviews.length > 0) {
       return product.reviews.map((r) => ({
         author: r.author,
@@ -53,8 +53,18 @@ export default function ProductDetailClient({ product, relatedProducts }: Produc
     }
   };
 
-  const handleAddReview = (newRev: ReviewItem) => {
-    setReviews((prev) => [newRev, ...prev]);
+  const handleAddReview = async (newRev: ReviewItem) => {
+    const res = await fetch('/api/products/reviews', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ slug: product.slug, review: newRev }),
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok || !data.review) {
+      throw new Error(data.error || 'Failed to submit review');
+    }
+
+    // Review stays hidden until approved in admin, so it is not added to the list here
   };
 
   return (

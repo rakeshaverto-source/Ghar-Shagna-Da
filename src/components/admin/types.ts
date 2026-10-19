@@ -23,7 +23,10 @@ export interface ProductReviewItem {
   comment: string;
   image?: string;
   tag?: string;
+  approved?: boolean;
 }
+
+export const isPendingReview = (review: { approved?: boolean }) => review.approved === false;
 
 export interface HomeReviewItem {
   _id?: string;

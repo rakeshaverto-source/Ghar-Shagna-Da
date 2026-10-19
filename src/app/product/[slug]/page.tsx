@@ -46,7 +46,7 @@ async function getProductBySlug(slug: string): Promise<Product | null> {
           rentalDays: dbProduct.duration || '3 Days',
           isTrending: dbProduct.featured || false,
           status: (dbProduct.status as any) || 'available',
-          reviews: (dbProduct.reviews || []).map((r: any) => ({
+          reviews: (dbProduct.reviews || []).filter((r: any) => r.approved !== false).map((r: any) => ({
             author: r.author || '',
             city: r.city || '',
             date: r.date || '',

@@ -7,7 +7,7 @@ import { ReviewItem } from './reviewsData';
 interface WriteReviewModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSubmitReview: (review: ReviewItem) => void;
+  onSubmitReview: (review: ReviewItem) => Promise<void>;
   productTitle?: string;
   productImage?: string;
 }
@@ -35,6 +35,7 @@ export default function WriteReviewModal({
   const [image, setImage] = useState('');
   const [isUploading, setIsUploading] = useState(false);
   const [isSubmittedSuccess, setIsSubmittedSuccess] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const galleryInputRef = useRef<HTMLInputElement>(null);
   const cameraInputRef = useRef<HTMLInputElement>(null);
@@ -66,7 +67,7 @@ export default function WriteReviewModal({
     e.target.value = '';
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!author.trim() || !comment.trim()) {
       alert('Please enter your name and review feedback.');
@@ -83,7 +84,15 @@ export default function WriteReviewModal({
       tag: 'Verified Bride',
     };
 
-    onSubmitReview(newRev);
+    setIsSubmitting(true);
+    try {
+      await onSubmitReview(newRev);
+    } catch (err) {
+      alert((err as Error).message || 'Could not submit review. Please try again.');
+      return;
+    } finally {
+      setIsSubmitting(false);
+    }
     setIsSubmittedSuccess(true);
 
     setTimeout(() => {
@@ -94,7 +103,7 @@ export default function WriteReviewModal({
       setImage('');
       setRating(5);
       onClose();
-    }, 1200);
+    }, 2500);
   };
 
   const activeRating = hoverRating || rating;
@@ -150,7 +159,7 @@ export default function WriteReviewModal({
                 Dhanvaad! Thank You for Your Review
               </h4>
               <p className="text-xs text-stone-600 mt-1">
-                Your review and photo will help upcoming brides find their dream wedding look!
+                Your review will appear on the website once our team approves it.
               </p>
             </div>
           </div>
@@ -362,10 +371,10 @@ export default function WriteReviewModal({
               </button>
               <button
                 type="submit"
-                disabled={!author.trim() || !comment.trim()}
+                disabled={!author.trim() || !comment.trim() || isSubmitting || isUploading}
                 className="px-6 py-2.5 rounded-xl bg-[#8b1828] hover:bg-[#721320] disabled:bg-stone-300 disabled:cursor-not-allowed text-white font-bold text-xs shadow-md hover:shadow-lg active:scale-98 transition-all cursor-pointer flex items-center gap-2"
               >
-                <span>Submit Review</span>
+                <span>{isSubmitting ? 'Submitting...' : 'Submit Review'}</span>
               </button>
             </div>
           </form>

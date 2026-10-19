@@ -116,7 +116,7 @@ async function getCategoryProducts(
           rentalDays: p.duration || '3 Days',
           isTrending: p.featured || false,
           status: (p.status as any) || 'available',
-          reviews: (p.reviews || []).map((r: any) => ({
+          reviews: (p.reviews || []).filter((r: any) => r.approved !== false).map((r: any) => ({
             author: r.author || '',
             city: r.city || '',
             date: r.date || '',

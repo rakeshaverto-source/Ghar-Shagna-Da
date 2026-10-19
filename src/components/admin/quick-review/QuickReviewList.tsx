@@ -1,19 +1,21 @@
 'use client';
 
 import React from 'react';
-import { ProductReviewItem } from '../types';
-import { Star, Trash2, MessageSquare } from 'lucide-react';
+import { ProductReviewItem, isPendingReview } from '../types';
+import { Star, Trash2, MessageSquare, Check } from 'lucide-react';
 
 interface QuickReviewListProps {
   reviews: ProductReviewItem[];
   isSubmitting: boolean;
   onDeleteReview: (index: number) => void;
+  onApproveReview: (index: number) => void;
 }
 
 export default function QuickReviewList({
   reviews,
   isSubmitting,
   onDeleteReview,
+  onApproveReview,
 }: QuickReviewListProps) {
   if (reviews.length === 0) {
     return (
@@ -34,7 +36,11 @@ export default function QuickReviewList({
       {reviews.map((rev, index) => (
         <div
           key={index}
-          className="flex items-start justify-between gap-3 p-3.5 bg-[#FAF8F5] border border-stone-200 rounded-2xl hover:border-stone-300 transition-colors"
+          className={`flex items-start justify-between gap-3 p-3.5 border rounded-2xl transition-colors ${
+            isPendingReview(rev)
+              ? 'bg-amber-50/70 border-amber-300 hover:border-amber-400'
+              : 'bg-[#FAF8F5] border-stone-200 hover:border-stone-300'
+          }`}
         >
           <div className="flex items-start gap-3 min-w-0 flex-1">
             {rev.image ? (
@@ -60,6 +66,11 @@ export default function QuickReviewList({
                 <span className="text-[10px] font-semibold px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded-full">
                   {rev.tag || 'Verified Bride'}
                 </span>
+                {isPendingReview(rev) && (
+                  <span className="text-[10px] font-bold px-2 py-0.5 bg-amber-200 text-amber-900 rounded-full">
+                    Pending Approval
+                  </span>
+                )}
                 <span className="text-[11px] text-stone-400 ml-auto">{rev.date}</span>
               </div>
 
@@ -80,15 +91,29 @@ export default function QuickReviewList({
             </div>
           </div>
 
-          <button
-            type="button"
-            disabled={isSubmitting}
-            onClick={() => onDeleteReview(index)}
-            className="p-1.5 text-stone-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors cursor-pointer shrink-0 disabled:opacity-40"
-            title="Delete Review"
-          >
-            <Trash2 className="w-3.5 h-3.5" />
-          </button>
+          <div className="flex items-center gap-1 shrink-0">
+            {isPendingReview(rev) && (
+              <button
+                type="button"
+                disabled={isSubmitting}
+                onClick={() => onApproveReview(index)}
+                className="inline-flex items-center gap-1 px-2.5 py-1 text-[11px] font-bold text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg transition-colors cursor-pointer disabled:opacity-40"
+                title="Approve and show on website"
+              >
+                <Check className="w-3.5 h-3.5" />
+                <span>Approve</span>
+              </button>
+            )}
+            <button
+              type="button"
+              disabled={isSubmitting}
+              onClick={() => onDeleteReview(index)}
+              className="p-1.5 text-stone-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors cursor-pointer disabled:opacity-40"
+              title="Delete Review"
+            >
+              <Trash2 className="w-3.5 h-3.5" />
+            </button>
+          </div>
         </div>
       ))}
     </div>

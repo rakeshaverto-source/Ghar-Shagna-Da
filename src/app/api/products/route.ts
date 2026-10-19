@@ -25,7 +25,16 @@ export async function GET() {
       await Product.insertMany(INITIAL_PRODUCTS);
     }
 
-    const products = await Product.find().sort({ createdAt: -1 });
+    const products = await Product.find().sort({ createdAt: -1 }).lean();
+
+    // Pending customer reviews are only visible to the admin
+    const isAdmin = await verifyAdminSession();
+    if (!isAdmin) {
+      for (const p of products) {
+        p.reviews = (p.reviews || []).filter((r: { approved?: boolean }) => r.approved !== false);
+      }
+    }
+
     return NextResponse.json({ products, source: 'database' });
   } catch (err: unknown) {
     const error = err as Error;
