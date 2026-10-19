@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { AnalyticsSettings, PageSeoItem, OutfitItem } from './types';
 import { Save, CheckCircle2 } from 'lucide-react';
-import { SITE_CONFIG } from '@/data/products';
+import { SITE_CONFIG, CATEGORIES } from '@/data/products';
 import PageSeoSelector from './page-seo/PageSeoSelector';
 import PageSeoForm from './page-seo/PageSeoForm';
 
@@ -21,12 +21,17 @@ const PRESET_PAGES = [
   { path: '/catalog', label: 'Outfits Catalog (/catalog)' },
   { path: '/how-rental-works', label: 'How Rental Works (/how-rental-works)' },
   { path: '/contact', label: 'Contact Us (/contact)' },
-  { path: '/category/bridal-lehengas', label: 'Bridal Lehengas (/category/bridal-lehengas)' },
-  { path: '/category/sherwanis', label: 'Sherwanis (/category/sherwanis)' },
-  { path: '/category/wedding-dresses', label: 'Wedding Dresses (/category/wedding-dresses)' },
-  { path: '/category/festive-shararas', label: 'Festive Shararas (/category/festive-shararas)' },
-  { path: '/category/designer-sarees', label: 'Designer Sarees (/category/designer-sarees)' },
-  { path: '/category/anarkali-suits', label: 'Anarkali Suits (/category/anarkali-suits)' },
+  { path: '/women', label: 'Women Collection (/women)' },
+  { path: '/men', label: 'Men Collection (/men)' },
+  { path: '/gallery', label: 'Gallery (/gallery)' },
+  { path: '/blog', label: 'Blog (/blog)' },
+  // Every category, type and occasion page linked from the website
+  ...CATEGORIES.map((c) => {
+    const isMen = c.slug.startsWith('sherwanis');
+    const title = c.title.charAt(0) + c.title.slice(1).toLowerCase();
+    const label = c.slug.includes('occasion=') ? `${title} (${isMen ? 'Groom' : 'Bride'} Occasion)` : c.title;
+    return { path: `/category/${c.slug}`, label: `${label} (/category/${c.slug})` };
+  }),
 ];
 
 export default function PageSeoTab({

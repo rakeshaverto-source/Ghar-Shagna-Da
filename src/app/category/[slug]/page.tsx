@@ -7,6 +7,7 @@ import { CheckCircle2 } from 'lucide-react';
 import { CATEGORIES, INITIAL_PRODUCTS, SITE_CONFIG, Product } from '@/data/products';
 import ProductCard from '@/components/catalog/ProductCard';
 import { constructMetadata } from '@/lib/seo';
+import { getAdminPageSeo } from '@/lib/pageSeo';
 import { BreadcrumbJsonLd } from '@/components/seo/JsonLd';
 import { connectDB } from '@/lib/mongodb';
 import ProductModel from '@/models/Product';
@@ -31,26 +32,80 @@ export async function generateStaticParams() {
   ];
 }
 
-export async function generateMetadata({ params }: CategoryPageProps): Promise<Metadata> {
+export async function generateMetadata({ params, searchParams }: CategoryPageProps): Promise<Metadata> {
   const resolvedParams = await params;
-  const category =
-    CATEGORIES.find((c) => c.slug === resolvedParams.slug) ||
-    CATEGORIES.find((c) => c.slug.split('?')[0] === resolvedParams.slug);
+  const resolvedSearchParams = searchParams ? await searchParams : {};
+  const { occasion, type } = resolvedSearchParams;
+  const { category } = findCategory(resolvedParams.slug, resolvedSearchParams);
 
   if (!category) {
     return constructMetadata({ title: 'Category Not Found | Ghar Shagna Da', noIndex: true });
   }
 
+  // Each occasion/type page gets its own SEO, matching the paths listed in the admin "Page SEO" tab
+  const pagePath = `/category/${resolvedParams.slug}${
+    occasion ? `?occasion=${occasion}` : type ? `?type=${type}` : ''
+  }`;
+  const adminSeo = await getAdminPageSeo(pagePath);
+
+  const isMen = MEN_CATEGORY_SLUGS.includes(resolvedParams.slug);
+  const occasionLabel = occasion ? occasion.charAt(0).toUpperCase() + occasion.slice(1) : '';
+  const defaultTitle = occasion
+    ? `${occasionLabel} Outfits on Rent for ${isMen ? 'Grooms' : 'Brides'} | Ghar Shagna Da`
+    : `${category.title} on Rent | Ghar Shagna Da`;
+  const defaultDescription = occasion
+    ? `Rent handcrafted ${isMen ? 'sherwanis and groom wear' : 'lehengas, gowns and bridal outfits'} for ${occasionLabel} in Punjab. Custom fitting, hygienic sanitization and affordable rentals.`
+    : `Rent handcrafted ${category.title} for weddings and Anand Karaj in Punjab. Custom fitting, hygienic sanitization and affordable rentals.`;
+  const defaultKeywords = occasion
+    ? [
+        `${occasionLabel.toLowerCase()} outfit on rent`,
+        `${occasionLabel.toLowerCase()} ${isMen ? 'sherwani' : 'lehenga'} on rent`,
+        'Ghar Shagna Da rentals',
+      ]
+    : [`${category.title} on rent`, `wedding ${category.title} rental`, 'Ghar Shagna Da rentals'];
+
   return constructMetadata({
-    title: `${category.title} on Rent | Ghar Shagna Da`,
-    description: `Rent handcrafted ${category.title} for weddings and Anand Karaj in Punjab. Custom fitting, hygienic sanitization and affordable rentals.`,
-    canonical: `https://gharshagnada.com/category/${resolvedParams.slug}`,
-    keywords: [
-      `${category.title} on rent`,
-      `wedding ${category.title} rental`,
-      `Ghar Shagna Da rentals`,
-    ],
+    title: adminSeo?.title?.trim() || defaultTitle,
+    description: adminSeo?.description?.trim() || defaultDescription,
+    canonical: adminSeo?.canonical?.trim() || `${SITE_CONFIG.domain}${pagePath}`,
+    image: adminSeo?.ogImage?.trim() || encodeURI(category.image),
+    noIndex: Boolean(adminSeo?.noIndex),
+    keywords: adminSeo?.keywords?.trim()
+      ? adminSeo.keywords.split(',').map((k) => k.trim()).filter(Boolean)
+      : defaultKeywords,
   });
+}
+
+// Men's collection; every other category belongs to the women's section
+const MEN_CATEGORY_SLUGS = ['sherwanis'];
+
+// Spelling variants used for the same event (e.g. "Mehndi" on a product, "mehendi" in the URL)
+const OCCASION_ALIASES: Record<string, string> = {
+  mehendi: 'mehe?ndi',
+  mehndi: 'mehe?ndi',
+  sangeet: 'sangeet|sangit',
+};
+
+function occasionPattern(occasion: string) {
+  const key = occasion.toLowerCase();
+  return OCCASION_ALIASES[key] || key.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function typePattern(type: string) {
+  // "indo-western" should also match "Indo Western"
+  return type.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/-/g, '[- ]');
+}
+
+// Page entry (e.g. "wedding-dresses?occasion=cocktail") for the banner, plus the base collection for breadcrumbs
+function findCategory(slug: string, filter: { occasion?: string; type?: string }) {
+  const page =
+    (filter.occasion && CATEGORIES.find((c) => c.slug === `${slug}?occasion=${filter.occasion}`)) ||
+    (filter.type && CATEGORIES.find((c) => c.slug === `${slug}?type=${filter.type}`)) ||
+    undefined;
+  const base =
+    CATEGORIES.find((c) => c.slug === slug) ||
+    CATEGORIES.find((c) => c.slug.split('?')[0] === slug);
+  return { category: page || base, baseCategory: base };
 }
 
 async function getCategoryProducts(
@@ -65,20 +120,23 @@ async function getCategoryProducts(
     }
     const conn = await connectDB();
     if (conn) {
-      const query: any = {
-        $or: [
-          { categorySlug: categorySlug },
-          { category: categorySlug },
-        ],
-      };
+      const isMen = MEN_CATEGORY_SLUGS.includes(categorySlug);
+      const query: any = filter?.occasion
+        ? // Occasion pages list every outfit for that event in the men's or women's section
+          { categorySlug: isMen ? { $in: MEN_CATEGORY_SLUGS } : { $nin: MEN_CATEGORY_SLUGS } }
+        : {
+            $or: [
+              { categorySlug: categorySlug },
+              { category: categorySlug },
+            ],
+          };
 
       if (filter?.occasion) {
-        query.occasion = { $regex: new RegExp(filter.occasion, 'i') };
+        query.occasion = { $regex: new RegExp(occasionPattern(filter.occasion), 'i') };
       }
 
       if (filter?.type) {
-        // "indo-western" should also match "Indo Western"
-        const typeRegex = new RegExp(filter.type.replace(/-/g, '[- ]'), 'i');
+        const typeRegex = new RegExp(typePattern(filter.type), 'i');
         query.$and = [
           {
             $or: [
@@ -93,7 +151,9 @@ async function getCategoryProducts(
 
       const dbProducts = await ProductModel.find(query).sort({ createdAt: -1 }).lean();
 
-      if (dbProducts && dbProducts.length > 0) {
+      // Once the DB is connected it is the source of truth; an empty result must not fall back
+      // to the static sample outfits (they ignore admin edits to category/occasion)
+      if (dbProducts) {
         return dbProducts.map((p) => ({
           _id: p._id ? p._id.toString() : undefined,
           id: p.id || p.slug,
@@ -133,13 +193,16 @@ async function getCategoryProducts(
     console.error('Error fetching category products from DB:', err);
   }
 
-  let staticList = INITIAL_PRODUCTS.filter((p) => p.category === categorySlug);
+  const isMen = MEN_CATEGORY_SLUGS.includes(categorySlug);
+  let staticList = filter?.occasion
+    ? INITIAL_PRODUCTS.filter((p) => MEN_CATEGORY_SLUGS.includes(p.category) === isMen)
+    : INITIAL_PRODUCTS.filter((p) => p.category === categorySlug);
   if (filter?.occasion) {
-    const occRegex = new RegExp(filter.occasion, 'i');
+    const occRegex = new RegExp(occasionPattern(filter.occasion), 'i');
     staticList = staticList.filter((p) => occRegex.test(p.occasion));
   }
   if (filter?.type) {
-    const typeRegex = new RegExp(filter.type.replace(/-/g, '[- ]'), 'i');
+    const typeRegex = new RegExp(typePattern(filter.type), 'i');
     staticList = staticList.filter(
       (p) =>
         typeRegex.test(p.title) ||
@@ -153,11 +216,9 @@ async function getCategoryProducts(
 export default async function CategoryPage({ params, searchParams }: CategoryPageProps) {
   const resolvedParams = await params;
   const resolvedSearchParams = searchParams ? await searchParams : {};
-  const category =
-    CATEGORIES.find((c) => c.slug === resolvedParams.slug) ||
-    CATEGORIES.find((c) => c.slug.split('?')[0] === resolvedParams.slug);
+  const { category, baseCategory } = findCategory(resolvedParams.slug, resolvedSearchParams);
 
-  if (!category) {
+  if (!category || !baseCategory) {
     notFound();
   }
 
@@ -176,13 +237,22 @@ export default async function CategoryPage({ params, searchParams }: CategoryPag
     ? `${activeType.charAt(0).toUpperCase() + activeType.slice(1)} Collection`
     : null;
 
+  // Occasion pages cover the whole men's or women's section, not a single collection
+  const isMen = MEN_CATEGORY_SLUGS.includes(resolvedParams.slug);
+  const parentCrumb = activeOccasion
+    ? { title: isMen ? "Men" : "Women", href: isMen ? "/men" : "/women" }
+    : { title: baseCategory.title, href: `/category/${resolvedParams.slug}` };
+  const pageTitle = activeOccasion
+    ? `${filterLabel} • ${isMen ? "Groom Outfits" : "Bridal & Party Outfits"}`
+    : category.title;
+
   return (
     <>
       <BreadcrumbJsonLd
         items={[
           { name: 'Home', url: SITE_CONFIG.domain },
           { name: 'Catalog', url: `${SITE_CONFIG.domain}/catalog` },
-          { name: category.title, url: `${SITE_CONFIG.domain}/category/${category.slug}` },
+          { name: parentCrumb.title, url: `${SITE_CONFIG.domain}${parentCrumb.href}` },
         ]}
       />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 sm:pt-36 pb-12 space-y-12">
@@ -196,8 +266,8 @@ export default async function CategoryPage({ params, searchParams }: CategoryPag
           Catalog
         </Link>
         <span>/</span>
-        <Link href={`/category/${category.slug}`} className="hover:text-[#8b1828]">
-          {category.title}
+        <Link href={parentCrumb.href} className="hover:text-[#8b1828]">
+          {parentCrumb.title}
         </Link>
         {filterLabel && (
           <>
@@ -222,7 +292,7 @@ export default async function CategoryPage({ params, searchParams }: CategoryPag
           </div>
 
           <h1 className="font-serif-luxury text-3xl sm:text-5xl font-bold text-stone-900">
-            {filterLabel ? `${filterLabel} • ` : ''}{category.title} on Rent
+            {pageTitle} on Rent
           </h1>
 
           <p className="text-sm sm:text-base text-stone-600 font-normal leading-relaxed">
@@ -264,7 +334,7 @@ export default async function CategoryPage({ params, searchParams }: CategoryPag
             </h2>
             {filterLabel && (
               <Link
-                href={`/category/${category.slug}`}
+                href={parentCrumb.href}
                 className="text-xs text-[#8b1828] hover:underline font-medium"
               >
                 Clear Filter (View All)
@@ -292,10 +362,10 @@ export default async function CategoryPage({ params, searchParams }: CategoryPag
             </p>
             <div className="pt-2 flex justify-center gap-3">
               <Link
-                href={`/category/${category.slug}`}
+                href={parentCrumb.href}
                 className="px-5 py-2.5 rounded-full bg-[#8b1828] text-white text-xs font-semibold hover:bg-[#70121f] transition-colors"
               >
-                View All {category.title}
+                View All {parentCrumb.title}
               </Link>
               <Link
                 href="/catalog"

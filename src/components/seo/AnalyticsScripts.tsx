@@ -93,12 +93,14 @@ export default function AnalyticsScripts() {
     // "Cannot read properties of null (reading 'removeChild')" if they disappear.
     document.head.querySelectorAll('[data-page-seo]').forEach((tag) => tag.remove());
 
-    // Normalize paths e.g. "/catalog/" -> "/catalog"
+    // Normalize paths e.g. "/catalog/" -> "/catalog"; occasion/type pages are saved with their query
     const currentPath = pathname.replace(/\/$/, '') || '/';
-    const pageConfig = tracking.pageSeoList.find((p) => {
-      const pPath = p.pagePath.replace(/\/$/, '') || '/';
-      return pPath === currentPath;
-    });
+    const currentPathWithQuery = `${currentPath}${window.location.search}`;
+    const findConfig = (path: string) =>
+      tracking.pageSeoList!.find((p) => (p.pagePath.replace(/\/$/, '') || '/') === path);
+    const pageConfig = window.location.search
+      ? findConfig(currentPathWithQuery)
+      : findConfig(currentPath);
 
     if (!pageConfig) return;
 
