@@ -34,8 +34,8 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: CategoryPageProps): Promise<Metadata> {
   const resolvedParams = await params;
   const category =
-    CATEGORIES.find((c) => c.slug.split('?')[0] === resolvedParams.slug) ||
-    CATEGORIES.find((c) => c.slug === resolvedParams.slug);
+    CATEGORIES.find((c) => c.slug === resolvedParams.slug) ||
+    CATEGORIES.find((c) => c.slug.split('?')[0] === resolvedParams.slug);
 
   if (!category) {
     return constructMetadata({ title: 'Category Not Found | Ghar Shagna Da', noIndex: true });
@@ -151,8 +151,8 @@ export default async function CategoryPage({ params, searchParams }: CategoryPag
   const resolvedParams = await params;
   const resolvedSearchParams = searchParams ? await searchParams : {};
   const category =
-    CATEGORIES.find((c) => c.slug.split('?')[0] === resolvedParams.slug) ||
-    CATEGORIES.find((c) => c.slug === resolvedParams.slug);
+    CATEGORIES.find((c) => c.slug === resolvedParams.slug) ||
+    CATEGORIES.find((c) => c.slug.split('?')[0] === resolvedParams.slug);
 
   if (!category) {
     notFound();
@@ -161,7 +161,7 @@ export default async function CategoryPage({ params, searchParams }: CategoryPag
   const activeOccasion = resolvedSearchParams.occasion;
   const activeType = resolvedSearchParams.type;
 
-  const categoryProducts = await getCategoryProducts(category.slug, {
+  const categoryProducts = await getCategoryProducts(resolvedParams.slug, {
     occasion: activeOccasion,
     type: activeType,
   });

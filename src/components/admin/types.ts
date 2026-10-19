@@ -77,6 +77,9 @@ export interface BookingLead {
   createdAt: string;
 }
 
+export const slugify = (text: string) =>
+  text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
+
 export const CATEGORY_OPTIONS = [
   { label: 'Bridal Lehengas', slug: 'bridal-lehengas' },
   { label: 'Wedding Gowns', slug: 'wedding-dresses' },

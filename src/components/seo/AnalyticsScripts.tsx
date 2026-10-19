@@ -88,6 +88,11 @@ export default function AnalyticsScripts() {
   useEffect(() => {
     if (!tracking.pageSeoList || tracking.pageSeoList.length === 0) return;
 
+    // Clear tags created by this component on the previous page. Tags rendered by
+    // Next.js metadata are never removed here: React owns them and crashes with
+    // "Cannot read properties of null (reading 'removeChild')" if they disappear.
+    document.head.querySelectorAll('[data-page-seo]').forEach((tag) => tag.remove());
+
     // Normalize paths e.g. "/catalog/" -> "/catalog"
     const currentPath = pathname.replace(/\/$/, '') || '/';
     const pageConfig = tracking.pageSeoList.find((p) => {
@@ -97,16 +102,19 @@ export default function AnalyticsScripts() {
 
     if (!pageConfig) return;
 
-    // Conflict-free replacement helper to prevent duplicates
+    // Update existing tags in place (no removal) so React-managed tags stay intact
     const updateOrCreateMeta = (selector: string, attrName: string, attrVal: string, content: string) => {
       if (!content) return;
-      // Remove all existing duplicates first to ensure only 1 clean tag exists
       const existingTags = document.querySelectorAll(selector);
-      existingTags.forEach((tag) => tag.remove());
+      if (existingTags.length > 0) {
+        existingTags.forEach((tag) => tag.setAttribute('content', content));
+        return;
+      }
 
       const newMeta = document.createElement('meta');
       newMeta.setAttribute(attrName, attrVal);
       newMeta.setAttribute('content', content);
+      newMeta.setAttribute('data-page-seo', '');
       document.head.appendChild(newMeta);
     };
 
@@ -142,12 +150,15 @@ export default function AnalyticsScripts() {
     // Update Canonical URL cleanly
     if (pageConfig.canonical && pageConfig.canonical.trim()) {
       const existingCanonicals = document.querySelectorAll('link[rel="canonical"]');
-      existingCanonicals.forEach((c) => c.remove());
-
-      const link = document.createElement('link');
-      link.setAttribute('rel', 'canonical');
-      link.setAttribute('href', pageConfig.canonical.trim());
-      document.head.appendChild(link);
+      if (existingCanonicals.length > 0) {
+        existingCanonicals.forEach((c) => c.setAttribute('href', pageConfig.canonical!.trim()));
+      } else {
+        const link = document.createElement('link');
+        link.setAttribute('rel', 'canonical');
+        link.setAttribute('href', pageConfig.canonical.trim());
+        link.setAttribute('data-page-seo', '');
+        document.head.appendChild(link);
+      }
     }
 
     // Robots noindex if specified

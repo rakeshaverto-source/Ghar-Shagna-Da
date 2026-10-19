@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Tag, DollarSign } from 'lucide-react';
-import { CATEGORY_OPTIONS, OCCASION_OPTIONS, OutfitItem } from '../types';
+import { CATEGORY_OPTIONS, OCCASION_OPTIONS, OutfitItem, slugify } from '../types';
 
 interface OutfitBasicPricingSectionProps {
   formData: Partial<OutfitItem>;
@@ -49,6 +49,31 @@ export default function OutfitBasicPricingSection({
               className="w-full bg-[#FAF8F5] border border-stone-200 focus:border-[#8b1828] focus:bg-white rounded-xl py-2.5 px-3.5 text-xs sm:text-sm text-stone-900 focus:outline-none focus:ring-2 focus:ring-[#8b1828]/10 transition-all placeholder-stone-400"
             />
           </div>
+        </div>
+
+        <div className="space-y-1.5">
+          <label className="block text-xs font-bold text-stone-700">
+            URL Slug
+          </label>
+          <div className="flex items-center bg-[#FAF8F5] border border-stone-200 focus-within:border-[#8b1828] focus-within:bg-white rounded-xl focus-within:ring-2 focus-within:ring-[#8b1828]/10 transition-all">
+            <span className="pl-3.5 text-xs sm:text-sm text-stone-400 font-mono whitespace-nowrap">/product/</span>
+            <input
+              type="text"
+              placeholder={slugify(formData.title || '') || 'royal-heritage-crimson-velvet-lehenga'}
+              value={formData.slug || ''}
+              onChange={(e) =>
+                setFormData({
+                  ...formData,
+                  slug: e.target.value.toLowerCase().replace(/[^a-z0-9-]+/g, '-'),
+                })
+              }
+              onBlur={() => setFormData({ ...formData, slug: slugify(formData.slug || '') })}
+              className="w-full bg-transparent py-2.5 pr-3.5 text-xs sm:text-sm text-stone-900 font-mono focus:outline-none placeholder-stone-400"
+            />
+          </div>
+          <p className="text-[11px] text-stone-500">
+            Khaali chhodoge to title se apne aap ban jaayega.
+          </p>
         </div>
       </div>
 
@@ -151,15 +176,25 @@ export default function OutfitBasicPricingSection({
         {/* Quick Occasion Pills */}
         <div className="flex items-center gap-1.5 flex-wrap pt-0.5">
           <span className="text-[10px] font-bold text-stone-400 uppercase tracking-wider mr-1">
-            Quick Select Event:
+            Quick Select Events (multiple):
           </span>
           {['Cocktail', 'Reception', 'Sangeet', 'Bridesmaid', 'Mehendi', 'Haldi'].map((occ) => {
-            const isActive = formData.occasion?.toLowerCase().includes(occ.toLowerCase());
+            const parts = (formData.occasion || '')
+              .split(',')
+              .map((p) => p.trim())
+              .filter(Boolean);
+            const matchesOcc = (p: string) => p.toLowerCase().includes(occ.toLowerCase());
+            const isActive = parts.some(matchesOcc);
             return (
               <button
                 key={occ}
                 type="button"
-                onClick={() => setFormData({ ...formData, occasion: occ })}
+                onClick={() =>
+                  setFormData({
+                    ...formData,
+                    occasion: (isActive ? parts.filter((p) => !matchesOcc(p)) : [...parts, occ]).join(', '),
+                  })
+                }
                 className={`text-[11px] px-2.5 py-1 rounded-lg font-semibold transition-all cursor-pointer border ${
                   isActive
                     ? 'bg-[#8b1828] text-white border-[#8b1828] shadow-xs'

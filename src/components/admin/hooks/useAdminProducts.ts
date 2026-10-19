@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { OutfitItem } from '../types';
+import { OutfitItem, slugify } from '../types';
 
 export function useAdminProducts() {
   const [products, setProducts] = useState<OutfitItem[]>([]);
@@ -151,6 +151,7 @@ export function useAdminProducts() {
           body: JSON.stringify({
             ...editingProduct,
             ...formData,
+            slug: slugify(formData.slug || '') || editingProduct.slug,
           }),
         });
 
@@ -163,10 +164,7 @@ export function useAdminProducts() {
         }
       } else {
         const newId = `outfit-${Date.now()}`;
-        const newSlug = formData
-          .title!.toLowerCase()
-          .replace(/[^a-z0-9]+/g, '-')
-          .replace(/(^-|-$)+/g, '');
+        const newSlug = slugify(formData.slug || '') || slugify(formData.title!);
 
         const payload = {
           ...formData,

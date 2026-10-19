@@ -4,6 +4,13 @@ import Product from '@/models/Product';
 import { INITIAL_PRODUCTS } from '@/data/products';
 import { verifyAdminSession } from '@/lib/auth';
 
+const DUPLICATE_SLUG_MESSAGE = 'This URL slug is already used by another outfit. Please choose a different slug.';
+
+function isDuplicateSlugError(err: unknown) {
+  const e = err as { code?: number; keyValue?: Record<string, unknown> };
+  return e?.code === 11000 && Boolean(e.keyValue && 'slug' in e.keyValue);
+}
+
 export async function GET() {
   try {
     const conn = await connectDB();
@@ -61,6 +68,9 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ success: true, product: newProduct }, { status: 201 });
   } catch (err: unknown) {
+    if (isDuplicateSlugError(err)) {
+      return NextResponse.json({ error: DUPLICATE_SLUG_MESSAGE }, { status: 409 });
+    }
     const error = err as Error;
     return NextResponse.json({ error: error.message || 'Failed to create product' }, { status: 500 });
   }
@@ -90,7 +100,12 @@ export async function PUT(req: Request) {
     if (id) {
       filterConditions.push({ id });
     }
-    if (slug) {
+    if (filterConditions.length > 0) {
+      // Product found by _id/id, so the slug can be edited
+      if (slug) {
+        updateData.slug = slug;
+      }
+    } else if (slug) {
       filterConditions.push({ slug });
     }
 
@@ -110,6 +125,9 @@ export async function PUT(req: Request) {
 
     return NextResponse.json({ success: true, product: updated });
   } catch (err: unknown) {
+    if (isDuplicateSlugError(err)) {
+      return NextResponse.json({ error: DUPLICATE_SLUG_MESSAGE }, { status: 409 });
+    }
     const error = err as Error;
     return NextResponse.json({ error: error.message || 'Failed to update product' }, { status: 500 });
   }
