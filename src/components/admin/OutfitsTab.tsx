@@ -33,6 +33,76 @@ export default function OutfitsTab({
   onOpenInquiries,
   bookings = [],
 }: OutfitsTabProps) {
+  const inquiryCount = (p: OutfitItem) =>
+    bookings.filter(
+      (b) =>
+        b.productTitle &&
+        (b.productTitle.toLowerCase() === p.title.toLowerCase() ||
+          p.title.toLowerCase().includes(b.productTitle.toLowerCase()) ||
+          b.productTitle.toLowerCase().includes(p.title.toLowerCase()))
+    ).length;
+
+  const statusBadge = (p: OutfitItem) => (
+    <span
+      className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold ${
+        (p.status || 'available') === 'available'
+          ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+          : p.status === 'rented'
+          ? 'bg-amber-50 text-amber-700 border border-amber-200'
+          : 'bg-stone-100 text-stone-700 border border-stone-200'
+      }`}
+    >
+      {(p.status || 'available').toUpperCase()}
+    </span>
+  );
+
+  // Quick Reviews & Inquiries pills (shared by the desktop table and phone cards)
+  const renderPills = (p: OutfitItem) => (
+    <div className="mt-1 flex items-center gap-1.5 flex-wrap">
+      <button
+        type="button"
+        onClick={() => onOpenReviews && onOpenReviews(p)}
+        className="inline-flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-full bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 transition-colors cursor-pointer"
+        title="View or Add Reviews"
+      >
+        <Star className="w-3 h-3 fill-amber-500 text-amber-500" />
+        <span>{(p.reviews || []).length} Reviews</span>
+        <span className="text-amber-500 font-bold ml-0.5">+</span>
+      </button>
+
+      {(p.reviews || []).some(isPendingReview) && (
+        <button
+          type="button"
+          onClick={() => onOpenReviews && onOpenReviews(p)}
+          className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-500 hover:bg-amber-600 text-white transition-colors cursor-pointer animate-pulse"
+          title="Customer reviews waiting for approval"
+        >
+          {(p.reviews || []).filter(isPendingReview).length} Pending Approval
+        </button>
+      )}
+
+      {/* Inquiries Pill for this product */}
+      {(() => {
+        const prodInquiries = inquiryCount(p);
+        return (
+          <button
+            type="button"
+            onClick={() => onOpenInquiries && onOpenInquiries(p)}
+            className={`inline-flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-full transition-colors cursor-pointer border ${
+              prodInquiries > 0
+                ? 'bg-rose-50 hover:bg-rose-100 text-[#8b1828] border-rose-200 font-bold'
+                : 'bg-stone-50 hover:bg-stone-100 text-stone-500 border-stone-200'
+            }`}
+            title={`View inquiries for ${p.title}`}
+          >
+            <CalendarCheck className="w-3 h-3 text-[#8b1828]" />
+            <span>{prodInquiries} Inquiries</span>
+          </button>
+        );
+      })()}
+    </div>
+  );
+
   return (
     <div className="space-y-4">
       {/* Search & Category Filter Bar */}
@@ -87,7 +157,54 @@ export default function OutfitsTab({
             <p className="text-xs text-stone-400 mt-1">Try another search or add a new outfit.</p>
           </div>
         ) : (
-          <div className="overflow-x-auto">
+          <>
+          {/* Phones: one card per outfit */}
+          <ul className="md:hidden divide-y divide-stone-100">
+            {filteredProducts.map((p) => (
+              <li key={p.id} className="p-3 flex gap-3">
+                <button
+                  type="button"
+                  onClick={() => handleEdit(p)}
+                  className="relative w-16 h-20 bg-stone-100 rounded-lg overflow-hidden shrink-0 border border-stone-200"
+                  aria-label={`Edit ${p.title}`}
+                >
+                  <Image src={p.images[0] || '/hero-lehenga.jpg'} alt={p.title} fill sizes="64px" className="object-cover" />
+                </button>
+                <div className="min-w-0 flex-1 space-y-1">
+                  <p className="font-semibold text-stone-900 text-sm leading-snug line-clamp-2">
+                    {p.featured && <span className="text-[#8b1828]">⭐ </span>}
+                    {p.title}
+                  </p>
+                  <div className="flex items-center gap-2 flex-wrap text-[11px]">
+                    <span className="font-bold text-[#8b1828] text-sm">{p.price}</span>
+                    {statusBadge(p)}
+                    <span className="text-stone-400 truncate">{p.category}</span>
+                  </div>
+                  {renderPills(p)}
+                  <div className="flex items-center gap-2 pt-1">
+                    <button
+                      type="button"
+                      onClick={() => handleEdit(p)}
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-stone-700 bg-stone-100 hover:bg-stone-200 border border-stone-200"
+                    >
+                      <Edit3 className="w-3.5 h-3.5" />
+                      <span>Edit</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleDeleteProduct(p._id || p.id, p.title)}
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-red-600 bg-red-50 hover:bg-red-100 border border-red-100"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                      <span>Delete</span>
+                    </button>
+                  </div>
+                </div>
+              </li>
+            ))}
+          </ul>
+
+          <div className="hidden md:block overflow-x-auto">
             <table className="w-full text-left text-xs">
               <thead className="bg-[#FAF7F2] text-stone-600 border-b border-[#EDE4D8] uppercase tracking-wider text-[10px]">
                 <tr>
@@ -126,56 +243,7 @@ export default function OutfitsTab({
                           <span className="text-[11px] text-stone-400 block truncate">
                             {p.subtitle || p.color}
                           </span>
-                          {/* Quick Reviews & Inquiries Pills Row */}
-                          <div className="mt-1 flex items-center gap-1.5 flex-wrap">
-                            <button
-                              type="button"
-                              onClick={() => onOpenReviews && onOpenReviews(p)}
-                              className="inline-flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-full bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 transition-colors cursor-pointer"
-                              title="View or Add Reviews"
-                            >
-                              <Star className="w-3 h-3 fill-amber-500 text-amber-500" />
-                              <span>{(p.reviews || []).length} Reviews</span>
-                              <span className="text-amber-500 font-bold ml-0.5">+</span>
-                            </button>
-
-                            {(p.reviews || []).some(isPendingReview) && (
-                              <button
-                                type="button"
-                                onClick={() => onOpenReviews && onOpenReviews(p)}
-                                className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-500 hover:bg-amber-600 text-white transition-colors cursor-pointer animate-pulse"
-                                title="Customer reviews waiting for approval"
-                              >
-                                {(p.reviews || []).filter(isPendingReview).length} Pending Approval
-                              </button>
-                            )}
-
-                            {/* Inquiries Pill for this product */}
-                            {(() => {
-                              const prodInquiries = bookings.filter(
-                                (b) =>
-                                  b.productTitle &&
-                                  (b.productTitle.toLowerCase() === p.title.toLowerCase() ||
-                                    p.title.toLowerCase().includes(b.productTitle.toLowerCase()) ||
-                                    b.productTitle.toLowerCase().includes(p.title.toLowerCase()))
-                              );
-                              return (
-                                <button
-                                  type="button"
-                                  onClick={() => onOpenInquiries && onOpenInquiries(p)}
-                                  className={`inline-flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-full transition-colors cursor-pointer border ${
-                                    prodInquiries.length > 0
-                                      ? 'bg-rose-50 hover:bg-rose-100 text-[#8b1828] border-rose-200 font-bold'
-                                      : 'bg-stone-50 hover:bg-stone-100 text-stone-500 border-stone-200'
-                                  }`}
-                                  title={`View inquiries for ${p.title}`}
-                                >
-                                  <CalendarCheck className="w-3 h-3 text-[#8b1828]" />
-                                  <span>{prodInquiries.length} Inquiries</span>
-                                </button>
-                              );
-                            })()}
-                          </div>
+                          {renderPills(p)}
                         </div>
                       </div>
                     </td>
@@ -190,19 +258,7 @@ export default function OutfitsTab({
                         {p.work}
                       </span>
                     </td>
-                    <td className="py-3 px-4">
-                      <span
-                        className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold ${
-                          (p.status || 'available') === 'available'
-                            ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
-                            : p.status === 'rented'
-                            ? 'bg-amber-50 text-amber-700 border border-amber-200'
-                            : 'bg-stone-100 text-stone-700 border border-stone-200'
-                        }`}
-                      >
-                        {(p.status || 'available').toUpperCase()}
-                      </span>
-                    </td>
+                    <td className="py-3 px-4">{statusBadge(p)}</td>
                     <td className="py-3 px-4 text-right">
                       <div className="inline-flex items-center gap-1.5">
                         {/* Direct Inquiries Side Button */}
@@ -244,6 +300,7 @@ export default function OutfitsTab({
               </tbody>
             </table>
           </div>
+          </>
         )}
       </div>
     </div>

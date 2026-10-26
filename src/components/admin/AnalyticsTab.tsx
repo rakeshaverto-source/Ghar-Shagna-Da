@@ -51,7 +51,7 @@ export default function AnalyticsTab({
   return (
     <div className="max-w-4xl mx-auto space-y-6">
       {/* Top Banner / Info Card */}
-      <div className="bg-gradient-to-r from-stone-900 via-[#8b1828] to-stone-900 rounded-2xl p-6 text-white shadow-md relative overflow-hidden">
+      <div className="bg-gradient-to-r from-stone-900 via-[#8b1828] to-stone-900 rounded-2xl p-4 sm:p-6 text-white shadow-md relative overflow-hidden">
         <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-3xl pointer-events-none" />
         <div className="relative z-10">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md text-xs font-medium tracking-wide uppercase mb-3 text-amber-200">
@@ -87,13 +87,13 @@ export default function AnalyticsTab({
       {/* Settings Form */}
       <form onSubmit={handleSaveAnalyticsSettings} className="space-y-6">
         {/* 1. Google Search Console Verification Token */}
-        <div className="bg-white rounded-2xl border border-stone-200 p-6 shadow-xs space-y-4 transition-shadow hover:shadow-sm">
+        <div className="bg-white rounded-2xl border border-stone-200 p-4 sm:p-6 shadow-xs space-y-4 transition-shadow hover:shadow-sm">
           <div className="flex items-start justify-between gap-4">
             <div className="flex items-center gap-3.5">
-              <div className="w-11 h-11 rounded-xl bg-amber-50 text-amber-700 border border-amber-200/60 flex items-center justify-center shrink-0">
+              <div className="w-11 h-11 rounded-xl bg-amber-50 text-amber-700 border border-amber-200/60 hidden sm:flex items-center justify-center shrink-0">
                 <Search className="w-5 h-5" />
               </div>
-              <div>
+              <div className="min-w-0">
                 <h3 className="font-semibold text-stone-900 text-base">
                   Google Search Console Verification Token
                 </h3>
@@ -132,25 +132,27 @@ export default function AnalyticsTab({
                 {extractedNotice}
               </p>
             )}
-            <p className="text-xs text-stone-500 flex items-center gap-2 mt-1.5 leading-normal">
+            <p className="text-xs text-stone-500 flex items-start gap-2 mt-1.5 leading-normal">
               <HelpCircle className="w-4 h-4 text-stone-400 shrink-0" />
-              You can paste either the raw verification token or the entire tag{' '}
-              <code className="bg-stone-100 border border-stone-200 px-1.5 py-0.5 rounded text-xs text-stone-800 font-mono">
-                &lt;meta name=&quot;google-site-verification&quot; content=&quot;...&quot;&gt;
-              </code>
-              . The exact token code will be extracted automatically.
+              <span className="min-w-0">
+                You can paste either the raw verification token or the entire tag{' '}
+                <code className="bg-stone-100 border border-stone-200 px-1.5 py-0.5 rounded text-xs text-stone-800 font-mono break-all">
+                  &lt;meta name=&quot;google-site-verification&quot; content=&quot;...&quot;&gt;
+                </code>
+                . The exact token code will be extracted automatically.
+              </span>
             </p>
           </div>
         </div>
 
         {/* 2. Google Analytics 4 (GA4) */}
-        <div className="bg-white rounded-2xl border border-stone-200 p-6 shadow-xs space-y-4 transition-shadow hover:shadow-sm">
+        <div className="bg-white rounded-2xl border border-stone-200 p-4 sm:p-6 shadow-xs space-y-4 transition-shadow hover:shadow-sm">
           <div className="flex items-start justify-between gap-4">
             <div className="flex items-center gap-3.5">
-              <div className="w-11 h-11 rounded-xl bg-blue-50 text-blue-700 border border-blue-200/60 flex items-center justify-center shrink-0">
+              <div className="w-11 h-11 rounded-xl bg-blue-50 text-blue-700 border border-blue-200/60 hidden sm:flex items-center justify-center shrink-0">
                 <BarChart3 className="w-5 h-5" />
               </div>
-              <div>
+              <div className="min-w-0">
                 <h3 className="font-semibold text-stone-900 text-base">
                   Google Analytics 4 (GA4) Measurement ID
                 </h3>
@@ -194,13 +196,13 @@ export default function AnalyticsTab({
         </div>
 
         {/* 3. Meta (Facebook) Pixel ID */}
-        <div className="bg-white rounded-2xl border border-stone-200 p-6 shadow-xs space-y-4 transition-shadow hover:shadow-sm">
+        <div className="bg-white rounded-2xl border border-stone-200 p-4 sm:p-6 shadow-xs space-y-4 transition-shadow hover:shadow-sm">
           <div className="flex items-start justify-between gap-4">
             <div className="flex items-center gap-3.5">
-              <div className="w-11 h-11 rounded-xl bg-purple-50 text-purple-700 border border-purple-200/60 flex items-center justify-center shrink-0">
+              <div className="w-11 h-11 rounded-xl bg-purple-50 text-purple-700 border border-purple-200/60 hidden sm:flex items-center justify-center shrink-0">
                 <Share2 className="w-5 h-5" />
               </div>
-              <div>
+              <div className="min-w-0">
                 <h3 className="font-semibold text-stone-900 text-base">
                   Meta (Facebook & Instagram) Pixel ID
                 </h3>
@@ -244,13 +246,13 @@ export default function AnalyticsTab({
         </div>
 
         {/* 4. Automated Fixed Schema.org Info */}
-        <div className="bg-white rounded-2xl border border-stone-200 p-6 shadow-xs space-y-5 transition-shadow hover:shadow-sm">
+        <div className="bg-white rounded-2xl border border-stone-200 p-4 sm:p-6 shadow-xs space-y-5 transition-shadow hover:shadow-sm">
           <div className="flex items-start justify-between gap-4">
             <div className="flex items-center gap-3.5">
-              <div className="w-11 h-11 rounded-xl bg-emerald-50 text-emerald-700 border border-emerald-200/60 flex items-center justify-center shrink-0">
+              <div className="w-11 h-11 rounded-xl bg-emerald-50 text-emerald-700 border border-emerald-200/60 hidden sm:flex items-center justify-center shrink-0">
                 <Code className="w-5 h-5" />
               </div>
-              <div>
+              <div className="min-w-0">
                 <h3 className="font-semibold text-stone-900 text-base">
                   Schema.org Structured Data (JSON-LD)
                 </h3>

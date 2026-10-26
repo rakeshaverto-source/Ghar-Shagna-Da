@@ -32,7 +32,7 @@ export default function PageSeoForm({
   onRemovePageSeo,
 }: PageSeoFormProps) {
   return (
-    <div className="bg-white border border-[#EDE4D8] rounded-2xl p-6 sm:p-7 shadow-xs space-y-6">
+    <div className="bg-white border border-[#EDE4D8] rounded-2xl p-4 sm:p-7 shadow-xs space-y-6">
       {/* Header Row: Badge, Title & Crawler status */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-[#EBE3D7] pb-5">
         <div className="flex items-center gap-3.5">
@@ -40,7 +40,7 @@ export default function PageSeoForm({
             SEO
           </div>
           <div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 flex-wrap">
               <h3 className="font-bold text-stone-900 text-base">
                 {selectedLabel.split(' (')[0]}
               </h3>
@@ -56,11 +56,11 @@ export default function PageSeoForm({
 
         <div className="flex items-center gap-2.5 self-stretch sm:self-auto justify-end">
           {/* Google Index Toggle */}
-          <div className="relative">
+          <div className="relative min-w-0 flex-1 sm:flex-none">
             <select
               value={currentPageSeo.noIndex ? 'noindex' : 'index'}
               onChange={(e) => onUpdateField('noIndex', e.target.value === 'noindex')}
-              className="bg-[#FAF8F5] border border-emerald-300 text-emerald-800 rounded-xl px-3.5 py-2 text-xs font-bold focus:outline-none focus:ring-1 focus:ring-emerald-500 cursor-pointer appearance-none pr-8"
+              className="bg-[#FAF8F5] border border-emerald-300 text-emerald-800 rounded-xl px-3.5 py-2 text-xs font-bold focus:outline-none focus:ring-1 focus:ring-emerald-500 cursor-pointer appearance-none pr-8 w-full truncate"
             >
               <option value="index">Google: Index &amp; Follow (Default Public)</option>
               <option value="noindex">Google: NoIndex &amp; NoFollow (Hidden from Search)</option>
@@ -77,7 +77,7 @@ export default function PageSeoForm({
             href={selectedPagePath}
             target="_blank"
             rel="noreferrer"
-            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-stone-100 hover:bg-stone-200/80 text-xs font-semibold text-stone-700 border border-stone-200 transition-colors"
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl whitespace-nowrap shrink-0 bg-stone-100 hover:bg-stone-200/80 text-xs font-semibold text-stone-700 border border-stone-200 transition-colors"
           >
             <span>Visit Page</span>
             <ExternalLink className="w-3 h-3" />
@@ -88,7 +88,7 @@ export default function PageSeoForm({
               type="button"
               onClick={onRemovePageSeo}
               title="Reset to default"
-              className="p-2 rounded-xl bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 transition-colors cursor-pointer"
+              className="p-2 rounded-xl bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 transition-colors cursor-pointer shrink-0"
             >
               <Trash2 className="w-3.5 h-3.5" />
             </button>

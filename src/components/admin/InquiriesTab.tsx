@@ -47,6 +47,27 @@ export default function InquiriesTab({
 
   const cleanPhone = (phone: string) => phone.replace(/[^0-9]/g, '');
 
+  const followUpLink = (b: BookingLead) =>
+    `https://wa.me/${cleanPhone(b.phone)}?text=Hi%20${encodeURIComponent(
+      b.customerName
+    )},%20thank%20you%20for%20inquiring%20about%20${encodeURIComponent(
+      b.productTitle
+    )}%20at%20Ghar%20Shagna%20Da.`;
+
+  const statusSelect = (b: BookingLead) => (
+    <select
+      value={b.status}
+      onChange={(e) => handleUpdateBookingStatus(b._id, e.target.value)}
+      className="bg-[#FAF8F5] border border-stone-200 rounded-lg text-[11px] py-1 px-2 font-semibold text-stone-800 focus:outline-none focus:border-[#8b1828] cursor-pointer"
+    >
+      <option value="new">🆕 New Lead</option>
+      <option value="contacted">📞 Contacted</option>
+      <option value="booked">💍 Booked</option>
+      <option value="returned">✅ Returned</option>
+      <option value="cancelled">❌ Cancelled</option>
+    </select>
+  );
+
   return (
     <div className="space-y-4">
       {/* Top Header Card */}
@@ -82,7 +103,70 @@ export default function InquiriesTab({
             </p>
           </div>
         ) : (
-          <div className="overflow-x-auto">
+          <>
+          {/* Phones: one card per lead; tap the card for full details */}
+          <ul className="md:hidden divide-y divide-stone-100">
+            {bookings.map((b) => (
+              <li key={b._id} className="p-3 space-y-2 cursor-pointer" onClick={() => setActiveLead(b)}>
+                <div className="flex items-start justify-between gap-2">
+                  <div className="min-w-0">
+                    <p className="font-semibold text-stone-900 text-sm truncate">{b.customerName}</p>
+                    <p className="text-[11px] text-stone-600 flex items-center gap-1 min-w-0">
+                      <Package className="w-3.5 h-3.5 text-[#8b1828] shrink-0" />
+                      <span className="truncate">{b.productTitle}</span>
+                    </p>
+                  </div>
+                  <div className="shrink-0" onClick={(e) => e.stopPropagation()}>
+                    {statusSelect(b)}
+                  </div>
+                </div>
+                <div className="flex items-center gap-x-3 gap-y-1 flex-wrap text-[11px] text-stone-500">
+                  <span className="inline-flex items-center gap-1">
+                    <Calendar className="w-3 h-3" />
+                    {b.eventDate || 'Flexible'}
+                  </span>
+                  <span className="inline-flex items-center gap-1">
+                    <MapPin className="w-3 h-3" />
+                    {b.city || 'Punjab'}
+                  </span>
+                  {b.rentalDuration && (
+                    <span className="inline-flex items-center gap-1">
+                      <Clock className="w-3 h-3" />
+                      {b.rentalDuration}
+                    </span>
+                  )}
+                </div>
+                <div className="flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
+                  <a
+                    href={followUpLink(b)}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 rounded-lg text-xs font-semibold"
+                  >
+                    <MessageCircle className="w-3.5 h-3.5" />
+                    <span>WhatsApp</span>
+                  </a>
+                  <a
+                    href={`tel:${b.phone}`}
+                    className="inline-flex items-center gap-1.5 bg-stone-100 hover:bg-stone-200 text-stone-700 px-3 py-1.5 rounded-lg text-xs font-semibold border border-stone-200"
+                  >
+                    <Phone className="w-3.5 h-3.5" />
+                    <span>Call</span>
+                  </a>
+                  <button
+                    type="button"
+                    onClick={() => setActiveLead(b)}
+                    className="inline-flex items-center gap-1.5 bg-stone-100 hover:bg-stone-200 text-stone-700 px-3 py-1.5 rounded-lg text-xs font-semibold border border-stone-200"
+                  >
+                    <Eye className="w-3.5 h-3.5 text-[#8b1828]" />
+                    <span>View</span>
+                  </button>
+                </div>
+              </li>
+            ))}
+          </ul>
+
+          <div className="hidden md:block overflow-x-auto">
             <table className="w-full text-left text-xs">
               <thead className="bg-[#FAF7F2] text-stone-600 border-b border-[#EDE4D8] uppercase tracking-wider text-[10px]">
                 <tr>
@@ -135,17 +219,7 @@ export default function InquiriesTab({
                     </td>
                     <td className="py-3 px-4 text-stone-600 font-medium">{b.rentalDuration}</td>
                     <td className="py-3 px-4" onClick={(e) => e.stopPropagation()}>
-                      <select
-                        value={b.status}
-                        onChange={(e) => handleUpdateBookingStatus(b._id, e.target.value)}
-                        className="bg-[#FAF8F5] border border-stone-200 rounded-lg text-[11px] py-1 px-2 font-semibold text-stone-800 focus:outline-none focus:border-[#8b1828] cursor-pointer"
-                      >
-                        <option value="new">🆕 New Lead</option>
-                        <option value="contacted">📞 Contacted</option>
-                        <option value="booked">💍 Booked</option>
-                        <option value="returned">✅ Returned</option>
-                        <option value="cancelled">❌ Cancelled</option>
-                      </select>
+                      {statusSelect(b)}
                     </td>
                     <td className="py-3 px-4 text-right" onClick={(e) => e.stopPropagation()}>
                       <div className="flex items-center justify-end gap-1.5">
@@ -162,11 +236,7 @@ export default function InquiriesTab({
 
                         {/* WhatsApp Direct Chat */}
                         <a
-                          href={`https://wa.me/${cleanPhone(b.phone)}?text=Hi%20${encodeURIComponent(
-                            b.customerName
-                          )},%20thank%20you%20for%20inquiring%20about%20${encodeURIComponent(
-                            b.productTitle
-                          )}%20at%20Ghar%20Shagna%20Da.`}
+                          href={followUpLink(b)}
                           target="_blank"
                           rel="noreferrer"
                           className="inline-flex items-center gap-1 bg-emerald-600 hover:bg-emerald-700 text-white px-2.5 py-1 rounded-lg text-[11px] font-semibold transition-colors shadow-xs"
@@ -182,13 +252,14 @@ export default function InquiriesTab({
               </tbody>
             </table>
           </div>
+          </>
         )}
       </div>
 
       {/* 🔍 VIEW LEAD DETAILS MODAL */}
       {activeLead && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-stone-950/70 backdrop-blur-sm overflow-y-auto animate-in fade-in duration-150">
-          <div className="bg-white border border-[#EDE4D8] rounded-3xl max-w-lg w-full p-6 shadow-2xl relative my-6 space-y-5">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-stone-950/70 backdrop-blur-sm overflow-y-auto animate-in fade-in duration-150">
+          <div className="bg-white border border-[#EDE4D8] rounded-3xl max-w-lg w-full p-4 sm:p-6 shadow-2xl relative my-6 space-y-5">
             {/* Modal Header */}
             <div className="flex items-start justify-between border-b border-[#EDE4D8] pb-4">
               <div className="flex items-center gap-3">
@@ -216,8 +287,8 @@ export default function InquiriesTab({
             {/* Details Grid */}
             <div className="space-y-3.5 text-xs">
               <div className="bg-[#FAF8F5] p-3.5 rounded-2xl border border-stone-200 space-y-2.5">
-                <div className="flex items-center justify-between">
-                  <span className="text-stone-500 font-semibold flex items-center gap-1.5">
+                <div className="flex items-center justify-between gap-3">
+                  <span className="text-stone-500 font-semibold flex items-center gap-1.5 shrink-0">
                     <Package className="w-4 h-4 text-[#8b1828]" />
                     <span>Outfit Requested:</span>
                   </span>
@@ -226,8 +297,8 @@ export default function InquiriesTab({
                   </span>
                 </div>
 
-                <div className="flex items-center justify-between">
-                  <span className="text-stone-500 font-semibold flex items-center gap-1.5">
+                <div className="flex items-center justify-between gap-3">
+                  <span className="text-stone-500 font-semibold flex items-center gap-1.5 shrink-0">
                     <Phone className="w-4 h-4 text-emerald-600" />
                     <span>WhatsApp Contact:</span>
                   </span>

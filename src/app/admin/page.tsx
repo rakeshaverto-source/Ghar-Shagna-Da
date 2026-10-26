@@ -31,6 +31,7 @@ import { useAdminInquiries, useAdminSeoAnalytics } from '@/components/admin/hook
 export default function AdminDashboardPage() {
   const [activeTab, setActiveTab] = useState<'products' | 'bookings' | 'hero' | 'reviews' | 'gallery' | 'blogs' | 'analytics' | 'pageseo'>('products');
   const [selectedInquiryLead, setSelectedInquiryLead] = useState<BookingLead | null>(null);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   // Modular Auth State & Actions
   const {
@@ -319,15 +320,24 @@ export default function AdminDashboardPage() {
       {/* 🧭 LUXURY ADMIN SIDEBAR */}
       <AdminSidebar
         activeTab={activeTab}
-        setActiveTab={setActiveTab}
+        setActiveTab={(tab) => {
+          setActiveTab(tab);
+          setIsMobileMenuOpen(false);
+          window.scrollTo({ top: 0 });
+        }}
         productsCount={products.length}
         bookingsCount={bookings.length}
         heroSlidesCount={heroSlides.length}
         reviewsCount={homeReviews.length}
         galleryCount={galleryItems.length}
         blogsCount={blogs.length}
-        handleAddNewProduct={handleAddNewProduct}
+        handleAddNewProduct={() => {
+          setIsMobileMenuOpen(false);
+          handleAddNewProduct();
+        }}
         handleLogout={handleLogout}
+        mobileOpen={isMobileMenuOpen}
+        onCloseMobile={() => setIsMobileMenuOpen(false)}
       />
 
       {/* 🖥️ MAIN ADMIN WORKSPACE */}
@@ -354,10 +364,11 @@ export default function AdminDashboardPage() {
           }}
           onAddNewProduct={handleAddNewProduct}
           onAddNewHero={handleAddNewHero}
+          onOpenMenu={() => setIsMobileMenuOpen(true)}
         />
 
         {/* Workspace Body */}
-        <div className="p-6">
+        <div className="p-3 sm:p-6">
           {/* TAB 1: PRODUCTS INVENTORY */}
           {activeTab === 'products' && (
             <OutfitsTab

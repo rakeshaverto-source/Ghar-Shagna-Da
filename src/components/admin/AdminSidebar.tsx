@@ -14,6 +14,7 @@ import {
   Globe,
   Star,
   BookOpen,
+  X,
 } from 'lucide-react';
 
 interface AdminSidebarProps {
@@ -27,6 +28,9 @@ interface AdminSidebarProps {
   blogsCount?: number;
   handleAddNewProduct: () => void;
   handleLogout: () => void;
+  // Phones: the sidebar is a slide-in drawer opened from the header menu button
+  mobileOpen?: boolean;
+  onCloseMobile?: () => void;
 }
 
 export default function AdminSidebar({
@@ -40,9 +44,19 @@ export default function AdminSidebar({
   blogsCount = 0,
   handleAddNewProduct,
   handleLogout,
+  mobileOpen = false,
+  onCloseMobile,
 }: AdminSidebarProps) {
   return (
-    <aside className="w-full md:w-64 bg-white border-r border-[#EBE3D7] flex flex-col shrink-0 md:min-h-screen sticky top-0 z-40 shadow-xs">
+    <>
+    {mobileOpen && (
+      <div className="fixed inset-0 z-40 bg-stone-950/50 backdrop-blur-xs md:hidden" onClick={onCloseMobile} />
+    )}
+    <aside
+      className={`fixed inset-y-0 left-0 z-50 w-72 max-w-[85vw] overflow-y-auto transition-transform duration-300 ${
+        mobileOpen ? 'translate-x-0 shadow-2xl' : '-translate-x-full'
+      } md:translate-x-0 md:w-64 md:sticky md:top-0 md:h-screen bg-white border-r border-[#EBE3D7] flex flex-col shrink-0 md:shadow-xs`}
+    >
       {/* Brand Header */}
       <div className="p-5 border-b border-[#EBE3D7] flex items-center justify-between">
         <div className="flex items-center gap-3">
@@ -54,6 +68,14 @@ export default function AdminSidebar({
             <span className="text-[10px] uppercase tracking-widest text-[#8b1828] font-bold">Admin Portal</span>
           </div>
         </div>
+        <button
+          type="button"
+          onClick={onCloseMobile}
+          aria-label="Close menu"
+          className="md:hidden p-2 -mr-2 rounded-xl text-stone-500 hover:bg-stone-100"
+        >
+          <X className="w-5 h-5" />
+        </button>
       </div>
 
       {/* Sidebar Nav Links */}
@@ -62,7 +84,7 @@ export default function AdminSidebar({
 
         <button
           onClick={() => setActiveTab('products')}
-          className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all ${
+          className={`w-full flex items-center justify-between px-3.5 py-3 md:py-2.5 rounded-xl text-sm md:text-xs font-semibold transition-all ${
             activeTab === 'products'
               ? 'bg-[#8b1828] text-white shadow-md shadow-[#8b1828]/20'
               : 'text-stone-600 hover:bg-stone-100 hover:text-stone-900'
@@ -83,7 +105,7 @@ export default function AdminSidebar({
 
         <button
           onClick={() => setActiveTab('bookings')}
-          className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all ${
+          className={`w-full flex items-center justify-between px-3.5 py-3 md:py-2.5 rounded-xl text-sm md:text-xs font-semibold transition-all ${
             activeTab === 'bookings'
               ? 'bg-[#8b1828] text-white shadow-md shadow-[#8b1828]/20'
               : 'text-stone-600 hover:bg-stone-100 hover:text-stone-900'
@@ -104,7 +126,7 @@ export default function AdminSidebar({
 
         <button
           onClick={() => setActiveTab('hero')}
-          className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all ${
+          className={`w-full flex items-center justify-between px-3.5 py-3 md:py-2.5 rounded-xl text-sm md:text-xs font-semibold transition-all ${
             activeTab === 'hero'
               ? 'bg-[#8b1828] text-white shadow-md shadow-[#8b1828]/20'
               : 'text-stone-600 hover:bg-stone-100 hover:text-stone-900'
@@ -125,7 +147,7 @@ export default function AdminSidebar({
 
         <button
           onClick={() => setActiveTab('reviews')}
-          className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all ${
+          className={`w-full flex items-center justify-between px-3.5 py-3 md:py-2.5 rounded-xl text-sm md:text-xs font-semibold transition-all ${
             activeTab === 'reviews'
               ? 'bg-[#8b1828] text-white shadow-md shadow-[#8b1828]/20'
               : 'text-stone-600 hover:bg-stone-100 hover:text-stone-900'
@@ -146,7 +168,7 @@ export default function AdminSidebar({
 
         <button
           onClick={() => setActiveTab('gallery')}
-          className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all ${
+          className={`w-full flex items-center justify-between px-3.5 py-3 md:py-2.5 rounded-xl text-sm md:text-xs font-semibold transition-all ${
             activeTab === 'gallery'
               ? 'bg-[#8b1828] text-white shadow-md shadow-[#8b1828]/20'
               : 'text-stone-600 hover:bg-stone-100 hover:text-stone-900'
@@ -167,7 +189,7 @@ export default function AdminSidebar({
 
         <button
           onClick={() => setActiveTab('blogs')}
-          className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all ${
+          className={`w-full flex items-center justify-between px-3.5 py-3 md:py-2.5 rounded-xl text-sm md:text-xs font-semibold transition-all ${
             activeTab === 'blogs'
               ? 'bg-[#8b1828] text-white shadow-md shadow-[#8b1828]/20'
               : 'text-stone-600 hover:bg-stone-100 hover:text-stone-900'
@@ -188,7 +210,7 @@ export default function AdminSidebar({
 
         <button
           onClick={() => setActiveTab('pageseo')}
-          className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all ${
+          className={`w-full flex items-center justify-between px-3.5 py-3 md:py-2.5 rounded-xl text-sm md:text-xs font-semibold transition-all ${
             activeTab === 'pageseo'
               ? 'bg-[#8b1828] text-white shadow-md shadow-[#8b1828]/20'
               : 'text-stone-600 hover:bg-stone-100 hover:text-stone-900'
@@ -209,7 +231,7 @@ export default function AdminSidebar({
 
         <button
           onClick={() => setActiveTab('analytics')}
-          className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all ${
+          className={`w-full flex items-center justify-between px-3.5 py-3 md:py-2.5 rounded-xl text-sm md:text-xs font-semibold transition-all ${
             activeTab === 'analytics'
               ? 'bg-[#8b1828] text-white shadow-md shadow-[#8b1828]/20'
               : 'text-stone-600 hover:bg-stone-100 hover:text-stone-900'
@@ -234,7 +256,7 @@ export default function AdminSidebar({
           <Link
             href="/"
             target="_blank"
-            className="w-full flex items-center gap-2.5 px-3.5 py-2 rounded-xl text-xs font-medium text-stone-600 hover:bg-stone-100 hover:text-stone-900 transition-colors"
+            className="w-full flex items-center gap-2.5 px-3.5 py-2.5 md:py-2 rounded-xl text-sm md:text-xs font-medium text-stone-600 hover:bg-stone-100 hover:text-stone-900 transition-colors"
           >
             <ExternalLink className="w-3.5 h-3.5 text-stone-400" />
             <span>Open Live Store</span>
@@ -243,7 +265,7 @@ export default function AdminSidebar({
           <Link
             href="/blog"
             target="_blank"
-            className="w-full flex items-center gap-2.5 px-3.5 py-2 rounded-xl text-xs font-medium text-stone-600 hover:bg-stone-100 hover:text-stone-900 transition-colors"
+            className="w-full flex items-center gap-2.5 px-3.5 py-2.5 md:py-2 rounded-xl text-sm md:text-xs font-medium text-stone-600 hover:bg-stone-100 hover:text-stone-900 transition-colors"
           >
             <ExternalLink className="w-3.5 h-3.5 text-stone-400" />
             <span>View All Live Blogs</span>
@@ -251,7 +273,7 @@ export default function AdminSidebar({
 
           <button
             onClick={handleAddNewProduct}
-            className="w-full mt-2 flex items-center gap-2.5 px-3.5 py-2 rounded-xl text-xs font-semibold text-[#8b1828] bg-rose-50 hover:bg-rose-100/70 border border-rose-200/60 transition-colors"
+            className="w-full mt-2 flex items-center gap-2.5 px-3.5 py-2.5 md:py-2 rounded-xl text-sm md:text-xs font-semibold text-[#8b1828] bg-rose-50 hover:bg-rose-100/70 border border-rose-200/60 transition-colors"
           >
             <Plus className="w-3.5 h-3.5" />
             <span>Add New Outfit</span>
@@ -261,7 +283,7 @@ export default function AdminSidebar({
             onClick={() => {
               setActiveTab('blogs');
             }}
-            className="w-full mt-2 flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold text-purple-900 bg-purple-50 hover:bg-purple-100/80 border border-purple-200/70 transition-colors shadow-xs"
+            className="w-full mt-2 flex items-center justify-between px-3.5 py-3 md:py-2.5 rounded-xl text-sm md:text-xs font-semibold text-purple-900 bg-purple-50 hover:bg-purple-100/80 border border-purple-200/70 transition-colors shadow-xs"
           >
             <div className="flex items-center gap-2">
               <BookOpen className="w-4 h-4 text-purple-700" />
@@ -290,5 +312,6 @@ export default function AdminSidebar({
         </button>
       </div>
     </aside>
+    </>
   );
 }

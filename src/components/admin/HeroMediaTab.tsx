@@ -178,9 +178,9 @@ export default function HeroMediaTab({
 
       {/* 🔴 LIVE ON HOMEPAGE PREVIEW CARD */}
       <div className="bg-white rounded-2xl border border-[#EDE4D8] overflow-hidden shadow-xs">
-        <div className="p-4 bg-stone-50 border-b border-[#EDE4D8] flex items-center justify-between">
+        <div className="p-4 bg-stone-50 border-b border-[#EDE4D8] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
           <div className="flex items-center gap-2.5">
-            <span className="flex h-3 w-3 relative">
+            <span className="flex h-3 w-3 relative shrink-0">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
             </span>
@@ -198,7 +198,7 @@ export default function HeroMediaTab({
 
           <div className="flex items-center gap-2">
             <span
-              className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold ${
+              className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold whitespace-nowrap ${
                 heroMediaMode === 'video'
                   ? 'bg-rose-100 text-[#8b1828] border border-rose-200'
                   : 'bg-amber-100 text-amber-800 border border-amber-200'
@@ -211,7 +211,7 @@ export default function HeroMediaTab({
             <Link
               href="/"
               target="_blank"
-              className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-stone-900 text-white hover:bg-stone-800 transition-colors"
+              className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold whitespace-nowrap bg-stone-900 text-white hover:bg-stone-800 transition-colors"
             >
               <Eye className="w-3.5 h-3.5" />
               <span>View Storefront</span>
@@ -222,7 +222,7 @@ export default function HeroMediaTab({
         {/* Video Preview or Image Carousel Preview */}
         <div className="p-4">
           {heroMediaMode === 'video' ? (
-            <div className="relative rounded-xl overflow-hidden border border-stone-200 bg-stone-950 aspect-[21/9] max-h-72">
+            <div className="relative rounded-xl overflow-hidden border border-stone-200 bg-stone-950 aspect-video sm:aspect-[21/9] max-h-72">
               {videoSettings.videoUrl ? (
                 <video
                   key={videoSettings.videoUrl}
@@ -245,7 +245,7 @@ export default function HeroMediaTab({
                     <Play className="w-2.5 h-2.5 fill-current" /> Live Playing
                   </span>
                   <div className="flex items-center gap-2">
-                    <span className="text-[11px] font-mono text-stone-300 bg-black/60 px-2 py-0.5 rounded max-w-[200px] truncate">
+                    <span className="text-[11px] font-mono text-stone-300 bg-black/60 px-2 py-0.5 rounded max-w-[200px] truncate hidden sm:inline">
                       {videoSettings.videoUrl || 'No Video'}
                     </span>
                     <button
@@ -269,9 +269,9 @@ export default function HeroMediaTab({
               </div>
             </div>
           ) : (
-            <div className="p-4 bg-amber-50/60 rounded-xl border border-amber-200/80 flex items-center justify-between">
+            <div className="p-4 bg-amber-50/60 rounded-xl border border-amber-200/80 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-700 flex items-center justify-center font-bold">
+                <div className="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-700 flex items-center justify-center font-bold shrink-0">
                   <ImageIcon className="w-5 h-5" />
                 </div>
                 <div>
@@ -291,8 +291,8 @@ export default function HeroMediaTab({
         </div>
       </div>
 
-      <div className="bg-white p-4 rounded-2xl border border-[#EDE4D8] shadow-xs flex items-center justify-between">
-        <div>
+      <div className="bg-white p-4 rounded-2xl border border-[#EDE4D8] shadow-xs flex items-center justify-between gap-3">
+        <div className="min-w-0">
           <h3 className="font-bold text-stone-900 text-sm">Hero Slide Banners Management</h3>
           <p className="text-xs text-stone-500">
             Update desktop & mobile banner photos, headings, taglines, and call-to-actions live on website.
@@ -300,7 +300,7 @@ export default function HeroMediaTab({
         </div>
         <button
           onClick={handleAddNewHero}
-          className="inline-flex items-center gap-1.5 bg-[#8b1828] text-white px-3.5 py-2 rounded-xl text-xs font-semibold hover:bg-[#721320] transition-colors"
+          className="inline-flex items-center gap-1.5 bg-[#8b1828] text-white px-3.5 py-2 rounded-xl text-xs font-semibold hover:bg-[#721320] transition-colors whitespace-nowrap shrink-0"
         >
           <Plus className="w-3.5 h-3.5" />
           <span>Add Slide</span>

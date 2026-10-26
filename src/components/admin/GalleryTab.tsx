@@ -224,7 +224,7 @@ export default function GalleryTab({
       <div className="flex items-center justify-end gap-4">
 
         {/* Search Input */}
-        <div className="relative min-w-[240px]">
+        <div className="relative w-full sm:w-auto sm:min-w-[240px]">
           <Search className="w-3.5 h-3.5 text-stone-400 absolute left-3 top-1/2 -translate-y-1/2" />
           <input
             type="text"
@@ -260,7 +260,7 @@ export default function GalleryTab({
           </button>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-5">
           {filteredItems.map((item) => (
             <div
               key={item._id}
@@ -272,14 +272,14 @@ export default function GalleryTab({
                   src={item.imageUrl}
                   alt={item.title}
                   fill
-                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                  sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
                   className="object-cover group-hover:scale-105 transition-transform duration-500"
                 />
 
 
 
-                {/* Quick Action Overlay on Hover */}
-                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2 p-4">
+                {/* Quick Action Overlay on Hover (always shown in the corner on phones, which have no hover) */}
+                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2 p-4 max-md:opacity-100 max-md:bg-transparent max-md:items-start max-md:justify-end max-md:p-2">
                   <button
                     onClick={() => handleOpenEditModal(item)}
                     className="p-2 rounded-xl bg-white text-stone-800 hover:bg-stone-100 shadow transition-transform hover:scale-110"
@@ -302,7 +302,7 @@ export default function GalleryTab({
               </div>
 
               {/* Photo Details */}
-              <div className="p-3.5 flex-1 flex flex-col justify-between">
+              <div className="p-2.5 sm:p-3.5 flex-1 flex flex-col justify-between">
                 <div>
                   <h3 className="font-bold text-xs text-stone-900 line-clamp-1 group-hover:text-[#8b1828] transition-colors">
                     {item.title}
@@ -314,8 +314,8 @@ export default function GalleryTab({
                   )}
                 </div>
 
-                <div className="mt-3 pt-2.5 border-t border-stone-100 flex items-center justify-between text-[10px] text-stone-400">
-                  <div className="flex items-center gap-1 font-medium text-stone-600">
+                <div className="mt-3 pt-2.5 border-t border-stone-100 flex items-center justify-between flex-wrap gap-1 text-[10px] text-stone-400">
+                  <div className="flex items-center gap-1 font-medium text-stone-600 min-w-0">
                     <Heart className="w-3 h-3 text-[#8b1828]" />
                     <span>{item.brideName || 'Ghar Shagna Da Bride'}</span>
                   </div>

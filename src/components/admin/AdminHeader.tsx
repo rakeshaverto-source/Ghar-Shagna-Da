@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { RefreshCw, Plus } from 'lucide-react';
+import { RefreshCw, Plus, Menu } from 'lucide-react';
 import AdminNotificationBell from './AdminNotificationBell';
 
 interface AdminHeaderProps {
@@ -11,6 +11,7 @@ interface AdminHeaderProps {
   onAddNewHero: () => void;
   onAddNewBlog?: () => void;
   onSelectTab?: (tab: 'products' | 'bookings' | 'hero' | 'reviews' | 'gallery' | 'blogs' | 'analytics' | 'pageseo') => void;
+  onOpenMenu?: () => void;
 }
 
 export default function AdminHeader({
@@ -20,6 +21,7 @@ export default function AdminHeader({
   onAddNewHero,
   onAddNewBlog,
   onSelectTab,
+  onOpenMenu,
 }: AdminHeaderProps) {
   const getTabTitle = () => {
     switch (activeTab) {
@@ -66,13 +68,23 @@ export default function AdminHeader({
   };
 
   return (
-    <header className="bg-white border-b border-[#EBE3D7] h-16 px-6 flex items-center justify-between sticky top-0 z-30">
-      <div>
-        <h1 className="font-bold text-stone-900 text-base">{getTabTitle()}</h1>
-        <p className="text-[11px] text-stone-400">{getTabSubtitle()}</p>
+    <header className="bg-white border-b border-[#EBE3D7] h-14 md:h-16 px-3 sm:px-6 flex items-center justify-between gap-2 sticky top-0 z-30">
+      <div className="flex items-center gap-2 min-w-0">
+        <button
+          type="button"
+          onClick={onOpenMenu}
+          aria-label="Open menu"
+          className="md:hidden p-2 -ml-1 rounded-xl text-stone-700 hover:bg-stone-100 shrink-0"
+        >
+          <Menu className="w-5 h-5" />
+        </button>
+        <div className="min-w-0">
+          <h1 className="font-bold text-stone-900 text-sm md:text-base truncate">{getTabTitle()}</h1>
+          <p className="hidden md:block text-[11px] text-stone-400 truncate">{getTabSubtitle()}</p>
+        </div>
       </div>
 
-      <div className="flex items-center gap-2 relative">
+      <div className="flex items-center gap-1.5 sm:gap-2 relative shrink-0">
         <AdminNotificationBell onOpenLeads={() => onSelectTab?.('bookings')} />
 
         <button
@@ -88,10 +100,10 @@ export default function AdminHeader({
           <button
             type="button"
             onClick={onAddNewProduct}
-            className="inline-flex items-center gap-1.5 bg-[#8b1828] hover:bg-[#721320] text-white px-3.5 py-2 rounded-xl text-xs font-semibold transition-all shadow-sm active:scale-95 cursor-pointer"
+            className="inline-flex items-center gap-1.5 bg-[#8b1828] hover:bg-[#721320] text-white p-2 sm:px-3.5 sm:py-2 rounded-xl text-xs font-semibold transition-all shadow-sm active:scale-95 cursor-pointer"
           >
-            <Plus className="w-3.5 h-3.5" />
-            <span>New Outfit</span>
+            <Plus className="w-4 h-4 sm:w-3.5 sm:h-3.5" />
+            <span className="hidden sm:inline">New Outfit</span>
           </button>
         )}
 
@@ -99,10 +111,10 @@ export default function AdminHeader({
           <button
             type="button"
             onClick={onAddNewHero}
-            className="inline-flex items-center gap-1.5 bg-[#8b1828] hover:bg-[#721320] text-white px-3.5 py-2 rounded-xl text-xs font-semibold transition-all shadow-sm active:scale-95 cursor-pointer"
+            className="inline-flex items-center gap-1.5 bg-[#8b1828] hover:bg-[#721320] text-white p-2 sm:px-3.5 sm:py-2 rounded-xl text-xs font-semibold transition-all shadow-sm active:scale-95 cursor-pointer"
           >
-            <Plus className="w-3.5 h-3.5" />
-            <span>Add Banner Slide</span>
+            <Plus className="w-4 h-4 sm:w-3.5 sm:h-3.5" />
+            <span className="hidden sm:inline">Add Banner Slide</span>
           </button>
         )}
 
@@ -110,10 +122,10 @@ export default function AdminHeader({
           <button
             type="button"
             onClick={onAddNewBlog}
-            className="inline-flex items-center gap-1.5 bg-[#8b1828] hover:bg-[#721320] text-white px-3.5 py-2 rounded-xl text-xs font-semibold transition-all shadow-sm active:scale-95 cursor-pointer"
+            className="inline-flex items-center gap-1.5 bg-[#8b1828] hover:bg-[#721320] text-white p-2 sm:px-3.5 sm:py-2 rounded-xl text-xs font-semibold transition-all shadow-sm active:scale-95 cursor-pointer"
           >
-            <Plus className="w-3.5 h-3.5" />
-            <span>Write New Article</span>
+            <Plus className="w-4 h-4 sm:w-3.5 sm:h-3.5" />
+            <span className="hidden sm:inline">Write New Article</span>
           </button>
         )}
       </div>
