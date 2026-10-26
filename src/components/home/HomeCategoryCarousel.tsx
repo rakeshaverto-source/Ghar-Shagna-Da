@@ -4,6 +4,7 @@ import React, { useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { CATEGORIES } from '@/data/products';
+import { categoryPath } from '@/lib/categoryRoutes';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 export default function HomeCategoryCarousel() {
@@ -62,7 +63,7 @@ export default function HomeCategoryCarousel() {
           {CATEGORIES.map((cat, idx) => (
             <Link
               key={cat.id}
-              href={`/category/${cat.slug}`}
+              href={categoryPath(cat.slug)}
               className="group relative flex-none w-[260px] xs:w-[280px] sm:w-[320px] lg:w-[340px] aspect-[9/14] snap-start flex flex-col justify-end select-none"
             >
               {/* 1. Base Card Container */}

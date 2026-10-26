@@ -15,6 +15,7 @@ export default function HomeBlogSection({ initialPosts }: HomeBlogSectionProps) 
   const [loading, setLoading] = useState(!initialPosts);
 
   useEffect(() => {
+    if (initialPosts) return;
     fetch('/api/blogs')
       .then((res) => res.json())
       .then((data) => {
@@ -24,7 +25,7 @@ export default function HomeBlogSection({ initialPosts }: HomeBlogSectionProps) 
       })
       .catch((err) => console.error('Failed to load blog section', err))
       .finally(() => setLoading(false));
-  }, []);
+  }, [initialPosts]);
 
   if (!loading && blogs.length === 0) {
     return null;

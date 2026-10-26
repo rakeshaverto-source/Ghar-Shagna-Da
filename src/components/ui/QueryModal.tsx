@@ -24,8 +24,9 @@ export default function QueryModal({
     city: '',
     notes: '',
   });
-  const [loading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState('');
   const [minDate, setMinDate] = useState('');
 
   React.useEffect(() => {
@@ -34,13 +35,14 @@ export default function QueryModal({
 
   if (!isOpen) return null;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
+    setLoading(true);
+    setError('');
 
-    // Save lead to MongoDB in background
+    // The inquiry is only saved to the admin leads (no WhatsApp redirect), so confirm it was stored
     try {
-      fetch('/api/bookings', {
+      const res = await fetch('/api/bookings', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -52,26 +54,15 @@ export default function QueryModal({
           city: formData.city,
           notes: formData.notes,
         }),
-      }).catch((err) => console.log('Offline save notice:', err));
-    } catch {
-      // ignore offline fallback
+      });
+      if (!res.ok) throw new Error(`Status ${res.status}`);
+      setSubmitted(true);
+    } catch (err) {
+      console.error('Failed to send inquiry:', err);
+      setError(`Could not send your inquiry. Please try again or call us at ${SITE_CONFIG.phone}.`);
+    } finally {
+      setLoading(false);
     }
-
-    const message = `🌸 *Ghar Shagna Da - Rental Inquiry* 🌸
-*Outfit:* ${productTitle || 'General Wedding Outfit'}
-*Customer Name:* ${formData.name}
-*Phone:* ${formData.phone}
-*Wedding / Event Date:* ${formData.eventDate || 'Not specified'}
-*Rental Duration:* ${formData.rentalDays}
-*City:* ${formData.city || 'Punjab'}
-*Alteration & Note:* ${formData.notes || 'None'}`;
-
-    setTimeout(() => {
-      window.open(
-        `https://wa.me/${SITE_CONFIG.whatsappNumber}?text=${encodeURIComponent(message)}`,
-        '_blank'
-      );
-    }, 400);
   };
 
   return (
@@ -214,12 +205,18 @@ export default function QueryModal({
                 className="w-full inline-flex items-center justify-center gap-2.5 bg-gradient-to-r from-[#8b1828] via-[#a31d32] to-[#8b1828] hover:from-[#721320] hover:to-[#721320] text-white font-semibold py-3 px-6 rounded-xl text-sm transition-all shadow-[0_8px_20px_rgba(139,24,40,0.3)] hover:shadow-[0_12px_25px_rgba(139,24,40,0.4)] active:scale-[0.99] disabled:opacity-50"
               >
                 <Send className="w-4 h-4" />
-                <span>{loading ? 'Submitting...' : 'Send Inquiry & Open WhatsApp'}</span>
+                <span>{loading ? 'Submitting...' : 'Send Inquiry'}</span>
               </button>
+
+              {error && (
+                <p className="text-center text-xs text-red-600" role="alert">
+                  {error}
+                </p>
+              )}
 
               <div className="flex items-center justify-center gap-1.5 text-center text-[11px] text-stone-500 pt-1">
                 <span>🔒</span>
-                <span>Direct WhatsApp booking with Ghar Shagna Da Master Stylist</span>
+                <span>Our Ghar Shagna Da stylist will contact you to confirm your booking</span>
               </div>
             </form>
           </div>
@@ -230,7 +227,7 @@ export default function QueryModal({
             </div>
             <h3 className="text-2xl font-bold text-stone-900">Inquiry Received!</h3>
             <p className="text-sm text-stone-600 max-w-sm mx-auto">
-              Your inquiry has been recorded. WhatsApp will connect you directly with our bridal stylist for date confirmation and custom fitting measurements.
+              Your inquiry has been recorded. Our stylist will contact you shortly on your number for date confirmation and custom fitting measurements.
             </p>
             <div className="pt-2">
               <button

@@ -139,8 +139,18 @@ export function ProductJsonLd({ product }: { product: ProductSchemaInput }) {
   );
 
   const categoryName = product.categoryLabel || product.category || 'Bridal Wear';
-  const ratingValue = product.rating || 5;
-  const reviewCount = product.reviewsCount || 7;
+  // Only real, approved reviews may be reported to search engines; no reviews means no rating
+  const reviewCount = product.reviewsCount || 0;
+  const aggregateRating =
+    reviewCount > 0 && product.rating
+      ? {
+          '@type': 'AggregateRating',
+          ratingValue: product.rating.toFixed(1),
+          reviewCount: reviewCount.toString(),
+          bestRating: '5',
+          worstRating: '1',
+        }
+      : undefined;
 
   const schema = {
     '@context': 'https://schema.org/',
@@ -158,13 +168,7 @@ export function ProductJsonLd({ product }: { product: ProductSchemaInput }) {
     color: product.color || undefined,
     material: product.fabric || undefined,
     pattern: product.work || product.embroidery || undefined,
-    aggregateRating: {
-      '@type': 'AggregateRating',
-      ratingValue: ratingValue.toString(),
-      reviewCount: reviewCount.toString(),
-      bestRating: '5',
-      worstRating: '1',
-    },
+    aggregateRating,
     offers: {
       '@type': 'Offer',
       url: `${SITE_CONFIG.domain}/product/${product.slug}`,

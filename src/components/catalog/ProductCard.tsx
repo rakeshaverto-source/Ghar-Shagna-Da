@@ -85,7 +85,7 @@ export default function ProductCard({ product }: ProductCardProps) {
       <div className="p-5 flex-1 flex flex-col justify-between space-y-4">
         <div>
           {product.subtitle && (
-            <p className="font-script text-2xl font-bold text-[#8b1828] leading-snug drop-shadow-sm tracking-wide">
+            <p className="font-script text-2xl font-bold text-[#8b1828] leading-snug drop-shadow-sm tracking-wide line-clamp-1">
               {product.subtitle}
             </p>
           )}

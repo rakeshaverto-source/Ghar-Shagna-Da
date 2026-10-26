@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import { notFound } from 'next/navigation';
+import { notFound, permanentRedirect } from 'next/navigation';
 import { connection } from 'next/server';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -11,6 +11,7 @@ import { getAdminPageSeo } from '@/lib/pageSeo';
 import { BreadcrumbJsonLd } from '@/components/seo/JsonLd';
 import { connectDB } from '@/lib/mongodb';
 import ProductModel from '@/models/Product';
+import { CLEAN_CATEGORY_ROUTES, resolveCategoryRoute } from '@/lib/categoryRoutes';
 
 export const instant = false;
 
@@ -29,26 +30,26 @@ export async function generateStaticParams() {
     { slug: 'bridal-lehengas' },
     { slug: 'wedding-dresses' },
     { slug: 'sherwanis' },
+    ...Object.keys(CLEAN_CATEGORY_ROUTES).map((slug) => ({ slug })),
   ];
 }
 
 export async function generateMetadata({ params, searchParams }: CategoryPageProps): Promise<Metadata> {
-  const resolvedParams = await params;
-  const resolvedSearchParams = searchParams ? await searchParams : {};
-  const { occasion, type } = resolvedSearchParams;
-  const { category } = findCategory(resolvedParams.slug, resolvedSearchParams);
+  const { slug, filter, pagePath } = resolveCategoryRoute(
+    (await params).slug,
+    searchParams ? await searchParams : {}
+  );
+  const { occasion } = filter;
+  const { category } = findCategory(slug, filter);
 
   if (!category) {
     return constructMetadata({ title: 'Category Not Found | Ghar Shagna Da', noIndex: true });
   }
 
   // Each occasion/type page gets its own SEO, matching the paths listed in the admin "Page SEO" tab
-  const pagePath = `/category/${resolvedParams.slug}${
-    occasion ? `?occasion=${occasion}` : type ? `?type=${type}` : ''
-  }`;
   const adminSeo = await getAdminPageSeo(pagePath);
 
-  const isMen = MEN_CATEGORY_SLUGS.includes(resolvedParams.slug);
+  const isMen = MEN_CATEGORY_SLUGS.includes(slug);
   const occasionLabel = occasion ? occasion.charAt(0).toUpperCase() + occasion.slice(1) : '';
   const defaultTitle = occasion
     ? `${occasionLabel} Outfits on Rent for ${isMen ? 'Grooms' : 'Brides'} | Ghar Shagna Da`
@@ -214,18 +215,24 @@ async function getCategoryProducts(
 }
 
 export default async function CategoryPage({ params, searchParams }: CategoryPageProps) {
-  const resolvedParams = await params;
-  const resolvedSearchParams = searchParams ? await searchParams : {};
-  const { category, baseCategory } = findCategory(resolvedParams.slug, resolvedSearchParams);
+  const { slug, filter, pagePath, redirectTo } = resolveCategoryRoute(
+    (await params).slug,
+    searchParams ? await searchParams : {}
+  );
+  // Old query-string URLs (e.g. /category/sherwanis?type=kurta) move to their clean URL
+  if (redirectTo) {
+    permanentRedirect(redirectTo);
+  }
+  const { category, baseCategory } = findCategory(slug, filter);
 
   if (!category || !baseCategory) {
     notFound();
   }
 
-  const activeOccasion = resolvedSearchParams.occasion;
-  const activeType = resolvedSearchParams.type;
+  const activeOccasion = filter.occasion;
+  const activeType = filter.type;
 
-  const categoryProducts = await getCategoryProducts(resolvedParams.slug, {
+  const categoryProducts = await getCategoryProducts(slug, {
     occasion: activeOccasion,
     type: activeType,
   });
@@ -234,16 +241,22 @@ export default async function CategoryPage({ params, searchParams }: CategoryPag
   const filterLabel = activeOccasion
     ? `${activeOccasion.charAt(0).toUpperCase() + activeOccasion.slice(1)} Special`
     : activeType
-    ? `${activeType.charAt(0).toUpperCase() + activeType.slice(1)} Collection`
+    ? `${category.title} Collection`
     : null;
 
   // Occasion pages cover the whole men's or women's section, not a single collection
-  const isMen = MEN_CATEGORY_SLUGS.includes(resolvedParams.slug);
+  const isMen = MEN_CATEGORY_SLUGS.includes(slug);
   const parentCrumb = activeOccasion
     ? { title: isMen ? "Men" : "Women", href: isMen ? "/men" : "/women" }
-    : { title: baseCategory.title, href: `/category/${resolvedParams.slug}` };
+    : { title: baseCategory.title, href: `/category/${slug}` };
   const pageTitle = activeOccasion
     ? `${filterLabel} • ${isMen ? "Groom Outfits" : "Bridal & Party Outfits"}`
+    : category.title;
+
+  // Home / Men or Women / this page, e.g. "Home / Men / Indo Western"
+  const sectionCrumb = { name: isMen ? 'Men' : 'Women', href: isMen ? '/men' : '/women' };
+  const currentCrumbName = activeOccasion
+    ? `${activeOccasion.charAt(0).toUpperCase() + activeOccasion.slice(1)} Outfits`
     : category.title;
 
   return (
@@ -251,30 +264,24 @@ export default async function CategoryPage({ params, searchParams }: CategoryPag
       <BreadcrumbJsonLd
         items={[
           { name: 'Home', url: SITE_CONFIG.domain },
-          { name: 'Catalog', url: `${SITE_CONFIG.domain}/catalog` },
-          { name: parentCrumb.title, url: `${SITE_CONFIG.domain}${parentCrumb.href}` },
+          { name: sectionCrumb.name, url: `${SITE_CONFIG.domain}${sectionCrumb.href}` },
+          { name: currentCrumbName, url: `${SITE_CONFIG.domain}${pagePath}` },
         ]}
       />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 sm:pt-36 pb-12 space-y-12">
       {/* Breadcrumbs */}
-      <nav className="flex items-center gap-2 text-xs text-stone-500">
+      <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs text-stone-500">
         <Link href="/" className="hover:text-[#8b1828]">
           Home
         </Link>
         <span>/</span>
-        <Link href="/catalog" className="hover:text-[#8b1828]">
-          Catalog
+        <Link href={sectionCrumb.href} className="hover:text-[#8b1828]">
+          {sectionCrumb.name}
         </Link>
         <span>/</span>
-        <Link href={parentCrumb.href} className="hover:text-[#8b1828]">
-          {parentCrumb.title}
-        </Link>
-        {filterLabel && (
-          <>
-            <span>/</span>
-            <span className="text-[#8b1828] font-semibold">{filterLabel}</span>
-          </>
-        )}
+        <span aria-current="page" className="text-[#8b1828] font-semibold">
+          {currentCrumbName}
+        </span>
       </nav>
 
       {/* Category Hero Banner */}

@@ -51,58 +51,48 @@ const CREATIVE_SLIDES: CreativeSlide[] = [
   },
 ];
 
-interface FullWidthHeroProps {
-  onOpenModal: () => void;
+// Turns the /api/hero response (or the same data loaded on the server) into hero state
+function heroStateFromData(data: any) {
+  let slides = CREATIVE_SLIDES;
+  if (data?.slides && data.slides.length > 0) {
+    // Filter out slides that are turned off if any
+    const activeSlides = data.slides.filter((s: { isVisible?: boolean }) => s.isVisible !== false);
+    slides = activeSlides.length > 0 ? activeSlides : data.slides;
+  }
+  return {
+    slides,
+    isHeroEnabled: data?.isHeroEnabled !== undefined ? Boolean(data.isHeroEnabled) : true,
+    mediaMode: (data?.heroMediaMode || 'image') as 'video' | 'image',
+    videoUrl: data?.videoUrl !== undefined ? data.videoUrl : '/luxury_lehengas.mp4',
+    videoContent: {
+      headingPrefix: data?.videoHeadingPrefix || 'SHAGNA DI',
+      headingHighlight: data?.videoHeadingHighlight || 'Raat',
+      tagline: data?.videoTagline || 'TIMELESS DESIGNS. SHAHI ANDAAZ.',
+      subtagline: data?.videoSubtagline || 'Khaas lamhon ke liye, sabse khoobsurat bridal lehengas on rent.',
+      ctaText: data?.videoCtaText || 'Explore Bridal Rentals',
+      ctaLink: data?.videoCtaLink || '/category/bridal-lehengas',
+    },
+  };
 }
 
-export default function FullWidthCreativeHero({ onOpenModal }: FullWidthHeroProps) {
-  const [slides, setSlides] = useState<CreativeSlide[]>(CREATIVE_SLIDES);
-  const [isHeroEnabled, setIsHeroEnabled] = useState<boolean>(true);
-  const [mediaMode, setMediaMode] = useState<'video' | 'image'>('image');
-  const [videoUrl, setVideoUrl] = useState<string>('/luxury_lehengas.mp4');
-  const [videoContent, setVideoContent] = useState({
-    headingPrefix: 'SHAGNA DI',
-    headingHighlight: 'Raat',
-    tagline: 'TIMELESS DESIGNS. SHAHI ANDAAZ.',
-    subtagline: 'Khaas lamhon ke liye, sabse khoobsurat bridal lehengas on rent.',
-    ctaText: 'Explore Bridal Rentals',
-    ctaLink: '/category/bridal-lehengas',
-  });
+interface FullWidthHeroProps {
+  onOpenModal: () => void;
+  // Hero data loaded on the server; when missing, it is fetched from /api/hero
+  initialData?: any;
+}
+
+export default function FullWidthCreativeHero({ onOpenModal, initialData }: FullWidthHeroProps) {
+  const [hero, setHero] = useState(() => heroStateFromData(initialData));
+  const { slides, isHeroEnabled, mediaMode, videoUrl, videoContent } = hero;
   const [current, setCurrent] = useState(0);
 
   useEffect(() => {
+    if (initialData) return;
     fetch('/api/hero')
       .then((res) => res.json())
-      .then((data) => {
-        if (data.isHeroEnabled !== undefined) {
-          setIsHeroEnabled(Boolean(data.isHeroEnabled));
-        }
-        if (data.heroMediaMode) {
-          setMediaMode(data.heroMediaMode);
-        }
-        if (data.videoUrl !== undefined) {
-          setVideoUrl(data.videoUrl);
-        }
-        setVideoContent({
-          headingPrefix: data.videoHeadingPrefix || 'SHAGNA DI',
-          headingHighlight: data.videoHeadingHighlight || 'Raat',
-          tagline: data.videoTagline || 'TIMELESS DESIGNS. SHAHI ANDAAZ.',
-          subtagline: data.videoSubtagline || 'Khaas lamhon ke liye, sabse khoobsurat bridal lehengas on rent.',
-          ctaText: data.videoCtaText || 'Explore Bridal Rentals',
-          ctaLink: data.videoCtaLink || '/category/bridal-lehengas',
-        });
-        if (data.slides && data.slides.length > 0) {
-          // Filter out slides that are turned off if any
-          const activeSlides = data.slides.filter((s: { isVisible?: boolean }) => s.isVisible !== false);
-          if (activeSlides.length > 0) {
-            setSlides(activeSlides);
-          } else {
-            setSlides(data.slides);
-          }
-        }
-      })
+      .then((data) => setHero(heroStateFromData(data)))
       .catch(() => { });
-  }, []);
+  }, [initialData]);
 
   const [isHovered, setIsHovered] = useState(false);
 

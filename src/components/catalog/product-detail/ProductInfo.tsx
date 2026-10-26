@@ -57,7 +57,7 @@ Please let me know if this is available for my wedding date.`
           </p>
         )}
 
-        <h1 className="font-serif-luxury text-3xl sm:text-4xl font-bold text-stone-900 mt-1">
+        <h1 className="font-serif-luxury text-2xl sm:text-3xl font-bold text-stone-900 mt-1 leading-tight">
           {product.title}
         </h1>
       </div>

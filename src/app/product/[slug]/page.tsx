@@ -179,8 +179,10 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
           color: product.color,
           work: product.embroidery,
           status: 'available',
-          rating: 5,
-          reviewsCount: 7,
+          rating: product.reviews?.length
+            ? product.reviews.reduce((sum, r) => sum + (Number(r.rating) || 5), 0) / product.reviews.length
+            : undefined,
+          reviewsCount: product.reviews?.length || 0,
         }}
       />
 

@@ -106,7 +106,7 @@ export default function OutfitsTab({
                       <div className="flex items-center gap-3">
                         <div className="relative w-12 h-14 bg-stone-100 rounded-lg overflow-hidden shrink-0 border border-stone-200">
                           <Image
-                            src={p.images[0] || '/products/lehenga-maroon.png'}
+                            src={p.images[0] || '/hero-lehenga.jpg'}
                             alt={p.title}
                             fill
                             className="object-cover"

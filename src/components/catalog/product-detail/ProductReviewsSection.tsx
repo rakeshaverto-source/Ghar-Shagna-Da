@@ -24,14 +24,20 @@ export default function ProductReviewsSection({
           Customer Reviews
         </h2>
 
-        <div className="flex items-center gap-2.5 mt-2.5">
-          <div className="flex items-center text-amber-400 text-lg">
-            ★★★★★
+        {reviews.length > 0 ? (
+          <div className="flex items-center gap-2.5 mt-2.5">
+            <div className="flex items-center text-amber-400 text-lg">
+              ★★★★★
+            </div>
+            <span className="text-sm font-medium text-stone-700">
+              {reviews.length} {reviews.length === 1 ? 'Review' : 'Reviews'}
+            </span>
           </div>
-          <span className="text-sm font-medium text-stone-700">
-            {reviews.length} {reviews.length === 1 ? 'Review' : 'Reviews'}
-          </span>
-        </div>
+        ) : (
+          <p className="text-sm text-stone-500 mt-2.5">
+            No reviews yet. Rented this outfit? Be the first to share your experience.
+          </p>
+        )}
       </div>
 
       {/* Write a review button */}

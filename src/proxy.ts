@@ -5,12 +5,16 @@ import { INITIAL_BLOG_POSTS } from '@/data/blogs';
 import { connectDB } from '@/lib/mongodb';
 import Product from '@/models/Product';
 import BlogPost from '@/models/BlogPost';
+import { CLEAN_CATEGORY_ROUTES } from '@/lib/categoryRoutes';
 
 // Returns a real HTTP 404 for unknown product/blog/category slugs.
 // Streamed pages always answer 200, which Google reports as "soft 404".
 // Every check fails open (lets the request through) if anything goes wrong.
 
-const CATEGORY_SLUGS = new Set(CATEGORIES.map((c) => c.slug.split('?')[0]));
+const CATEGORY_SLUGS = new Set([
+  ...CATEGORIES.map((c) => c.slug.split('?')[0]),
+  ...Object.keys(CLEAN_CATEGORY_ROUTES),
+]);
 const SEED_PRODUCTS = new Set(INITIAL_PRODUCTS.map((p) => p.slug));
 const SEED_BLOGS = new Set(INITIAL_BLOG_POSTS.map((b) => b.slug));
 

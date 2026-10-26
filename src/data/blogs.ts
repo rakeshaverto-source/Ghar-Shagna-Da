@@ -134,7 +134,7 @@ Say goodbye to complicated pleat pinning on hectic celebration evenings. Pre-sti
 #### 3. Lightweight Organza Dupattas
 Swap burdensome velvets for airy organza or tissue silk to stay refreshed and stylish through midnight celebrations.
     `,
-    coverImage: '/Categery/Sangeet.png',
+    coverImage: '/Categery/Sangeet1.png',
     category: 'Wedding Trends',
     author: 'Ghar Shagna Da Styling Team',
     authorRole: 'Celebrity Stylist',

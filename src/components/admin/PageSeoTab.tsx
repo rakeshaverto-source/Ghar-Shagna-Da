@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { AnalyticsSettings, PageSeoItem, OutfitItem } from './types';
 import { Save, CheckCircle2 } from 'lucide-react';
 import { SITE_CONFIG, CATEGORIES } from '@/data/products';
+import { categoryPath } from '@/lib/categoryRoutes';
 import PageSeoSelector from './page-seo/PageSeoSelector';
 import PageSeoForm from './page-seo/PageSeoForm';
 
@@ -30,7 +31,8 @@ const PRESET_PAGES = [
     const isMen = c.slug.startsWith('sherwanis');
     const title = c.title.charAt(0) + c.title.slice(1).toLowerCase();
     const label = c.slug.includes('occasion=') ? `${title} (${isMen ? 'Groom' : 'Bride'} Occasion)` : c.title;
-    return { path: `/category/${c.slug}`, label: `${label} (/category/${c.slug})` };
+    const path = categoryPath(c.slug);
+    return { path, label: `${label} (${path})` };
   }),
 ];
 

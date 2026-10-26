@@ -1,3 +1,4 @@
+import { connection } from 'next/server';
 import { connectDB } from '@/lib/mongodb';
 import SiteSettings, { IPageSeoItem } from '@/models/SiteSettings';
 
@@ -6,6 +7,9 @@ const normalizePath = (path: string) => path.replace(/\/$/, '') || '/';
 // Per-page SEO saved from the admin "Page SEO" tab. pagePath may include a query string,
 // e.g. "/category/wedding-dresses?occasion=cocktail".
 export async function getAdminPageSeo(pagePath: string): Promise<IPageSeoItem | null> {
+  // Admin SEO edits must show without a redeploy, so read them at request time, not while prerendering
+  await connection();
+
   try {
     const conn = await connectDB();
     if (!conn) return null;

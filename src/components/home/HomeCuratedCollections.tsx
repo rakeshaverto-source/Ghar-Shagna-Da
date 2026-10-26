@@ -4,6 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { OCCASION_CATEGORIES, OCCASION_CATEGORIES_MEN } from '@/data/products';
+import { categoryPath } from '@/lib/categoryRoutes';
 
 interface HomeCuratedCollectionsProps {
   attireGender: 'women' | 'men';
@@ -65,7 +66,7 @@ export default function HomeCuratedCollections({
         {currentOccasions.map((cat, idx) => (
           <Link
             key={`${attireGender}-${cat.id}`}
-            href={`/category/${cat.slug}`}
+            href={categoryPath(cat.slug)}
             className="group relative flex flex-col items-center select-none"
           >
             {/* Outer Wrapper with Aspect Ratio */}

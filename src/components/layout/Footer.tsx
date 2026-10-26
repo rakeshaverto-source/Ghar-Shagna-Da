@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { Phone, Mail, MapPin, MessageCircle, Heart } from 'lucide-react';
 import { SITE_CONFIG, CATEGORIES } from '@/data/products';
+import { categoryPath } from '@/lib/categoryRoutes';
 
 export default function Footer() {
   const pathname = usePathname();
@@ -47,7 +48,7 @@ export default function Footer() {
               {CATEGORIES.map((cat) => (
                 <li key={cat.id}>
                   <Link
-                    href={`/category/${cat.slug}`}
+                    href={categoryPath(cat.slug)}
                     className="hover:text-[#8b1828] text-stone-600 hover:translate-x-1 transition-all flex items-center justify-between group"
                   >
                     <span>{cat.title}</span>

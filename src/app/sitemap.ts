@@ -1,5 +1,6 @@
 import { MetadataRoute } from 'next';
 import { CATEGORIES, SITE_CONFIG, INITIAL_PRODUCTS } from '@/data/products';
+import { CLEAN_CATEGORY_ROUTES } from '@/lib/categoryRoutes';
 import { connectDB } from '@/lib/mongodb';
 import Product from '@/models/Product';
 
@@ -59,7 +60,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ];
 
   // 2. Category Pages (Unique canonical routes)
-  const uniqueCategorySlugs = Array.from(new Set(CATEGORIES.map((cat) => cat.slug.split('?')[0])));
+  const uniqueCategorySlugs = Array.from(
+    new Set([...CATEGORIES.map((cat) => cat.slug.split('?')[0]), ...Object.keys(CLEAN_CATEGORY_ROUTES)])
+  );
   const categoryRoutes: MetadataRoute.Sitemap = uniqueCategorySlugs.map((slug) => ({
     url: `${baseUrl}/category/${slug}`,
     lastModified: new Date(),

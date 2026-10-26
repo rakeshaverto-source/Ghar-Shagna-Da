@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { Product } from '@/data/products';
 import QueryModal from '@/components/ui/QueryModal';
-import { ReviewItem, DEFAULT_REVIEWS } from './product-detail/reviewsData';
+import { ReviewItem } from './product-detail/reviewsData';
 import ProductImageGallery from './product-detail/ProductImageGallery';
 import ProductInfo from './product-detail/ProductInfo';
 import ProductReviewsSection from './product-detail/ProductReviewsSection';
@@ -23,21 +23,18 @@ export default function ProductDetailClient({ product, relatedProducts }: Produc
   const [reviewModalOpen, setReviewModalOpen] = useState(false);
   const [showAllReviews, setShowAllReviews] = useState(true);
 
-  // Reviews initialized from product.reviews if set in Admin, else fallback defaults
-  const [reviews] = useState<ReviewItem[]>(() => {
-    if (product.reviews && product.reviews.length > 0) {
-      return product.reviews.map((r) => ({
-        author: r.author,
-        city: r.city || 'Punjab',
-        date: r.date || 'Recent',
-        rating: r.rating || 5,
-        comment: r.comment,
-        image: r.image || undefined,
-        tag: r.tag || 'Verified Bride',
-      }));
-    }
-    return DEFAULT_REVIEWS;
-  });
+  // Only this outfit's own approved reviews; no shared sample reviews across products
+  const [reviews] = useState<ReviewItem[]>(() =>
+    (product.reviews || []).map((r) => ({
+      author: r.author,
+      city: r.city || 'Punjab',
+      date: r.date || 'Recent',
+      rating: r.rating || 5,
+      comment: r.comment,
+      image: r.image || undefined,
+      tag: r.tag || 'Verified',
+    }))
+  );
 
   const handleShare = () => {
     if (navigator.share) {
