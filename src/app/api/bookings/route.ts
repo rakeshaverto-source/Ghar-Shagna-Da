@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { connectDB } from '@/lib/mongodb';
 import Booking from '@/models/Booking';
 import { verifyAdminSession } from '@/lib/auth';
+import { notifyNewLead } from '@/lib/notify';
 
 export async function GET() {
   try {
@@ -35,6 +36,8 @@ export async function POST(req: Request) {
     }
 
     const newBooking = await Booking.create(body);
+    // Bell notification, push and email for the admin; failures there never fail the inquiry
+    await notifyNewLead(newBooking);
     return NextResponse.json({ success: true, booking: newBooking }, { status: 201 });
   } catch (err: unknown) {
     const error = err as Error;

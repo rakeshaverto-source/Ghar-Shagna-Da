@@ -30,7 +30,7 @@ export function LocalBusinessJsonLd() {
     '@context': 'https://schema.org',
     '@type': 'ClothingStore',
     name: SITE_CONFIG.name,
-    image: 'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?q=80&w=1200',
+    image: `${SITE_CONFIG.domain}/og/bride.jpg`,
     '@id': `${SITE_CONFIG.domain}/#clothingstore`,
     url: SITE_CONFIG.domain,
     telephone: SITE_CONFIG.phone,

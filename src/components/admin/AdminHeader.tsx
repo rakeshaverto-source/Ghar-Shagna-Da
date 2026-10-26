@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
-import { RefreshCw, Plus, Bell } from 'lucide-react';
-import { BookingLead } from './types';
+import React from 'react';
+import { RefreshCw, Plus } from 'lucide-react';
+import AdminNotificationBell from './AdminNotificationBell';
 
 interface AdminHeaderProps {
   activeTab: 'products' | 'bookings' | 'hero' | 'reviews' | 'gallery' | 'blogs' | 'analytics' | 'pageseo';
@@ -10,9 +10,7 @@ interface AdminHeaderProps {
   onAddNewProduct: () => void;
   onAddNewHero: () => void;
   onAddNewBlog?: () => void;
-  bookings?: BookingLead[];
   onSelectTab?: (tab: 'products' | 'bookings' | 'hero' | 'reviews' | 'gallery' | 'blogs' | 'analytics' | 'pageseo') => void;
-  onSelectInquiry?: (lead: BookingLead) => void;
 }
 
 export default function AdminHeader({
@@ -21,12 +19,8 @@ export default function AdminHeader({
   onAddNewProduct,
   onAddNewHero,
   onAddNewBlog,
-  bookings = [],
   onSelectTab,
-  onSelectInquiry,
 }: AdminHeaderProps) {
-  const [showNotifications, setShowNotifications] = useState(false);
-  const newBookings = bookings.filter((b) => b.status === 'new');
   const getTabTitle = () => {
     switch (activeTab) {
       case 'products':
@@ -79,92 +73,7 @@ export default function AdminHeader({
       </div>
 
       <div className="flex items-center gap-2 relative">
-        {/* 🔔 Notification Bell Icon with Live Inquiries Badge */}
-        <div className="relative">
-          <button
-            type="button"
-            onClick={() => setShowNotifications(!showNotifications)}
-            title="Customer Inquiries & Notifications"
-            className="p-2 rounded-xl border border-stone-200 bg-stone-50 hover:bg-stone-100 text-stone-700 transition-colors cursor-pointer relative"
-          >
-            <Bell className="w-4 h-4" />
-            {newBookings.length > 0 && (
-              <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 bg-[#8b1828] text-white text-[10px] font-bold rounded-full flex items-center justify-center animate-pulse shadow-sm">
-                {newBookings.length}
-              </span>
-            )}
-          </button>
-
-          {/* Notifications Dropdown Drawer */}
-          {showNotifications && (
-            <div className="absolute right-0 top-12 w-80 sm:w-96 bg-white rounded-2xl shadow-2xl border border-stone-200/90 z-50 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
-              <div className="p-3.5 bg-gradient-to-r from-stone-900 to-stone-800 text-white flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <Bell className="w-4 h-4 text-amber-300" />
-                  <span className="text-xs font-bold tracking-wide">Customer Inquiries</span>
-                </div>
-                <span className="text-[10px] bg-rose-500/30 text-rose-200 font-semibold px-2 py-0.5 rounded-full border border-rose-400/30">
-                  {newBookings.length} New
-                </span>
-              </div>
-
-              <div className="max-h-72 overflow-y-auto divide-y divide-stone-100">
-                {bookings.length === 0 ? (
-                  <div className="p-6 text-center text-stone-400 text-xs">
-                    No inquiries received yet
-                  </div>
-                ) : (
-                  bookings.slice(0, 5).map((b) => (
-                    <div
-                      key={b._id}
-                      onClick={() => {
-                        setShowNotifications(false);
-                        onSelectTab?.('bookings');
-                        onSelectInquiry?.(b);
-                      }}
-                      className="p-3 hover:bg-rose-50/40 transition-colors cursor-pointer text-left"
-                    >
-                      <div className="flex items-center justify-between mb-1">
-                        <span className="text-xs font-bold text-stone-900 truncate">
-                          {b.customerName || 'Direct Customer'}
-                        </span>
-                        <span
-                          className={`text-[9px] font-bold uppercase px-1.5 py-0.5 rounded-full ${
-                            b.status === 'new'
-                              ? 'bg-rose-100 text-[#8b1828]'
-                              : 'bg-stone-100 text-stone-600'
-                          }`}
-                        >
-                          {b.status}
-                        </span>
-                      </div>
-                      <p className="text-[11px] text-[#8b1828] font-medium truncate">
-                        {b.productTitle || 'General Wedding Rental'}
-                      </p>
-                      <div className="flex items-center justify-between text-[10px] text-stone-400 mt-1">
-                        <span>📞 {b.phone}</span>
-                        <span>{b.eventDate ? `Date: ${b.eventDate}` : ''}</span>
-                      </div>
-                    </div>
-                  ))
-                )}
-              </div>
-
-              <div className="p-2.5 bg-stone-50 border-t border-stone-100 text-center">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setShowNotifications(false);
-                    onSelectTab?.('bookings');
-                  }}
-                  className="text-xs font-bold text-[#8b1828] hover:underline cursor-pointer"
-                >
-                  View All Customer Leads →
-                </button>
-              </div>
-            </div>
-          )}
-        </div>
+        <AdminNotificationBell onOpenLeads={() => onSelectTab?.('bookings')} />
 
         <button
           type="button"

@@ -11,7 +11,9 @@ import { Clock, ArrowLeft, Share2, MessageCircle, Phone, Tag, ChevronRight, Shie
 
 import { connection } from 'next/server';
 import { BlogPostingJsonLd, BreadcrumbJsonLd } from '@/components/seo/JsonLd';
+import { constructMetadata, OG_IMAGES } from '@/lib/seo';
 import BlogContent from '@/components/blog/BlogContent';
+import BlogNotifyButton from '@/components/blog/BlogNotifyButton';
 
 export const instant = false;
 
@@ -68,26 +70,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const finalTitle = post.metaTitle?.trim() || `${post.title} | Ghar Shagna Da Bridal Blog`;
   const finalDescription = post.metaDescription?.trim() || post.excerpt;
 
-  return {
+  return constructMetadata({
     title: finalTitle,
     description: finalDescription,
-    keywords: post.tags?.join(', ') || 'bridal rental, ghar shagna da',
-    alternates: { canonical: `https://gharshagnada.com/blog/${post.slug}` },
-    openGraph: {
-      type: 'article',
-      url: `https://gharshagnada.com/blog/${post.slug}`,
-      title: finalTitle,
-      description: finalDescription,
-      images: [
-        {
-          url: post.coverImage,
-          width: 1200,
-          height: 630,
-          alt: post.title,
-        },
-      ],
-    },
-  };
+    keywords: post.tags?.length ? post.tags : ['bridal rental', 'ghar shagna da'],
+    canonical: `${SITE_CONFIG.domain}/blog/${post.slug}`,
+    image: post.coverImage || OG_IMAGES.blog,
+    type: 'article',
+  });
 }
 
 export default async function BlogPostDetailPage({ params }: Props) {
@@ -210,6 +200,9 @@ export default async function BlogPostDetailPage({ params }: Props) {
             <div className="prose prose-stone max-w-none text-stone-800 leading-relaxed font-sans mb-8">
               <BlogContent content={post.content} />
             </div>
+
+            {/* New article alerts */}
+            <BlogNotifyButton variant="card" />
 
             {/* Tags */}
             {post.tags && post.tags.length > 0 && (

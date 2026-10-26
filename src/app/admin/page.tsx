@@ -282,6 +282,12 @@ export default function AdminDashboardPage() {
     }
   }, [isAuthenticated]);
 
+  // Push notifications link to /admin?tab=bookings; open that tab on arrival
+  useEffect(() => {
+    const tab = new URLSearchParams(window.location.search).get('tab');
+    if (tab === 'bookings') setActiveTab('bookings');
+  }, []);
+
   // Loading State while verifying session cookie
   if (isCheckingAuth) {
     return (
@@ -329,11 +335,10 @@ export default function AdminDashboardPage() {
         {/* Top Minimal Admin Bar */}
         <AdminHeader
           activeTab={activeTab}
-          bookings={bookings}
-          onSelectTab={setActiveTab}
-          onSelectInquiry={(lead) => {
-            setSelectedInquiryLead(lead);
-            setActiveTab('bookings');
+          onSelectTab={(tab) => {
+            setActiveTab(tab);
+            // A new-lead notification should show that lead right away
+            if (tab === 'bookings') fetchBookings();
           }}
           onRefresh={() => {
             if (activeTab === 'products') fetchProducts();

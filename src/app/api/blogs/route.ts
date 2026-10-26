@@ -4,6 +4,7 @@ import BlogPost from '@/models/BlogPost';
 import { INITIAL_BLOG_POSTS } from '@/data/blogs';
 import { verifyAdminSession } from '@/lib/auth';
 import { matchById } from '@/lib/matchById';
+import { notifyBlogPublished } from '@/lib/notify';
 
 export async function GET(req: Request) {
   try {
@@ -86,6 +87,10 @@ export async function POST(req: Request) {
       publishedAt: body.publishedAt ? new Date(body.publishedAt) : new Date(),
     });
 
+    if (newPost.isPublished) {
+      await notifyBlogPublished(newPost);
+    }
+
     return NextResponse.json({ success: true, post: newPost }, { status: 201 });
   } catch (err: unknown) {
     const error = err as Error;
@@ -112,11 +117,17 @@ export async function PUT(req: Request) {
       return NextResponse.json({ error: 'Blog ID is required for updating' }, { status: 400 });
     }
 
+    const before = await BlogPost.findOne(filter).select('isPublished').lean<{ isPublished?: boolean }>();
     const updated = await BlogPost.findOneAndUpdate(
       filter,
       { $set: body },
       { new: true }
     );
+
+    // Alert subscribers only when a draft goes live, not on every edit of a published post
+    if (updated?.isPublished && before && !before.isPublished) {
+      await notifyBlogPublished(updated);
+    }
 
     if (!updated) {
       return NextResponse.json({ error: 'Blog post not found' }, { status: 404 });

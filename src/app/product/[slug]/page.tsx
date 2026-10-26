@@ -4,7 +4,7 @@ import { connection } from 'next/server';
 import { INITIAL_PRODUCTS, SITE_CONFIG, Product } from '@/data/products';
 import ProductDetailClient from '@/components/catalog/ProductDetailClient';
 import { ProductJsonLd, BreadcrumbJsonLd } from '@/components/seo/JsonLd';
-import { constructMetadata } from '@/lib/seo';
+import { constructMetadata, OG_IMAGES } from '@/lib/seo';
 import { connectDB } from '@/lib/mongodb';
 import ProductModel from '@/models/Product';
 
@@ -123,7 +123,7 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
     return constructMetadata({ title: 'Product Not Found | Ghar Shagna Da', noIndex: true });
   }
 
-  const primaryImage = product.images?.[0] || 'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b';
+  const primaryImage = product.images?.[0] || OG_IMAGES.default;
   const desc =
     product.metaDescription ||
     `${product.title} on rent at Ghar Shagna Da. Handcrafted ${product.fabric} with ${product.embroidery}. Rental price: ${product.rentalPrice}.`;

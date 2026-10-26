@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { BlogPostItem } from '@/data/blogs';
 import { Clock, ArrowRight, BookOpen, MessageCircle } from 'lucide-react';
 import { SITE_CONFIG } from '@/data/products';
+import BlogNotifyButton from '@/components/blog/BlogNotifyButton';
 
 interface BlogClientViewProps {
   posts: BlogPostItem[];
@@ -38,6 +39,9 @@ export default function BlogClientView({ posts }: BlogClientViewProps) {
         <p className="text-sm text-stone-600 max-w-xl mx-auto">
           Expert styling advice, rental checklists, and bridal trends to ensure you look effortlessly royal on your wedding day.
         </p>
+        <div className="pt-2 flex justify-center">
+          <BlogNotifyButton />
+        </div>
       </div>
 
       {/* 2. CATEGORY PILLS BAR */}
