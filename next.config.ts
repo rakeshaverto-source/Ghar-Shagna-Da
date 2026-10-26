@@ -12,6 +12,15 @@ const nextConfig: NextConfig = {
       },
     },
   },
+  async headers() {
+    return [
+      {
+        // Tell browsers to always use HTTPS for this site (HSTS), for one year
+        source: '/:path*',
+        headers: [{ key: 'Strict-Transport-Security', value: 'max-age=31536000' }],
+      },
+    ];
+  },
   images: {
     remotePatterns: [
       {
