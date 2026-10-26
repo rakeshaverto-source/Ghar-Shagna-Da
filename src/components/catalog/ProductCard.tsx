@@ -16,7 +16,7 @@ export default function ProductCard({ product }: ProductCardProps) {
   )}`;
 
   return (
-    <article className="group bg-white rounded-2xl overflow-hidden border border-stone-200/90 shadow-[0_4px_20px_rgba(0,0,0,0.04)] hover:shadow-[0_16px_40px_rgba(139,24,40,0.12)] hover:border-amber-300/60 transition-all duration-500 flex flex-col justify-between">
+    <article className="group relative cursor-pointer bg-white rounded-2xl overflow-hidden border border-stone-200/90 shadow-[0_4px_20px_rgba(0,0,0,0.04)] hover:shadow-[0_16px_40px_rgba(139,24,40,0.12)] hover:border-amber-300/60 transition-all duration-500 flex flex-col justify-between">
       {/* Product Image Section */}
       <div className="relative aspect-[3/4] w-full overflow-hidden bg-stone-100">
         <Image
@@ -109,10 +109,11 @@ export default function ProductCard({ product }: ProductCardProps) {
 
         {/* Action Buttons */}
         <div className="grid grid-cols-2 gap-2.5 pt-1">
+          {/* after:absolute stretches this link over the whole card, so a click anywhere opens the outfit */}
           <Link
             href={`/product/${product.slug}`}
             data-cursor-text="LOOK"
-            className="w-full inline-flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl border border-stone-300 text-stone-800 hover:border-[#8b1828] hover:bg-[#8b1828] hover:text-white text-xs font-semibold tracking-wide uppercase transition-all duration-300 shadow-sm"
+            className="after:absolute after:inset-0 after:content-[''] w-full inline-flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl border border-stone-300 text-stone-800 hover:border-[#8b1828] hover:bg-[#8b1828] hover:text-white text-xs font-semibold tracking-wide uppercase transition-all duration-300 shadow-sm"
           >
             <Eye className="w-3.5 h-3.5" />
             <span>Details</span>
@@ -123,7 +124,7 @@ export default function ProductCard({ product }: ProductCardProps) {
             target="_blank"
             rel="noopener noreferrer"
             data-cursor-text="CHAT"
-            className="w-full inline-flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl bg-gradient-to-r from-[#25D366] to-[#1da851] hover:from-[#20ba5a] hover:to-[#178f44] text-white text-xs font-semibold tracking-wide uppercase shadow-md shadow-emerald-500/10 transition-all duration-300 hover:shadow-lg"
+            className="relative z-10 w-full inline-flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl bg-gradient-to-r from-[#25D366] to-[#1da851] hover:from-[#20ba5a] hover:to-[#178f44] text-white text-xs font-semibold tracking-wide uppercase shadow-md shadow-emerald-500/10 transition-all duration-300 hover:shadow-lg"
           >
             <MessageCircle className="w-3.5 h-3.5" />
             <span>Enquire</span>

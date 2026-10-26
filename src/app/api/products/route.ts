@@ -3,6 +3,7 @@ import { connectDB } from '@/lib/mongodb';
 import Product from '@/models/Product';
 import { INITIAL_PRODUCTS } from '@/data/products';
 import { verifyAdminSession } from '@/lib/auth';
+import { matchById } from '@/lib/matchById';
 
 const DUPLICATE_SLUG_MESSAGE = 'This URL slug is already used by another outfit. Please choose a different slug.';
 
@@ -162,7 +163,7 @@ export async function DELETE(req: Request) {
       return NextResponse.json({ error: 'Product ID required' }, { status: 400 });
     }
 
-    await Product.findOneAndDelete({ $or: [{ _id: id }, { id: id }] });
+    await Product.findOneAndDelete(matchById('id', id)!);
     return NextResponse.json({ success: true, message: 'Deleted successfully' });
   } catch (err: unknown) {
     const error = err as Error;

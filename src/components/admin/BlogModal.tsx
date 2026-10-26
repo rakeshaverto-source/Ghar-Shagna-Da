@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { BlogPostItem } from '@/components/admin/types';
 import { X, Upload, Sparkles } from 'lucide-react';
+import BlogBodyEditor from '@/components/admin/BlogBodyEditor';
 
 interface BlogModalProps {
   isOpen: boolean;
@@ -391,19 +392,12 @@ export default function BlogModal({
 
               {/* Article Content */}
               <div>
-                <div className="flex items-center justify-between mb-1">
-                  <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider">
-                    Article Body * (Markdown Supported)
-                  </label>
-                  <span className="text-[10px] text-stone-400">### Heading | * Bullet</span>
-                </div>
-                <textarea
-                  rows={9}
-                  required
+                <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1">
+                  Article Body *
+                </label>
+                <BlogBodyEditor
                   value={formData.content}
-                  onChange={(e) => setFormData({ ...formData, content: e.target.value })}
-                  placeholder="Write the full blog article here... Use ### Subheadings, * Bullets, or 1. Numbered lists."
-                  className="w-full px-3.5 py-2.5 bg-stone-50 border border-stone-200 rounded-xl text-xs text-stone-900 font-mono focus:outline-none focus:ring-2 focus:ring-[#8b1828]/20 leading-relaxed"
+                  onChange={(content) => setFormData({ ...formData, content })}
                 />
               </div>
 

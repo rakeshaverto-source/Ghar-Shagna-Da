@@ -3,6 +3,7 @@ import { connectDB } from '@/lib/mongodb';
 import BlogPost from '@/models/BlogPost';
 import { INITIAL_BLOG_POSTS } from '@/data/blogs';
 import { verifyAdminSession } from '@/lib/auth';
+import { matchById } from '@/lib/matchById';
 
 export async function GET(req: Request) {
   try {
@@ -104,15 +105,15 @@ export async function PUT(req: Request) {
       return NextResponse.json({ error: 'Database connection failed' }, { status: 503 });
     }
 
-    const body = await req.json();
-    const id = body.id || body._id;
+    const { _id, ...body } = await req.json();
+    const filter = matchById('id', body.id, _id);
 
-    if (!id) {
+    if (!filter) {
       return NextResponse.json({ error: 'Blog ID is required for updating' }, { status: 400 });
     }
 
     const updated = await BlogPost.findOneAndUpdate(
-      { $or: [{ id: id }, { _id: id }] },
+      filter,
       { $set: body },
       { new: true }
     );
@@ -147,7 +148,7 @@ export async function DELETE(req: Request) {
       return NextResponse.json({ error: 'Blog ID is required' }, { status: 400 });
     }
 
-    await BlogPost.findOneAndDelete({ $or: [{ id: id }, { _id: id }] });
+    await BlogPost.findOneAndDelete(matchById('id', id)!);
 
     return NextResponse.json({ success: true, message: 'Blog deleted successfully' });
   } catch (err: unknown) {

@@ -72,19 +72,14 @@ export default function BlogClientView({ posts }: BlogClientViewProps) {
                 key={post.id || post.slug}
                 className="bg-white rounded-3xl overflow-hidden border border-[#EBE3D7] shadow-xs hover:shadow-xl transition-all duration-300 flex flex-col group hover:-translate-y-1.5"
               >
-                <Link href={`/blog/${post.slug}`} className="relative aspect-[16/10] overflow-hidden block bg-stone-100">
+                <Link href={`/blog/${post.slug}`} className="relative aspect-video overflow-hidden block bg-stone-100">
                   <Image
                     src={post.coverImage}
                     alt={post.title}
                     fill
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    className="object-cover object-top group-hover:scale-105 transition-transform duration-700"
+                    className="object-contain object-center group-hover:scale-105 transition-transform duration-700"
                   />
-                  <div className="absolute top-4 left-4">
-                    <span className="bg-white/90 backdrop-blur-md text-stone-900 text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider shadow-xs border border-white/60">
-                      {post.category}
-                    </span>
-                  </div>
                 </Link>
 
                 <div className="p-6 flex-1 flex flex-col justify-between space-y-4">

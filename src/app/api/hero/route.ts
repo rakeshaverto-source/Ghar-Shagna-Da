@@ -3,6 +3,7 @@ import { connectDB } from '@/lib/mongodb';
 import HeroSlide from '@/models/HeroSlide';
 import SiteSettings from '@/models/SiteSettings';
 import { verifyAdminSession } from '@/lib/auth';
+import { matchById } from '@/lib/matchById';
 
 const DEFAULT_HERO_SLIDES = [
   {
@@ -205,8 +206,13 @@ export async function PUT(req: Request) {
 
     const { _id, slideId, ...updateData } = body;
 
+    const filter = matchById('slideId', _id, slideId);
+    if (!filter) {
+      return NextResponse.json({ error: 'Slide ID required' }, { status: 400 });
+    }
+
     const updated = await HeroSlide.findOneAndUpdate(
-      { $or: [{ _id: _id }, { slideId: slideId }] },
+      filter,
       { $set: updateData },
       { new: true }
     );
@@ -237,7 +243,7 @@ export async function DELETE(req: Request) {
       return NextResponse.json({ error: 'Slide ID required' }, { status: 400 });
     }
 
-    await HeroSlide.findOneAndDelete({ $or: [{ _id: id }, { slideId: id }] });
+    await HeroSlide.findOneAndDelete(matchById('slideId', id)!);
     return NextResponse.json({ success: true });
   } catch (err: unknown) {
     const error = err as Error;

@@ -28,13 +28,22 @@ export async function POST(req: Request) {
     const arrayBuffer = await file.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
     const resourceType = (data.get('resource_type') as 'auto' | 'image' | 'video') || 'auto';
-
-    // 1️⃣ IF CLOUDINARY IS CONFIGURED -> Upload to Cloudinary CDN
-    if (
+    const cloudinaryConfigured = Boolean(
       process.env.CLOUDINARY_CLOUD_NAME &&
       process.env.CLOUDINARY_API_KEY &&
       process.env.CLOUDINARY_API_SECRET
-    ) {
+    );
+
+    // Callers like the blog editor need a permanent URL; local files don't survive on serverless hosting
+    if (data.get('cloud_only') === 'true' && !cloudinaryConfigured) {
+      return NextResponse.json(
+        { error: 'Cloudinary is not configured on the server, so the image cannot be stored permanently.' },
+        { status: 503 }
+      );
+    }
+
+    // 1️⃣ IF CLOUDINARY IS CONFIGURED -> Upload to Cloudinary CDN
+    if (cloudinaryConfigured) {
       const uploadResponse = await new Promise((resolve, reject) => {
         cloudinary.uploader
           .upload_stream(

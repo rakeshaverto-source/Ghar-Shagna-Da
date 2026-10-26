@@ -11,6 +11,7 @@ import { Clock, ArrowLeft, Share2, MessageCircle, Phone, Tag, ChevronRight, Shie
 
 import { connection } from 'next/server';
 import { BlogPostingJsonLd, BreadcrumbJsonLd } from '@/components/seo/JsonLd';
+import BlogContent from '@/components/blog/BlogContent';
 
 export const instant = false;
 
@@ -99,93 +100,6 @@ export default async function BlogPostDetailPage({ params }: Props) {
 
   const recentPosts = await getRecentPosts(post.slug);
 
-  // Render markdown paragraphs / headers cleanly with luxury editorial typography
-  const renderFormattedContent = (content: string) => {
-    const lines = content.trim().split('\n');
-    let firstHeadingSeen = false;
-
-    return lines.map((line, idx) => {
-      const trimmed = line.trim();
-      if (!trimmed) return null;
-
-      if (trimmed.startsWith('#### ')) {
-        return (
-          <div key={idx} className="mt-6 mb-2 flex items-center gap-2">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#8b1828]" />
-            <h4 className="font-serif-luxury text-base sm:text-lg font-bold text-stone-900 tracking-tight">
-              {trimmed.replace('#### ', '')}
-            </h4>
-          </div>
-        );
-      }
-      if (trimmed.startsWith('### ')) {
-        const isFirst = !firstHeadingSeen;
-        firstHeadingSeen = true;
-        return (
-          <div key={idx} className={isFirst ? "mb-3" : "mt-8 mb-3 pt-3 border-t border-[#f0eae1]"}>
-            <h3 className="font-serif-luxury text-lg sm:text-2xl font-bold text-[#8b1828] tracking-tight leading-snug">
-              {trimmed.replace('### ', '')}
-            </h3>
-          </div>
-        );
-      }
-      if (trimmed.startsWith('## ')) {
-        firstHeadingSeen = true;
-        return (
-          <h2 key={idx} className="font-serif-luxury text-xl sm:text-2xl font-bold text-stone-900 mt-6 mb-3 tracking-tight leading-tight">
-            {trimmed.replace('## ', '')}
-          </h2>
-        );
-      }
-      if (trimmed.startsWith('* ') || trimmed.startsWith('- ')) {
-        return (
-          <div key={idx} className="flex items-start gap-3 my-2.5 pl-2">
-            <div className="w-1.5 h-1.5 rounded-full bg-[#8b1828] mt-2.5 shrink-0" />
-            <p className="text-stone-700 text-sm sm:text-[15px] leading-relaxed flex-1">
-              <span
-                dangerouslySetInnerHTML={{
-                  __html: trimmed
-                    .substring(2)
-                    .replace(/\*\*(.*?)\*\*/g, '<strong class="text-stone-950 font-bold">$1</strong>'),
-                }}
-              />
-            </p>
-          </div>
-        );
-      }
-      if (/^\d+\.\s/.test(trimmed)) {
-        const numMatch = trimmed.match(/^(\d+)\.\s/);
-        const num = numMatch ? numMatch[1] : '1';
-        return (
-          <div key={idx} className="flex items-start gap-3 my-3 pl-2">
-            <span className="w-6 h-6 rounded-full bg-rose-50 border border-rose-200 text-[#8b1828] text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">
-              {num}
-            </span>
-            <p className="text-stone-700 text-sm sm:text-[15px] leading-relaxed flex-1">
-              <span
-                dangerouslySetInnerHTML={{
-                  __html: trimmed
-                    .replace(/^\d+\.\s/, '')
-                    .replace(/\*\*(.*?)\*\*/g, '<strong class="text-stone-950 font-bold">$1</strong>'),
-                }}
-              />
-            </p>
-          </div>
-        );
-      }
-
-      return (
-        <p
-          key={idx}
-          className="text-stone-700 text-sm sm:text-[15.5px] leading-relaxed mb-4 font-normal"
-          dangerouslySetInnerHTML={{
-            __html: trimmed.replace(/\*\*(.*?)\*\*/g, '<strong class="text-stone-950 font-bold">$1</strong>'),
-          }}
-        />
-      );
-    });
-  };
-
   return (
     <div className="bg-[#FAF8F5] min-h-screen pt-28 sm:pt-36 pb-20">
       {/* Schema.org Structured Data */}
@@ -271,14 +185,14 @@ export default async function BlogPostDetailPage({ params }: Props) {
             </div>
 
             {/* Cover Image - Top aligned with proper aspect ratio */}
-            <div className="relative aspect-[16/10] rounded-2xl overflow-hidden mb-8 shadow-md border border-stone-100 bg-stone-100">
+            <div className="relative aspect-video rounded-2xl overflow-hidden mb-8 shadow-md border border-stone-100 bg-stone-100">
               <Image
                 src={post.coverImage}
                 alt={post.title}
                 fill
                 priority
                 sizes="(max-width: 1024px) 100vw, 750px"
-                className="object-cover object-center"
+                className="object-contain object-center"
               />
             </div>
 
@@ -294,7 +208,7 @@ export default async function BlogPostDetailPage({ params }: Props) {
 
             {/* Rich Body Content */}
             <div className="prose prose-stone max-w-none text-stone-800 leading-relaxed font-sans mb-8">
-              {renderFormattedContent(post.content)}
+              <BlogContent content={post.content} />
             </div>
 
             {/* Tags */}
@@ -414,9 +328,6 @@ export default async function BlogPostDetailPage({ params }: Props) {
                         />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <span className="text-[10px] font-bold text-[#8b1828] uppercase tracking-wider block mb-0.5">
-                          {r.category}
-                        </span>
                         <h5 className="font-serif-luxury text-xs font-bold text-stone-900 group-hover:text-[#8b1828] transition-colors line-clamp-2 leading-snug">
                           {r.title}
                         </h5>

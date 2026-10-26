@@ -65,19 +65,14 @@ export default function HomeBlogSection({ initialPosts }: HomeBlogSectionProps) 
               key={blog.id || blog.slug}
               className="bg-white rounded-3xl overflow-hidden border border-[#EBE3D7] shadow-xs hover:shadow-xl transition-all duration-300 flex flex-col group hover:-translate-y-1.5"
             >
-              <Link href={`/blog/${blog.slug}`} className="relative aspect-[16/10] overflow-hidden block">
+              <Link href={`/blog/${blog.slug}`} className="relative aspect-video overflow-hidden block bg-stone-100">
                 <Image
                   src={blog.coverImage}
                   alt={blog.title}
                   fill
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 400px"
-                  className="object-cover object-top group-hover:scale-105 transition-transform duration-700"
+                  className="object-contain object-center group-hover:scale-105 transition-transform duration-700"
                 />
-                <div className="absolute top-4 left-4">
-                  <span className="bg-[#8b1828] text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider shadow-sm">
-                    {blog.category || 'Bridal Guide'}
-                  </span>
-                </div>
               </Link>
 
               <div className="p-5 sm:p-6 flex-1 flex flex-col justify-between">
