@@ -58,7 +58,7 @@ export default function HomeCategoryCarousel() {
         {/* Horizontal Carousel Track */}
         <div
           ref={categoryScrollRef}
-          className="flex gap-4 sm:gap-6 overflow-x-auto scroll-smooth pb-0 sm:pb-6 pt-6 sm:pt-10 -mx-4 px-4 sm:mx-0 sm:px-0 no-scrollbar touch-pan-x snap-x snap-mandatory"
+          className="flex gap-4 sm:gap-6 overflow-x-auto scroll-smooth pb-0 sm:pb-6 pt-6 sm:pt-10 -mx-4 px-4 sm:mx-0 sm:px-0 no-scrollbar overscroll-x-contain snap-x snap-mandatory"
         >
           {CATEGORIES.map((cat, idx) => (
             <Link

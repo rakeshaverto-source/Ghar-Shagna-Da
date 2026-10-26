@@ -86,7 +86,7 @@ export default function HomeCustomerReviews({ reviewsList }: HomeCustomerReviews
       {/* Reviews Horizontal Carousel Track */}
       <div
         ref={reviewScrollRef}
-        className="flex gap-5 overflow-x-auto scroll-smooth pb-4 pt-1 -mx-4 px-4 sm:mx-0 sm:px-0 no-scrollbar touch-pan-x snap-x snap-mandatory"
+        className="flex gap-5 overflow-x-auto scroll-smooth pb-4 pt-1 -mx-4 px-4 sm:mx-0 sm:px-0 no-scrollbar overscroll-x-contain snap-x snap-mandatory"
       >
         {reviewsList.map((rev, idx) => (
           <a
