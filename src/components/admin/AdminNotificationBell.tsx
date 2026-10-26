@@ -143,7 +143,7 @@ export default function AdminNotificationBell({ onOpenLeads }: AdminNotification
       </button>
 
       {open && (
-        <div className="absolute right-0 top-12 w-80 sm:w-96 bg-white rounded-2xl shadow-2xl border border-stone-200/90 z-50 overflow-hidden">
+        <div className="fixed left-3 right-3 top-16 sm:absolute sm:left-auto sm:right-0 sm:top-12 sm:w-96 bg-white rounded-2xl shadow-2xl border border-stone-200/90 z-50 overflow-hidden">
           {/* Header */}
           <div className="p-3.5 bg-gradient-to-r from-stone-900 to-stone-800 text-white flex items-center justify-between gap-2">
             <div className="flex items-center gap-2">
