@@ -273,9 +273,9 @@ export default function FullWidthCreativeHero({ onOpenModal, initialData }: Full
         </div>
       </div>
 
-      {/* Luxury Navigation Dots Indicator at Bottom Center */}
+      {/* Luxury Navigation Dots Indicator: top-right below the header on mobile, bottom center on desktop */}
       {mediaMode === 'image' && slides.length > 1 && (
-        <div className="absolute bottom-6 sm:bottom-8 left-1/2 -translate-x-1/2 z-30 flex items-center gap-2 sm:gap-2.5 px-3.5 py-1.5 rounded-full bg-black/40 backdrop-blur-md border border-white/10 shadow-lg">
+        <div className="absolute top-20 right-4 md:top-auto md:right-auto md:bottom-8 md:left-1/2 md:-translate-x-1/2 z-30 flex items-center gap-2 sm:gap-2.5 px-3.5 py-1.5 rounded-full bg-black/40 backdrop-blur-md border border-white/10 shadow-lg">
           {slides.map((_, dotIdx) => {
             const isActive = dotIdx === current;
             return (
