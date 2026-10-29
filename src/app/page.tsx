@@ -4,7 +4,14 @@ import HomePageClient from '@/components/home/HomePageClient';
 import { constructMetadata, OG_IMAGES } from '@/lib/seo';
 
 // Home page shares the brand logo on WhatsApp/Facebook
-export const metadata = constructMetadata({ image: OG_IMAGES.logo, canonical: '/' });
+// Title kept from the old WordPress homepage, which already ranks for these searches
+export const metadata = constructMetadata({
+  title: 'Ghar Shagna Da - Best Bridal Lehenga and Sherwani on Rent in Tricity',
+  description:
+    'Ghar Shagna Da is a leading wedding & special-occasion outfit store in Chandigarh. Best bridal lehenga and sherwani on rent in Tricity – Chandigarh, Mohali, Panchkula & Zirakpur.',
+  image: OG_IMAGES.logo,
+  canonical: '/',
+});
 
 // Render with real DB data on the server so visitors don't see sample content first
 export const instant = false;
